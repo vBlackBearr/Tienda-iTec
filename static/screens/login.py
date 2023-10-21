@@ -10,6 +10,7 @@ from reactpy.core.hooks import use_context
 from static.components.base.navigationBar import navigationBar
 from static.components.login import login_form, banner as banner_login
 from static.components.base.footer import footer
+from static.components.base.css_scripts import css_scripts
 
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
@@ -20,10 +21,7 @@ def App(context):
     value = use_context(context)
 
     return html.div(
-        html.link({"rel": "stylesheet", "href": "/static/css/styles.css"}),
-        html.link({"rel": "stylesheet", "href": "/static/css/bulma.min.css"}),
-        html.link({"rel": "stylesheet", "href": "/static/css/material-design-icons-font.css"}),
-        html.script({"src": "/static/js/main.js"}),
+        css_scripts,
         navigationBar,
 
         # Login
