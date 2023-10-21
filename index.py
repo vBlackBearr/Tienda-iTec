@@ -20,8 +20,6 @@ def NavigationBar():
 def Header():
     return html.header(
         html.div({"class": "container"},
-                 html.a({"href": "/index"}, html.h1({"class": "title-cover"}, "iTec")),
-                 html.button({"class": "btn btn-default"}, "Comprar celulares que te llevan a la perfección")
                  )
     )
 
@@ -48,7 +46,7 @@ def MainContent():
                         html.div({"class": "column is-half column-full"}, [
                             html.div({"class": "card"}, [
                                 html.span({"class": "price"}, "$18,689"),
-                                html.img({"src": "static/img/item-1.png", "alt": ""}),
+                                html.img({"src": "static/img/item-4.jpeg", "alt": ""}),
                                 html.div({"class": "card-info"}, [
                                     html.h4({"class": "has-text-black has-text-centered has-text-weight-bold"},
                                             "iPhone 14"),
@@ -67,7 +65,7 @@ def MainContent():
                         html.div({"class": "column column-full is-half"}, [
                             html.div({"class": "card"}, [
                                 html.span({"class": "price"}, "$19,499"),
-                                html.img({"src": "static/img/item-2.png", "alt": ""}),
+                                html.img({"src": "static/img/item-3.jpg", "alt": ""}),
                                 html.div({"class": "card-info"}, [
                                     html.h4({"class": "has-text-black has-text-centered has-text-weight-bold"},
                                             "iPhone 14 plus"),
@@ -86,7 +84,7 @@ def MainContent():
                         html.div({"class": "column is-full"}, [
                             html.div({"class": "card"}, [
                                 html.span({"class": "price"}, "$21,699"),
-                                html.img({"src": "static/img/item-3.png", "alt": ""}),
+                                html.img({"src": "static/img/item-2.jpg", "alt": ""}),
                                 html.div({"class": "card-info"}, [
                                     html.h4({"class": "has-text-black has-text-centered has-text-weight-bold"},
                                             "iPhone 14 Pro"),
@@ -110,7 +108,7 @@ def MainContent():
                         html.div({"class": "column is-full"}, [
                             html.div({"class": "card"}, [
                                 html.span({"class": "price"}, "$23,469"),
-                                html.img({"src": "static/img/item-4.png", "alt": ""}),
+                                html.img({"src": "static/img/item-1.jpg", "alt": ""}),
                                 html.div({"class": "card-info"}, [
                                     html.h4({"class": "has-text-black has-text-centered has-text-weight-bold"},
                                             "iPhone 14 Pro Max"),

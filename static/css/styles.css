@@ -730,7 +730,7 @@ footer {
 }
 
 .banner-cover {
-    background-image: url(../img/banner.png);
+    background-image: url(../img/banner.jpeg);
     height: 100vh;
 }
 
@@ -756,7 +756,7 @@ footer {
 }
 
 .banner-cover {
-    background-image: url(../img/banner.png);
+    background-image: url(../img/banner.jpeg);
     height: 100vh;
 }
 
@@ -798,7 +798,7 @@ footer {
 
 @media screen and (min-width: 1023px) {
     .banner-cover {
-        background-image: url(../img/banner-large.jpg);
+        background-image: url(../img/banner-large.jpeg);
     }
 }
 
