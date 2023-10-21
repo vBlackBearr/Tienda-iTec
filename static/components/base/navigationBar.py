@@ -6,7 +6,7 @@ navigationBar = html.header(
         html.ul(
             {"class": "navbar-top-ul"},
             html.li({"class": "navbar-top-item"},
-                    html.a({"href": "registro.html", "class": "navbar-top-links"}, "Registro")),
+                    html.a({"href": "registro", "class": "navbar-top-links"}, "Registro")),
             html.li({"class": "navbar-top-item"},
                     html.a({"href": "login", "class": "navbar-top-links"}, "Iniciar sesión")),
             html.li({"class": "navbar-top-item"}, html.a({"href": "#", "class": "navbar-top-links"},
@@ -18,7 +18,7 @@ navigationBar = html.header(
             html.a({"class": "navbar-mobile-link has-text-white", "href": "#", "id": "btn-mobile"}, [
                 html.i({"class": "zmdi zmdi-menu"})
             ]),
-            html.a({"class": "navbar-mobile-link has-text-white", "href": "index.html"}, "iTec"),
+            html.a({"class": "navbar-mobile-link has-text-white", "href": "/"}, "iTec"),
             html.a({"class": "navbar-mobile-link has-text-white", "href": "#"}, [
                 html.i({"class": "zmdi zmdi-shopping-cart"}),
                 "Vacio"
@@ -34,7 +34,7 @@ navigationBar = html.header(
                 ])
             ]),
             html.a({"class": "is-hidden-mobile brand is-uppercase has-text-weight-bold has-text-dark",
-                    "href": "index.html"}, "iTec"),
+                    "href": "/"}, "iTec"),
             html.ul({"class": "nav-menu-ul"}, [
                 html.li({"class": "nav-menu-item", "id": "men"}, [
                     html.a({"class": "nav-menu-link link-submenu active", "href": "#"}, [
@@ -63,9 +63,9 @@ navigationBar = html.header(
                     ])
                 ]),
                 html.li({"class": "nav-menu-item"},
-                        html.a({"class": "nav-menu-link", "href": "login.html"}, "Registro")),
+                        html.a({"class": "nav-menu-link", "href": "login"}, "Registro")),
                 html.li({"class": "nav-menu-item"},
-                        html.a({"class": "nav-menu-link", "href": "login.html"}, "Iniciar Sesión"))
+                        html.a({"class": "nav-menu-link", "href": "login"}, "Iniciar Sesión"))
             ])
         ])
     ])
