@@ -3,25 +3,17 @@ from reactpy import component, html, use_state, use_effect
 from fastapi.staticfiles import StaticFiles
 from reactpy.backend.fastapi import configure
 
+# componentes
+from static.components.banner import banner
+from static.components.navigationBar import navigationBar
+
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
 
 @component
 def NavigationBar():
-    return html.nav(
-        {"class": "navbar-top"},
-        html.ul(
-            {"class": "navbar-top-ul"},
-            html.li({"class": "navbar-top-item"},
-                    html.a({"href": "registro.html", "class": "navbar-top-links"}, "Registro")),
-            html.li({"class": "navbar-top-item"},
-                    html.a({"href": "login.html", "class": "navbar-top-links"}, "Iniciar sesión")),
-            html.li({"class": "navbar-top-item"}, html.a({"href": "#", "class": "navbar-top-links"},
-                                                         html.i({"class": "zmdi zmdi-shopping-cart"}), " Carrito")
-                    )
-        )
-    )
+    return
 
 
 @component
@@ -208,7 +200,8 @@ def App():
         html.link({"rel": "stylesheet", "href": "/static/css/bulma.min.css"}),
         html.link({"rel": "stylesheet", "href": "/static/css/material-design-icons-font.css"}),
         html.script({"src": "/static/js/main.js"}),
-        NavigationBar(),
+        navigationBar,
+        banner,
         Header(),
         MainContent(),
         Footer()
