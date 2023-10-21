@@ -6,7 +6,7 @@ navigationBar = html.header(
         html.ul(
             {"class": "navbar-top-ul"},
             html.li({"class": "navbar-top-item"},
-                    html.a({"href": "registro", "class": "navbar-top-links"}, "Registro")),
+                    html.a({"href": "login", "class": "navbar-top-links"}, "Registro")),
             html.li({"class": "navbar-top-item"},
                     html.a({"href": "login", "class": "navbar-top-links"}, "Iniciar sesión")),
             html.li({"class": "navbar-top-item"}, html.a({"href": "#", "class": "navbar-top-links"},
