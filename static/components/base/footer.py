@@ -1,11 +1,52 @@
 from reactpy import html
 
-footer = html.footer(
-        {"class": "footer"},
-        html.div({"class": "container"},
-                 # Agrega aquí el contenido del pie de página
-                 ),
-        html.div({"class": "footer-bar-top"},
-                 html.a({"class": "footer-bar-top-links", "href": "#"}, "2019 Avenue Fashion")
-                 )
-    )
+footer = html.footer({"class": "footer"}, [
+    html.div({"class": "container"}, [
+        html.div({"class": "columns is-multiline"}, [
+            html.div({"class": "column"}, [
+                html.ul({"class": "footer-ul"}, [
+                    html.li({"class": "footer-item"}, [
+                        html.h3({"class": "has-text-weight-bold"}, "Porqué comprar")
+                    ]),
+                    html.li({"class": "footer-item"}, "Envios y retornos"),
+                    html.li({"class": "footer-item"}, "Envios seguros"),
+                    html.li({"class": "footer-item"}, "Etival trading")
+                ])
+            ]),
+            html.div({"class": "column"}, [
+                html.ul({"class": "footer-ul"}, [
+                    html.li({"class": "footer-item"}, [
+                        html.h3({"class": "has-text-weight-bold"}, "Tu cuenta")
+                    ]),
+                    html.li({"class": "footer-item"}, html.a({"class": "footer-link", "href": "#"}, "Iniciar sesión")),
+                    html.li({"class": "footer-item"}, html.a({"class": "footer-link", "href": "#"}, "Registro")),
+                    html.li({"class": "footer-item"}, html.a({"class": "footer-link", "href": "#"}, "Ver carrito")),
+                    html.li({"class": "footer-item"}, html.a({"class": "footer-link", "href": "#"}, "Ver catálogo"))
+                ])
+            ]),
+            html.div({"class": "column"}, [
+                html.ul({"class": "footer-ul"}, [
+                    html.li({"class": "footer-item"}, [
+                        html.h3({"class": "has-text-weight-bold"}, "Catalogo")
+                    ]),
+                    html.li({"class": "footer-item"}, html.a({"class": "footer-link", "href": "#"}, "Ver tu Catalogo")),
+                    html.li({"class": "footer-item"}, html.a({"class": "footer-link", "href": "#"}, "Privacidad y cookies")),
+                    html.li({"class": "footer-item"}, html.a({"class": "footer-link", "href": "#"}, "Borrar tu catalogo"))
+                ])
+            ]),
+            html.div({"class": "column is-full"}, [
+                html.div({"class": "footer-socials"}, [
+                    html.a({"class": "footer-solcials-link", "href": "#"}, html.i({"class": "zmdi zmdi-facebook"})),
+                    html.a({"class": "footer-solcials-link", "href": "#"}, html.i({"class": "zmdi zmdi-twitter"})),
+                    html.a({"class": "footer-solcials-link", "href": "#"}, html.i({"class": "zmdi zmdi-instagram"})),
+                    html.a({"class": "footer-solcials-link", "href": "#"}, html.i({"class": "zmdi zmdi-pinterest"}))
+                ])
+            ])
+        ])
+    ]),
+    html.div({"class": "footer-bar-top"}, [
+        html.div({"class": "container"}, [
+            html.a({"class": "footer-bar-top-links", "href": "#"}, "2019 Avenue Fashion")
+        ])
+    ])
+])
