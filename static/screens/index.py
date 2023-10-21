@@ -3,6 +3,9 @@ from reactpy import component, html
 from fastapi.staticfiles import StaticFiles
 from reactpy.backend.fastapi import configure
 
+# contexto
+from reactpy.core.hooks import use_context
+
 # componentes
 from static.components.base.banner import banner
 from static.components.base.navigationBar import navigationBar
@@ -16,7 +19,9 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 
 
 @component
-def App():
+def App(context):
+    value = use_context(context)
+
     return html.div(
         html.link({"rel": "stylesheet", "href": "/static/css/styles.css"}),
         html.link({"rel": "stylesheet", "href": "/static/css/bulma.min.css"}),
