@@ -9,6 +9,7 @@ from static.components.base.navigationBar import navigationBar
 from static.components.base.secondary_nav import secondary_nav
 from static.components.base.footer import footer
 from static.components.base.main_content import main_content
+from static.components.login import login_form, banner as banner_login
 
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
@@ -25,6 +26,13 @@ def App():
         banner,
         secondary_nav,
         main_content,
+
+
+        # Login
+        banner_login,
+        login_form,
+
+
         footer
     )
 
