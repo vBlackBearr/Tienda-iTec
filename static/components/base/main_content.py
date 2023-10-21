@@ -1,36 +1,6 @@
-from fastapi import FastAPI
-from reactpy import component, html
-from fastapi.staticfiles import StaticFiles
-from reactpy.backend.fastapi import configure
+from reactpy import html
 
-# componentes
-from static.components.base.banner import banner
-from static.components.base.navigationBar import navigationBar
-from static.components.base.secondary_nav import secondary_nav
-from static.components.base.footer import footer
-from static.components.base.main_content import main_content
-
-app = FastAPI()
-app.mount("/static", StaticFiles(directory="static"), name="static")
-
-
-
-@component
-def NavigationBar():
-    return
-
-
-@component
-def Header():
-    return html.header(
-        html.div({"class": "container"},
-                 )
-    )
-
-
-@component
-def MainContent():
-    return html.div(
+main_content = html.div(
         # Barra de navegación secundaria
         html.div({"class": "container"}, [
             html.nav({"class": "nav"}, [
@@ -50,7 +20,7 @@ def MainContent():
                         html.div({"class": "column is-half column-full"}, [
                             html.div({"class": "card"}, [
                                 html.span({"class": "price"}, "$18,689"),
-                                html.img({"src": "static/img/item-4.jpeg", "alt": ""}),
+                                html.img({"src": "static/img/item-1.png", "alt": ""}),
                                 html.div({"class": "card-info"}, [
                                     html.h4({"class": "has-text-black has-text-centered has-text-weight-bold"},
                                             "iPhone 14"),
@@ -69,7 +39,7 @@ def MainContent():
                         html.div({"class": "column column-full is-half"}, [
                             html.div({"class": "card"}, [
                                 html.span({"class": "price"}, "$19,499"),
-                                html.img({"src": "static/img/item-3.jpg", "alt": ""}),
+                                html.img({"src": "static/img/item-2.png", "alt": ""}),
                                 html.div({"class": "card-info"}, [
                                     html.h4({"class": "has-text-black has-text-centered has-text-weight-bold"},
                                             "iPhone 14 plus"),
@@ -88,7 +58,7 @@ def MainContent():
                         html.div({"class": "column is-full"}, [
                             html.div({"class": "card"}, [
                                 html.span({"class": "price"}, "$21,699"),
-                                html.img({"src": "static/img/item-2.jpg", "alt": ""}),
+                                html.img({"src": "static/img/item-3.png", "alt": ""}),
                                 html.div({"class": "card-info"}, [
                                     html.h4({"class": "has-text-black has-text-centered has-text-weight-bold"},
                                             "iPhone 14 Pro"),
@@ -112,7 +82,7 @@ def MainContent():
                         html.div({"class": "column is-full"}, [
                             html.div({"class": "card"}, [
                                 html.span({"class": "price"}, "$23,469"),
-                                html.img({"src": "static/img/item-1.jpg", "alt": ""}),
+                                html.img({"src": "static/img/item-4.png", "alt": ""}),
                                 html.div({"class": "card-info"}, [
                                     html.h4({"class": "has-text-black has-text-centered has-text-weight-bold"},
                                             "iPhone 14 Pro Max"),
@@ -180,35 +150,3 @@ def MainContent():
             ]),
         ]),
     )
-
-
-@component
-def Footer():
-    return html.footer(
-        {"class": "footer"},
-        html.div({"class": "container"},
-                 # Agrega aquí el contenido del pie de página
-                 ),
-        html.div({"class": "footer-bar-top"},
-                 html.a({"class": "footer-bar-top-links", "href": "#"}, "2019 Avenue Fashion")
-                 )
-    )
-
-
-
-@component
-def App():
-    return html.div(
-        html.link({"rel": "stylesheet", "href": "/static/css/styles.css"}),
-        html.link({"rel": "stylesheet", "href": "/static/css/bulma.min.css"}),
-        html.link({"rel": "stylesheet", "href": "/static/css/material-design-icons-font.css"}),
-        html.script({"src": "/static/js/main.js"}),
-        navigationBar,
-        banner,
-        secondary_nav,
-        main_content,
-        footer
-    )
-
-
-configure(app, App)
