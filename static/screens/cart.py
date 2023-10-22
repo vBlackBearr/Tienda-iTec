@@ -1,12 +1,14 @@
 from reactpy import component, html
 
+
 # contexto
 from reactpy.core.hooks import use_context
 
 # componentes
 from static.screens._base import Base
 from static.components.login import banner as banner_login
-
+from static.screens.payment import Payment
+from reactpy_router import route
 @component
 def Cart(context):
     value = use_context(context)
@@ -119,7 +121,7 @@ def Cart(context):
                             html.h5({"class": "font-weight-bold"}, "Total"),
                             html.h5({"class": "font-weight-bold"}, "$160")
                                 ),
-                        html.button({"class": "btn btn-block btn-primary my-3 py-3"}, "Generar compra")
+                        html.a({"class": "btn btn-block btn-primary my-3 py-3","href": "/payment"},"Generar compra")
                            )
                       )
                    )

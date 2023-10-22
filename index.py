@@ -10,6 +10,7 @@ from static.screens.index import Index
 from static.screens.login import Login
 from static.screens.product import Product
 from static.screens.cart import Cart
+from static.screens.payment import Payment
 
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
@@ -24,6 +25,7 @@ def App():
         route("/login", Login(context)),
         route("/product", Product(context)),
         route("/cart", Cart(context)),
+        route("/payment",Payment(context)),
         route("*", html.h1("Missing Link 🔗‍💥"))
     )
 
