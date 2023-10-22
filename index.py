@@ -6,8 +6,9 @@ from reactpy.core.hooks import create_context
 from reactpy.backend.fastapi import configure
 
 # componentes
-from static.screens.index import App as Index
-from static.screens.login import App as Login
+from static.screens.index import Index
+from static.screens.login import Login
+from static.screens.product import Product
 
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
@@ -20,7 +21,7 @@ def App():
     return simple.router(
         route("/", Index(context)),
         route("/login", Login(context)),
-        route("/kk", html.h1("kk Page 🏠")),
+        route("/product", Product(context)),
         route("*", html.h1("Missing Link 🔗‍💥"))
     )
 
