@@ -9,7 +9,7 @@ navigationBar = html.header(
                     html.a({"href": "login", "class": "navbar-top-links"}, "Registro")),
             html.li({"class": "navbar-top-item"},
                     html.a({"href": "login", "class": "navbar-top-links"}, "Iniciar sesión")),
-            html.li({"class": "navbar-top-item"}, html.a({"href": "#", "class": "navbar-top-links"},
+            html.li({"class": "navbar-top-item"}, html.a({"href": "cart", "class": "navbar-top-links"},
                                                          html.i({"class": "zmdi zmdi-shopping-cart"}), " Carrito")
                     )
         )

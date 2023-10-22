@@ -89,7 +89,7 @@ def Product(context):
                                     "class": "carousel-item"
                                 },
                                     html.img({
-                                        "src": "static/img/item-2.jpg",
+                                        "src": "static/img/item-4.jpg",
                                         "alt": "Nombre del Producto",
                                         "class": "img-fluid product-image"
                                     })

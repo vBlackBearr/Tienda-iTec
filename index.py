@@ -9,6 +9,7 @@ from reactpy.backend.fastapi import configure
 from static.screens.index import Index
 from static.screens.login import Login
 from static.screens.product import Product
+from static.screens.cart import Cart
 
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
@@ -22,6 +23,7 @@ def App():
         route("/", Index(context)),
         route("/login", Login(context)),
         route("/product", Product(context)),
+        route("/cart", Cart(context)),
         route("*", html.h1("Missing Link 🔗‍💥"))
     )
 
