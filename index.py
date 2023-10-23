@@ -25,7 +25,7 @@ def App():
         route("/login", Login(context)),
         route("/product", Product(context)),
         route("/cart", Cart(context)),
-        route("/payment",Payment(context)),
+        route("/payment", Payment(context)),
         route("*", html.h1("Missing Link 🔗‍💥"))
     )
 
