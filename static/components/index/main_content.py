@@ -106,9 +106,9 @@ main_content = (
                         html.div({"class": "card-second-body --text-right"}, [
                             html.h1({"class": "has-text-right is-size-4 has-text-weight-semibold-bold"},
                                     "Cupones 5% de descuento"),
-                            html.p({"class": "has-text-right"}, "Cupon valido en compras menores a 3 dispositvos"),
+                           # html.p({"class": "has-text-right"}, "Cupon valido en compras menores a 3 dispositvos"),
                             html.div([
-                                html.a({"class": "btn btn-default is-size-7", "href": "#"}, "Canjear"),
+                                html.a({"class": "btn btn-default is-size-7", "href": "static/img/lookbook-men.png"}, "Ver cupón"),
                             ]),
                         ]),
                     ]),
@@ -119,9 +119,9 @@ main_content = (
                         html.div({"class": "card-second-body --text-right"}, [
                             html.h1({"class": "has-text-right is-size-4 has-text-weight-semibold-bold"},
                                     "Descuento del 25%"),
-                            html.p({"class": "has-text-right"}, "Valido solo en tienda fisica de la condesa"),
+                          #  html.p({"class": "has-text-right"}, "Valido solo en tienda fisica de la condesa"),
                             html.div([
-                                html.a({"class": "btn btn-default is-size-7", "href": "#"}, "Ver vale"),
+                                html.a({"class": "btn btn-default is-size-7", "href": "static/img/lookbook-women.png"}, "Ver vale"),
                             ]),
                         ]),
                     ]),
@@ -132,9 +132,9 @@ main_content = (
                         html.div({"class": "card-second-body --text-right"}, [
                             html.h1({"class": "has-text-right is-size-4 has-text-weight-semibold-bold"},
                                     "Vale del 10% en todos los dispositivos"),
-                            html.p({"class": "has-text-right"}, "Valido hasta el 2 de diciembre"),
+                            #html.p({"class": "has-text-right"}, "Valido hasta el 2 de diciembre"),
                             html.div([
-                                html.a({"class": "btn btn-default is-size-7", "href": "#"}, "Canjear"),
+                                html.a({"class": "btn btn-default is-size-7", "href": "static/img/lookbook-you.png"}, "Ver cupón"),
                             ]),
                         ]),
                     ]),
