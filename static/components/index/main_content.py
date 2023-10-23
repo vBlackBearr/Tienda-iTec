@@ -106,7 +106,7 @@ main_content = (
                         html.div({"class": "card-second-body --text-right"}, [
                             html.h1({"class": "has-text-right is-size-4 has-text-weight-semibold-bold"},
                                     "Cupones 5% de descuento"),
-                            html.p({"class": "has-text-right"}, "Cupon valido en compras menores a 3 dispositovs"),
+                            html.p({"class": "has-text-right"}, "Cupon valido en compras menores a 3 dispositvos"),
                             html.div([
                                 html.a({"class": "btn btn-default is-size-7", "href": "#"}, "Canjear"),
                             ]),
