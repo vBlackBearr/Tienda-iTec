@@ -1,3 +1,5 @@
+
+
 -- Creación de la tabla partners
 CREATE TABLE partners (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -126,9 +128,11 @@ VALUES
 
 -- Tabla de roles
 CREATE TABLE roles (
-    role_id INT AUTO_INCREMENT PRIMARY KEY,
-    role_name VARCHAR(255) NOT NULL
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    role_name VARCHAR(255) NOT NULL,
+    enabled BOOLEAN DEFAULT TRUE
 );
+
 
 -- Valores de prueba para la tabla "roles"
 INSERT INTO roles (role_name) VALUES
@@ -138,18 +142,19 @@ INSERT INTO roles (role_name) VALUES
 
 
 -- Tabla de usuarios
-CREATE TABLE usuarios (
-    user_id INT AUTO_INCREMENT PRIMARY KEY,
+CREATE TABLE users (
+    id INT AUTO_INCREMENT PRIMARY KEY,
     username VARCHAR(255) NOT NULL,
     password VARCHAR(255) NOT NULL,
     email VARCHAR(255) NOT NULL,
     role_id INT,
-    FOREIGN KEY (role_id) REFERENCES roles(role_id)
+    enabled BOOLEAN DEFAULT TRUE,
+    FOREIGN KEY (role_id) REFERENCES roles(id)
 );
 
 
 -- Valores de prueba para la tabla "usuarios"
-INSERT INTO usuarios (username, password, email, role_id) VALUES
+INSERT INTO users (username, password, email, role_id) VALUES
     ('admin', 'hashed_password_admin', 'admin@example.com', 1),
     ('editor', 'hashed_password_editor', 'editor@example.com', 2),
     ('usuario1', 'hashed_password_user1', 'usuario1@example.com', 3),

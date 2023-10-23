@@ -12,6 +12,10 @@ from static.screens.product import Product
 from static.screens.cart import Cart
 from static.screens.payment import Payment
 
+# routes
+from static.cruds.controllers.controllerRoles import router as router_roles
+
+
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
@@ -29,5 +33,7 @@ def App():
         route("*", html.h1("Missing Link 🔗‍💥"))
     )
 
+
+app.include_router(router_roles)
 
 configure(app, App)

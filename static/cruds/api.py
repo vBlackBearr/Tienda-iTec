@@ -1,6 +1,63 @@
 import httpx
 
+#
+#       Roles
+#
+async def getRoles():
+    async with httpx.AsyncClient() as client:
+        response = await client.get("http://localhost:8000/backend/roles")
 
+    if response.status_code == 200:
+        result = response.json()
+        return result
+
+
+async def getRole(role_id):
+    async with httpx.AsyncClient() as client:
+        response = await client.get(f"http://localhost:8000/backend/roles/{role_id}")
+
+    if response.status_code == 200:
+        result = response.json()
+        return result
+    else:
+        return None
+
+
+async def postRole(new_role):
+    async with httpx.AsyncClient() as client:
+        response = await client.post("http://localhost:8000/backend/roles", json=new_role)
+
+    if response.status_code == 200:
+        result = response.json()
+        return result
+    else:
+        return None
+
+
+async def updateRole(role_id, updated_role):
+    async with httpx.AsyncClient() as client:
+        response = await client.put(f"http://localhost:8000/backend/roles/{role_id}", json=updated_role)
+
+    if response.status_code == 200:
+        result = response.json()
+        return result
+    else:
+        return None
+
+
+async def deleteRole(role_id):
+    async with httpx.AsyncClient() as client:
+        response = await client.delete(f"http://localhost:8000/backend/roles/{role_id}")
+
+    if response.status_code == 200:
+        return True  # Éxito en la eliminación
+    else:
+        return False  # Fallo en la eliminación
+
+
+#
+#       Partners
+#
 async def getPartners():
     async with httpx.AsyncClient() as client:
         response = await client.get("http://localhost:8000/backend/partners")
