@@ -1,10 +1,4 @@
-import uvicorn
-from fastapi import FastAPI
 from fastapi.staticfiles import StaticFiles
-from reactpy import component, html
-from reactpy_router import route, simple
-from reactpy.core.hooks import create_context
-from reactpy.backend.fastapi import configure
 
 # admin
 # --------------------------------------------
@@ -15,11 +9,11 @@ from reactpy.core.hooks import create_context
 from reactpy_router import route, simple
 
 # Screens Admin
-from static.admin.content.screens.index import Index
-from static.admin.content.screens.Partners import Partners
-from static.admin.content.screens.RawMaterials import RawMaterials
-from static.admin.content.screens.Products import Products
-from static.admin.content.screens.Sales import Sales
+from admin.content.screens.index import Index as AdminIndex
+from admin.content.screens.Partners import Partners as AdminPartners
+from admin.content.screens.RawMaterials import RawMaterials
+from admin.content.screens.Products import Products as AdminProducts
+from admin.content.screens.Sales import Sales
 
 # Screens Shop
 from static.screens.index import Index
@@ -29,17 +23,19 @@ from static.screens.cart import Cart
 from static.screens.payment import Payment
 
 # routers admin
-from static.admin.content.cruds.controllers.controllerPartners import router as router_partners
-from static.admin.content.cruds.controllers.controllerRawMaterials import router as router_raw_materials
-from static.admin.content.cruds.controllers.controllerProducts import router as router_products
-from static.admin.content.cruds.controllers.controllerSales import router as router_sales
-from static.admin.content.endp.pedidos import router as router_pedidos
+from admin.content.cruds.controllers.controllerPartners import router as router_partners
+from admin.content.cruds.controllers.controllerRawMaterials import router as router_raw_materials
+from admin.content.cruds.controllers.controllerProducts import router as router_products
+from admin.content.cruds.controllers.controllerSales import router as router_sales
+from admin.content.endp.pedidos import router as router_pedidos
 
 # routers shop
-from static.cruds.controllers.controllerRoles import router as router_roles
+# from static.cruds.controllers.controllerRoles import router as router_roles
+
 
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
+app.mount("/admin/content", StaticFiles(directory="admin/content"), name="admin")
 
 
 @component
@@ -52,12 +48,20 @@ def App():
         route("/product", Product(context)),
         route("/cart", Cart(context)),
         route("/payment", Payment(context)),
-        route("*", html.h1("Missing Link 🔗‍💥"))
+
+
+        # Admin
+        route("/admin/index", AdminIndex(context)),
+        route("/admin/partners", AdminPartners(context)),
+        route("/admin/raw_materials", RawMaterials(context)),
+        route("/admin/products", AdminProducts(context)),
+        route("/admin/sales", Sales(context)),
+        route("*", html.h1("Missing Link 🔗‍💥")),
     )
 
 
 # routers shop
-app.include_router(router_roles)
+# app.include_router(router_roles)
 
 # routers admin
 app.include_router(router_partners)
@@ -68,4 +72,4 @@ app.include_router(router_pedidos)
 
 configure(app, App)
 
-uvicorn.run(app, host="127.0.0.1", port=8000, log_level="info")
+# uvicorn.run(app, host="127.0.0.1", port=8000, log_level="info")
