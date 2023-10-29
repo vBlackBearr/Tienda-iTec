@@ -1,12 +1,9 @@
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
-import os
-
-db_name = os.getenv('DB_NAME')
 
 # DATABASE_URL = "mysql+mysqlconnector://usuario:contraseña@localhost/nombre_db"
-DATABASE_URL = "mysql+mysqlconnector://root@localhost/" + db_name
+DATABASE_URL = "mysql+mysqlconnector://root@localhost/erp-mrp-project"
 
 engine = create_engine(DATABASE_URL)
 

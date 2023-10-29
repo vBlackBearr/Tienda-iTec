@@ -1,5 +1,8 @@
 from reactpy import component, html
 from reactpy_router import route
+import httpx
+import asyncio
+import reactpy
 
 # contexto
 from reactpy.core.hooks import use_context
@@ -7,11 +10,41 @@ from reactpy.core.hooks import use_context
 # componentes
 from static.screens._base import Base
 from static.components.login import banner as banner_login
+from reactpy import use_state
+
+# dotenv
+from dotenv import load_dotenv
+load_dotenv()
 
 
 @component
 def Payment(context):
-    value = use_context(context),
+    value = use_context(context)
+
+    cantidad, set_cantidad = use_state(1)
+
+    def buy():
+        async def post():
+            print("compra")
+            async with httpx.AsyncClient() as client:
+
+                data = {
+                    "cantidad": cantidad
+                }
+
+                response = await client.post("http://localhost:8002/api/products", json=data)
+
+            if response.status_code == 200:
+                result = response.json()
+                return result
+            else:
+                return None
+
+        asyncio.ensure_future(post())
+
+
+
+
     return html.div(
         Base(
             (
@@ -134,7 +167,7 @@ def Payment(context):
                                                                  {"class": "d-flex justify-content-between mb-3 pt-1"},
                                                                  html.h6({"class": "font-weight-medium"}, "Subtotal"),
                                                                  html.h6({"class": "font-weight-medium"}, "$150"),
-                                                                 ),
+                                                             ),
                                                              html.div({"class": "d-flex justify-content-between"},
                                                                       html.h6({"class": "font-weight-medium"}, "IVA"),
                                                                       html.h6({"class": "font-weight-medium"}, "$10"),
@@ -188,11 +221,23 @@ def Payment(context):
                                                                                ),
                                                                       ),
                                                              ),
+                                                    html.div({
+                                                        "class": "px-5"
+                                                    },
+                                                        html.input({
+                                                            "value": cantidad,
+                                                            "on_change": lambda e: set_cantidad(e["target"]["value"]),
+                                                            "type": "number",
+                                                            "class": "form-control"
+                                                        })
+                                                    ),
                                                     html.div({"class": "card-footer border-secondary bg-transparent"},
                                                              html.button({
-                                                                             "class": "btn btn-lg btn-block btn-primary font-weight-bold my-3 py-3"},
-                                                                         "Comprar"),
+                                                                 "class": "btn btn-lg btn-block btn-primary font-weight-bold my-3 py-3",
+                                                                 "on_click": lambda e: buy()},
+                                                                 "Comprar"),
                                                              ),
+
                                                     ),
                                            ),
                                   ),
