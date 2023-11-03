@@ -5,18 +5,20 @@ from static.api import getSession
 
 
 def LoginForm():
-    # login_result, set_login_result = use_state("")
-    # show_modal, set_show_modal = use_state(False)
+
     modal_text, set_modal_text = use_state("")
     modal_style, set_modal_style = use_state({"display": "none"})
     email, set_email = use_state("")
     password, set_password = use_state("")
 
     @reactpy.event(prevent_default=True)
-    def handleLogin(e):
+    async def handleLogin(e):
         # ---activar el modal---
-        getSession({"email": email, "password": password})
-        set_modal_text("Login Success!")
+        response = await getSession({"email": email, "password": password})
+        if response:
+            set_modal_text("Login Success!")
+        else:
+            set_modal_text("Login Failed!")
         show_modal(None)
 
     def show_modal(e):
@@ -66,10 +68,25 @@ def LoginForm():
         html.div({"class": "columns"}, [
             html.div({"class": "column"}, [
                 html.h2({"class": "is-size-4"}, "Iniciar sesión"),
-                html.form({"on_submit": handleLogin, "class": "form-control"}, [
-                    html.input({"type": "email", "placeholder": "Email", "class": "form-control-field error"}),
-                    html.input({"type": "password", "placeholder": "Password", "class": "form-control-field"}),
-                    html.button({"class": "btn btn-default btn-primary"}, "Iniciar sesión")
+                html.form({"class": "form-control"}, [
+                    html.input({
+                        "type": "email",
+                        "placeholder": "Email",
+                        "class": "form-control-field",
+                        "on_change": lambda e: set_email(e["target"]["value"]),
+                        "value": email
+                    }),
+                    html.input({
+                        "type": "password",
+                        "placeholder": "Password",
+                        "class": "form-control-field",
+                        "on_change": lambda e: set_password(e["target"]["value"]),
+                        "value": password
+                    }),
+                    html.button({
+                        "class": "btn btn-default btn-primary",
+                        "on_click": handleLogin
+                    }, "Iniciar sesión")
                 ])
             ]),
             html.div({"class": "column"}, [

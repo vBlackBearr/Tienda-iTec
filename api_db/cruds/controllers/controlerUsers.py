@@ -7,7 +7,7 @@ from api_db.cruds.models.models import User
 router = APIRouter()
 
 
-@router.get("/backend/session")
+@router.post("/backend/session")
 def create_session(user: ValidUser, db: Session = Depends(get_db)):
     user = db.query(User).filter(User.email == user.email).filter(User.password == user.password).first()
     if not user:
