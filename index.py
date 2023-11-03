@@ -23,24 +23,33 @@ from static.screens.cart import Cart
 from static.screens.payment import Payment
 
 # routers admin
-from admin.content.cruds.controllers.controllerPartners import router as router_partners
-from admin.content.cruds.controllers.controllerRawMaterials import router as router_raw_materials
-from admin.content.cruds.controllers.controllerProducts import router as router_products
-from admin.content.cruds.controllers.controllerSales import router as router_sales
+from api_db.cruds.controllers.controllerPartners import router as router_partners
+from api_db.cruds.controllers.controllerRawMaterials import router as router_raw_materials
+from api_db.cruds.controllers.controllerProducts import router as router_products
+from api_db.cruds.controllers.controllerRoles import router as router_roles
+from api_db.cruds.controllers.controlerUsers import router as router_users
+
+from api_db.cruds.controllers.controllerSales import router as router_sales
 from admin.content.endp.pedidos import router as router_pedidos
 
 # routers shop
 # from static.cruds.controllers.controllerRoles import router as router_roles
 
+# Database
+from api_db.database import get_db
+
 
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
+app.mount("/api_db", StaticFiles(directory="api_db"), name="api_db")
 app.mount("/admin/content", StaticFiles(directory="admin/content"), name="admin")
 
 
 @component
 def App():
-    context = create_context("value")
+    context = create_context({
+        "DB": get_db()
+    })
 
     return simple.router(
         route("/", Index(context)),
@@ -69,6 +78,9 @@ app.include_router(router_raw_materials)
 app.include_router(router_products)
 app.include_router(router_sales)
 app.include_router(router_pedidos)
+app.include_router(router_roles)
+app.include_router(router_users)
+
 
 configure(app, App)
 

@@ -3,7 +3,6 @@ from reactpy.backend.fastapi import configure
 from reactpy import component, html, use_state, use_effect
 
 import asyncio
-from admin.content.cruds.controllers.controllerSales import router  # Cambia el import al controlador de ventas
 import reactpy
 from admin.content.api import getSales, postSale, deleteSale  # Cambia los nombres de las funciones de API
 
@@ -143,7 +142,5 @@ def SalesCrud():
 
 
 app = FastAPI()
-
-app.include_router(router)
 
 configure(app, SalesCrud)

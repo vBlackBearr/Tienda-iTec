@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, String, JSON, Boolean, ForeignKey, Date, DECIMAL
 from sqlalchemy.orm import relationship
-from admin.content.database import Base
+from api_db.database import Base
 
 
 class Partner(Base):
@@ -15,8 +15,6 @@ class Partner(Base):
     enabled = Column(Boolean)
 
     raw_materials_partners = relationship("RawMaterialPartner", back_populates="partner")
-
-
 
 
 class RawMaterial(Base):
@@ -44,19 +42,6 @@ class RawMaterialPartner(Base):
     raw_material = relationship("RawMaterial", back_populates="raw_materials_partners")
 
 
-
-# class RawMaterialStock(Base):
-#     __tablename__ = "raw_materials_stock"
-#
-#     id = Column(Integer, primary_key=True, index=True)
-#     raw_material_id = Column(Integer, ForeignKey('raw_materials.id'))
-#     stock = Column(Integer)
-#     props = Column(JSON)
-#     enabled = Column(Boolean)
-#
-#     raw_material = relationship("RawMaterial", back_populates="raw_material_stock")
-
-
 class Product(Base):
     __tablename__ = "products"
 
@@ -69,18 +54,6 @@ class Product(Base):
 
     bom = relationship("BOM", back_populates="product")
     product_sale = relationship("ProductSale", back_populates="product")
-
-
-
-# class ProductStock(Base):
-#     __tablename__ = "products_stock"
-#
-#     id = Column(Integer, primary_key=True, index=True)
-#     product_id = Column(Integer, ForeignKey('products.id'))
-#     stock = Column(Integer)
-#     props = Column(JSON)
-#     enabled = Column(Boolean)
-#     product = relationship("Product", back_populates="product_stock")
 
 
 class BOM(Base):
@@ -119,3 +92,26 @@ class ProductSale(Base):
     enabled = Column(Boolean)
     product = relationship("Product", back_populates="product_sale")
     sale = relationship("Sale", back_populates="product_sale")
+
+
+class Role(Base):
+    __tablename__ = "roles"
+
+    id = Column(Integer, primary_key=True, index=True)
+    role_name = Column(String, nullable=False)
+    enabled = Column(Boolean, default=True)
+
+    users = relationship("User", back_populates="role")
+
+
+class User(Base):
+    __tablename__ = "users"
+
+    id = Column(Integer, primary_key=True, index=True)
+    username = Column(String, nullable=False)
+    password = Column(String, nullable=False)
+    email = Column(String, nullable=False)
+    role_id = Column(Integer, ForeignKey('roles.id'))
+    enabled = Column(Boolean, default=True)
+
+    role = relationship("Role", back_populates="users")

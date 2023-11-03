@@ -1,6 +1,7 @@
 from pydantic import BaseModel
 from typing import Dict
 
+
 class PartnerBase(BaseModel):
     name: str
     details: str
@@ -8,6 +9,7 @@ class PartnerBase(BaseModel):
     api_endpoint: str
     props: dict
     enabled: bool
+
 
 class PartnerCreate(PartnerBase):
     pass
@@ -22,6 +24,8 @@ class Partner(PartnerBase):
 
     class Config:
         orm_mode = True
+
+
 #
 #
 #       Raw Material
@@ -133,6 +137,8 @@ class ProductStock(ProductStockBase):
         orm_mode = True
 
 """
+
+
 #
 #
 #        BOM
@@ -167,7 +173,7 @@ class BOM(BOMBase):
 #
 #
 class SaleBase(BaseModel):
-    date: str  
+    date: str
     total: float
     props: dict
     enabled: bool
@@ -215,3 +221,53 @@ class ProductSale(ProductSaleBase):
 
     class Config:
         orm_mode = True
+
+
+#
+#
+#     Roles
+#
+#
+class RoleBase(BaseModel):
+    role_name: str
+
+
+class RoleCreate(RoleBase):
+    pass
+
+
+class Role(RoleBase):
+    id: int
+    enabled: bool
+
+    class Config:
+        orm_mode = True
+
+
+#
+#
+#     Users
+#
+#
+class UserBase(BaseModel):
+    username: str
+    email: str
+
+
+class UserCreate(UserBase):
+    password: str
+    role_id: int
+
+
+class User(UserBase):
+    id: int
+    role_id: int
+    enabled: bool
+
+    class Config:
+        orm_mode = True
+
+
+class ValidUser(BaseModel):
+    email: str
+    password: str

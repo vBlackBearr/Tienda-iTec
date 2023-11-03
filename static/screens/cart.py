@@ -6,7 +6,7 @@ from reactpy.core.hooks import use_context
 
 # componentes
 from static.screens._base import Base
-from static.components.login import banner as banner_login
+from static.components.base.banner import banner as banner_login
 from static.screens.payment import Payment
 from reactpy_router import route
 @component

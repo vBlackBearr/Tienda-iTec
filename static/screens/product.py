@@ -5,7 +5,8 @@ from reactpy.core.hooks import use_context
 
 # componentes
 from static.screens._base import Base
-from static.components.login import banner as banner_login
+from static.components.base.banner import banner as banner_login
+
 
 @component
 def Product(context):
@@ -21,15 +22,15 @@ def Product(context):
                     "rel": "stylesheet",
                     "href": "/static/css/material-design-iconic-font.css"
                 }),
-                 html.link({
+                html.link({
                     "rel": "stylesheet",
                     "href": "/static/css/style.min.css"
                 }),
-                 html.link({
+                html.link({
                     "rel": "stylesheet",
                     "href": "/static/css/style.css"
                 }),
-                 html.link({
+                html.link({
                     "rel": "stylesheet",
                     "href": "/static/css/styles.css"
                 }),
@@ -130,63 +131,85 @@ def Product(context):
                                           html.p({"class": "text-dark font-weight-medium mb-0 mr-3"}, "Memoria:"),
                                           html.form([
                                               html.div({"class": "custom-control custom-radio custom-control-inline"}, [
-                                                  html.input({"type": "radio", "class": "custom-control-input", "id": "size-1", "name": "size"}),
-                                                  html.label({"class": "custom-control-label", "for": "size-1"}, "128 GB"),
+                                                  html.input(
+                                                      {"type": "radio", "class": "custom-control-input", "id": "size-1",
+                                                       "name": "size"}),
+                                                  html.label({"class": "custom-control-label", "for": "size-1"},
+                                                             "128 GB"),
                                               ]),
                                               html.div({"class": "custom-control custom-radio custom-control-inline"}, [
-                                                  html.input({"type": "radio", "class": "custom-control-input", "id": "size-2", "name": "size"}),
-                                                  html.label({"class": "custom-control-label", "for": "size-2"}, "256 GB"),
+                                                  html.input(
+                                                      {"type": "radio", "class": "custom-control-input", "id": "size-2",
+                                                       "name": "size"}),
+                                                  html.label({"class": "custom-control-label", "for": "size-2"},
+                                                             "256 GB"),
                                               ]),
                                               html.div({"class": "custom-control custom-radio custom-control-inline"}, [
-                                                  html.input({"type": "radio", "class": "custom-control-input", "id": "size-3", "name": "size"}),
-                                                  html.label({"class": "custom-control-label", "for": "size-3"}, "512 GB"),
+                                                  html.input(
+                                                      {"type": "radio", "class": "custom-control-input", "id": "size-3",
+                                                       "name": "size"}),
+                                                  html.label({"class": "custom-control-label", "for": "size-3"},
+                                                             "512 GB"),
                                               ]),
                                           ]),
-                                      ),
+                                          ),
                                  # Colores
                                  html.div({"class": "d-flex mb-4"},
                                           html.p({"class": "text-dark font-weight-medium mb-0 mr-3"}, "Colors:"),
                                           html.form([
                                               html.div({"class": "custom-control custom-radio custom-control-inline"}, [
-                                                  html.input({"type": "radio", "class": "custom-control-input", "id": "color-1", "name": "color"}),
-                                                  html.label({"class": "custom-control-label", "for": "color-1"}, "Negro"),
+                                                  html.input({"type": "radio", "class": "custom-control-input",
+                                                              "id": "color-1", "name": "color"}),
+                                                  html.label({"class": "custom-control-label", "for": "color-1"},
+                                                             "Negro"),
                                               ]),
                                               html.div({"class": "custom-control custom-radio custom-control-inline"}, [
-                                                  html.input({"type": "radio", "class": "custom-control-input", "id": "color-2", "name": "color"}),
-                                                  html.label({"class": "custom-control-label", "for": "color-2"}, "Blanco"),
+                                                  html.input({"type": "radio", "class": "custom-control-input",
+                                                              "id": "color-2", "name": "color"}),
+                                                  html.label({"class": "custom-control-label", "for": "color-2"},
+                                                             "Blanco"),
                                               ]),
                                               html.div({"class": "custom-control custom-radio custom-control-inline"}, [
-                                                  html.input({"type": "radio", "class": "custom-control-input", "id": "color-3", "name": "color"}),
-                                                  html.label({"class": "custom-control-label", "for": "color-3"}, "Lila"),
+                                                  html.input({"type": "radio", "class": "custom-control-input",
+                                                              "id": "color-3", "name": "color"}),
+                                                  html.label({"class": "custom-control-label", "for": "color-3"},
+                                                             "Lila"),
                                               ]),
                                               html.div({"class": "custom-control custom-radio custom-control-inline"}, [
-                                                  html.input({"type": "radio", "class": "custom-control-input", "id": "color-4", "name": "color"}),
-                                                  html.label({"class": "custom-control-label", "for": "color-4"}, "Azul"),
+                                                  html.input({"type": "radio", "class": "custom-control-input",
+                                                              "id": "color-4", "name": "color"}),
+                                                  html.label({"class": "custom-control-label", "for": "color-4"},
+                                                             "Azul"),
                                               ]),
                                               html.div({"class": "custom-control custom-radio custom-control-inline"}, [
-                                                  html.input({"type": "radio", "class": "custom-control-input", "id": "color-5", "name": "color"}),
-                                                  html.label({"class": "custom-control-label", "for": "color-5"}, "Rojo"),
+                                                  html.input({"type": "radio", "class": "custom-control-input",
+                                                              "id": "color-5", "name": "color"}),
+                                                  html.label({"class": "custom-control-label", "for": "color-5"},
+                                                             "Rojo"),
                                               ]),
                                               html.div({"class": "custom-control custom-radio custom-control-inline"}, [
-                                                  html.input({"type": "radio", "class": "custom-control-input", "id": "color-5", "name": "color"}),
-                                                  html.label({"class": "custom-control-label", "for": "color-5"}, "Amarillo Canario"),
+                                                  html.input({"type": "radio", "class": "custom-control-input",
+                                                              "id": "color-5", "name": "color"}),
+                                                  html.label({"class": "custom-control-label", "for": "color-5"},
+                                                             "Amarillo Canario"),
                                               ]),
                                           ]),
-                                      ),
+                                          ),
                                  # Input numérico para la cantidad
                                  html.div({"class": "input-group quantity mr-3", "style": "width: 130px;"},
                                           html.div({"class": "input-group-btn"},
                                                    html.button({"class": "btn btn-primary btn-minus"},
                                                                html.i({"class": "fa fa-minus"}, "-")
                                                                ),
-                                          ),
-                                          html.input({"type": "text", "class": "form-control bg-secondary text-center", "value": "1"}),
+                                                   ),
+                                          html.input({"type": "text", "class": "form-control bg-secondary text-center",
+                                                      "value": "1"}),
                                           html.div({"class": "input-group-btn"},
                                                    html.button({"class": "btn btn-primary btn-plus"},
                                                                html.i({"class": "fa fa-plus"}, "+")
                                                                ),
+                                                   ),
                                           ),
-                                 ),
                                  html.br(),
                                  # Botón de agregar al carrito
                                  html.button({"class": "btn btn-primary px-3"},
@@ -200,5 +223,3 @@ def Product(context):
             value
         )
     )
-
-

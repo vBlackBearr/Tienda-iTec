@@ -4,7 +4,8 @@ from reactpy import component, html
 from reactpy.core.hooks import use_context
 
 # componentes
-from static.components.login import login_form, banner as banner_login
+from static.components.login import LoginForm
+from static.components.base.banner import banner
 from static.screens._base import Base
 
 
@@ -13,8 +14,13 @@ def Login(context):
     context_value = use_context(context)
 
     content = (
-        banner_login,
-        login_form
+        banner,
+        html.link({
+            "rel": "stylesheet",
+            "href": "https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+        }),
+        html.script({"src": "https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"}),
+        LoginForm()
     )
 
     return html.div(
