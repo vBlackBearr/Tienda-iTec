@@ -1,4 +1,4 @@
-from reactpy import component, html
+from reactpy import component, html, use_state
 
 # contexto
 from reactpy.core.hooks import use_context
@@ -11,6 +11,15 @@ from static.components.base.banner import banner as banner_login
 @component
 def Product(context):
     value = use_context(context)
+    cantidad, set_cantidad = use_state(1)
+
+    def increaseCantidad(e):
+        set_cantidad(cantidad + 1)
+
+    def decreaseCantidad(e):
+        if cantidad >= 2:
+            set_cantidad(cantidad - 1)
+
     return html.div(
         Base(
             (
@@ -120,9 +129,9 @@ def Product(context):
                     # Contenedor de detalles del producto
                     html.div({"class": "col-md-6 ps-5"},
                              # Nombre del producto
-                             html.h2({"class": "h4 product-name"}, "Nombre del Producto"),
+                             html.h2({"class": "h4 product-name"}, "iPhone 14"),
                              # Precio del producto
-                             html.p({"class": "text-primary h5 product-price"}, "$19.99"),
+                             html.p({"class": "text-primary h5 product-price"}, "$949.99"),
                              html.div({
                                  "class": "d-inline p-2"
                              },
@@ -198,14 +207,16 @@ def Product(context):
                                  # Input numérico para la cantidad
                                  html.div({"class": "input-group quantity mr-3", "style": "width: 130px;"},
                                           html.div({"class": "input-group-btn"},
-                                                   html.button({"class": "btn btn-primary btn-minus"},
+                                                   html.button({"class": "btn btn-primary btn-minus",
+                                                                "on_click": decreaseCantidad},
                                                                html.i({"class": "fa fa-minus"}, "-")
                                                                ),
                                                    ),
                                           html.input({"type": "text", "class": "form-control bg-secondary text-center",
-                                                      "value": "1"}),
+                                                      "value": cantidad}),
                                           html.div({"class": "input-group-btn"},
-                                                   html.button({"class": "btn btn-primary btn-plus"},
+                                                   html.button({"class": "btn btn-primary btn-plus",
+                                                                "on_click": increaseCantidad},
                                                                html.i({"class": "fa fa-plus"}, "+")
                                                                ),
                                                    ),

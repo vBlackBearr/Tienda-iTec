@@ -48,9 +48,102 @@ CREATE TABLE products (
 -- Datos de prueba para la tabla products
 INSERT INTO products (name, description, props, stock, enabled)
 VALUES
-    ('Product 1', 'Description 1', '{"key": "value1"}', 50, 1),
-    ('Product 2', 'Description 2', '{"key": "value2"}', 75, 1),
-    ('Product 3', 'Description 3', '{"key": "value3"}', 60, 1);
+    ('iPhone 14 Azul', 'Description 1', '
+{"images": [
+        {
+          "alt": "",
+          "src": "static/img/IPHONE14/Azul/iphone-14-finish-select-202209-6-1inch-blue.jpeg"
+        },
+        {
+          "alt": "",
+          "src": "static/img/IPHONE14/Azul/iphone-14-finish-select-202209-6-1inch-blue_AV1.jpeg"
+        },
+        {
+          "alt": "",
+          "src": "static/img/IPHONE14/Azul/iphone-14-finish-select-202209-6-1inch-blue_AV2.jpeg"
+        }
+    ]
+}', 500, 1),
+    ('iPhone 14 Morado', 'Description 2', '
+{"images": [
+        {
+          "alt": "",
+          "src": "static/img/IPHONE14/Morado/iphone-14-finish-select-202209-6-1inch-purple.jpeg"
+        },
+        {
+          "alt": "",
+          "src": "static/img/IPHONE14/Morado/iphone-14-finish-select-202209-6-1inch-purple_AV1.jpeg"
+        },
+        {
+          "alt": "",
+          "src": "static/img/IPHONE14/Morado/iphone-14-finish-select-202209-6-1inch-purple_AV2.jpeg"
+        }
+    ]
+}', 75, 1),
+    ('iPhone 14 Amarillo', 'Description 3', '
+{"images": [
+        {
+          "alt": "",
+          "src": "static/img/IPHONE14/Amarillo/iphone-14-finish-select-202209-6-1inch-yellow.jpeg"
+        },
+        {
+          "alt": "",
+          "src": "static/img/IPHONE14/Amarillo/iphone-14-finish-select-202209-6-1inch-yellow_AV1.jpeg"
+        },
+        {
+          "alt": "",
+          "src": "static/img/IPHONE14/Amarillo/iphone-14-finish-select-202209-6-1inch-yellow_AV2.jpeg"
+        }
+    ]
+}', 60, 1),
+    ('iPhone 14 Medianoche', 'Description 2', '
+{"images": [
+        {
+          "alt": "",
+          "src": "static/img/IPHONE14/Medianoche/iphone-14-finish-select-202209-6-1inch-midnight.jpeg"
+        },
+        {
+          "alt": "",
+          "src": "static/img/IPHONE14/Medianoche/iphone-14-finish-select-202209-6-1inch-midnight_AV1.jpeg"
+        },
+        {
+          "alt": "",
+          "src": "static/img/IPHONE14/Medianoche/iphone-14-finish-select-202209-6-1inch-midnight_AV2.jpeg"
+        }
+    ]
+}', 75, 1),
+    ('iPhone 14 Blanco estelar', 'Description 2', '
+{"images": [
+        {
+          "alt": "",
+          "src": "static/img/IPHONE14/Blanco estelar/iphone-14-finish-select-202209-6-1inch-starlight.jpeg"
+        },
+        {
+          "alt": "",
+          "src": "static/img/IPHONE14/Blanco estelar/iphone-14-finish-select-202209-6-1inch-starlight_AV1.jpeg"
+        },
+        {
+          "alt": "",
+          "src": "static/img/IPHONE14/Blanco estelar/iphone-14-finish-select-202209-6-1inch-starlight_AV2.jpeg"
+        }
+    ]
+}', 75, 1),
+    ('iPhone 14 RED', 'Description 2', '
+{"images": [
+        {
+          "alt": "",
+          "src": "static/img/IPHONE14/RED/iphone-14-finish-select-202209-6-1inch-product-red.jpeg"
+        },
+        {
+          "alt": "",
+          "src": "static/img/IPHONE14/RED/iphone-14-finish-select-202209-6-1inch-product-red_AV1.jpeg"
+        },
+        {
+          "alt": "",
+          "src": "static/img/IPHONE14/RED/iphone-14-finish-select-202209-6-1inch-product-red_AV2.jpeg"
+        }
+    ]
+}', 75, 1);
 
 -- Creación de la tabla raw_materials_partners (relación muchos a muchos entre raw_materials y partners)
 CREATE TABLE raw_materials_partners (

@@ -13,7 +13,6 @@ def LoginForm():
 
     @reactpy.event(prevent_default=True)
     async def handleLogin(e):
-        # ---activar el modal---
         response = await getSession({"email": email, "password": password})
         if response:
             set_modal_text("Login Success!")
@@ -26,6 +25,7 @@ def LoginForm():
 
     def hide_modal(e):
         set_modal_style({"display": "none"})
+        set_modal_text("")
 
     return html.div({"class": "container"}, [
         # Modal(login_result="jkljkl", show_modal=show_modal),
