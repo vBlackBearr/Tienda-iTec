@@ -31,7 +31,17 @@ def Product(context):
         # print("Api response: ", prods[0]["props"]["images"])
         set_products(prods)
         # print(products)
-        set_selected_product(prods[0]["props"]["images"])
+        set_selected_product([
+            {
+                "src": "static/img/IPHONE14/iphone-14-finish-select-202209-6-1inch.jpeg"
+            },
+            {
+                "src": "static/img/IPHONE14/Azul/iphone-14-finish-select-202209-6-1inch-blue.jpeg"
+            },
+            {
+                "src": "static/img/IPHONE14/Amarillo/iphone-14-finish-select-202209-6-1inch-yellow_AV1.jpeg"
+            },
+        ])
         # print(products)
 
     use_effect(fetchProducts)
@@ -89,10 +99,15 @@ def Product(context):
                 banner_login,
                 # Contenedor principal de información del producto
                 html.div({
-                    "class": "product-container row row-cols-1 row-cols-md-5 g-2 g-lg-3 d-flex justify-content-center"},
+                    "class": "product-container row row-cols-1 row-cols-md-10 g-2 g-lg-3 d-flex justify-content-center",
+                    "style": {
+                        "background-color": "#f5f5f7",
+                        "padding-bottom": "30px",
+                        "padding-top": "30px"
+                    }},
                     # Carrusel de imágenes
                     html.div({
-                        "class": "col-md-4 mb-3",
+                        "class": "col-md-6 mb-3",
                     },
                         html.div({
                             "id": "carouselExample",
