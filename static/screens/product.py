@@ -207,10 +207,10 @@ def Product(context):
                                               ]),
                                               html.div({"class": "custom-control custom-radio custom-control-inline"}, [
                                                   html.input({"type": "radio", "class": "custom-control-input",
-                                                              "id": "color-5", "name": "color",
+                                                              "id": "color-6", "name": "color",
                                                               "value": "RED",
                                                               "on_change": lambda e: set_color_selected("RED")}),
-                                                  html.label({"class": "custom-control-label", "for": "color-5"},
+                                                  html.label({"class": "custom-control-label", "for": "color-6"},
                                                              "RED"),
                                               ]),
                                           ]),
