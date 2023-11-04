@@ -95,8 +95,8 @@ def Product(context):
                         "class": "col-md-4 mb-3",
                     },
                         html.div({
-                            "id": "product-carousel",
-                            "class": "carousel slide",
+                            "id": "carouselExample",
+                            "class": "carousel carousel-dark carousel-fade",
                             "data-bs-ride": "carousel"
                         },
                             html.div({
@@ -104,21 +104,23 @@ def Product(context):
                             },
                                 [create_table_row(row) for row in selected_product],
                             ),
-                            html.a({
-                                "class": "carousel-control-prev",
-                                "href": "#product-carousel",
-                                "role": "button",
-                                "data-bs-slide": "prev"
-                            },
+                            html.button(
+                                {
+                                    "class": "carousel-control-prev",
+                                    "type": "button",
+                                    "data-bs-target": "#carouselExample",
+                                    "data-bs-slide": "prev"
+                                },
                                 html.span({"class": "carousel-control-prev-icon", "aria-hidden": "true"}),
                                 html.span({"class": "visually-hidden"}, "Previous")
                             ),
-                            html.a({
-                                "class": "carousel-control-next",
-                                "href": "#product-carousel",
-                                "role": "button",
-                                "data-bs-slide": "next"
-                            },
+                            html.button(
+                                {
+                                    "class": "carousel-control-next",
+                                    "type": "button",
+                                    "data-bs-target": "#carouselExample",
+                                    "data-bs-slide": "next"
+                                },
                                 html.span({"class": "carousel-control-next-icon", "aria-hidden": "true"}),
                                 html.span({"class": "visually-hidden"}, "Next")
                             )
