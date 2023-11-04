@@ -27,7 +27,7 @@ from api_db.cruds.controllers.controllerPartners import router as router_partner
 from api_db.cruds.controllers.controllerRawMaterials import router as router_raw_materials
 from api_db.cruds.controllers.controllerProducts import router as router_products
 from api_db.cruds.controllers.controllerRoles import router as router_roles
-from api_db.cruds.controllers.controlerUsers import router as router_users
+from api_db.cruds.controllers.controllerUsers import router as router_users
 
 from api_db.cruds.controllers.controllerSales import router as router_sales
 from admin.content.endp.pedidos import router as router_pedidos

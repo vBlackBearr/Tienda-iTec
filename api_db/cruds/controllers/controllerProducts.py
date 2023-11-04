@@ -10,7 +10,7 @@ router = APIRouter()
 
 @router.get("/backend/products")
 def get_products(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
-    products = db.query(Product).offset(skip).limit(limit).all()
+    products = db.query(Product).filter(Product.enabled == True).offset(skip).limit(limit).all()
     return products
 
 

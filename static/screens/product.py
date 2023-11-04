@@ -1,4 +1,4 @@
-from reactpy import component, html, use_state
+from reactpy import component, html, use_state, use_effect
 
 # contexto
 from reactpy.core.hooks import use_context
@@ -7,11 +7,17 @@ from reactpy.core.hooks import use_context
 from static.screens._base import Base
 from static.components.base.banner import banner as banner_login
 
+# api
+from static.api import getProducts
+
 
 @component
 def Product(context):
     value = use_context(context)
     cantidad, set_cantidad = use_state(1)
+    color_selected, set_color_selected = use_state("")
+    products, set_products = use_state([])
+    selected_product, set_selected_product = use_state({})
 
     def increaseCantidad(e):
         set_cantidad(cantidad + 1)
@@ -20,6 +26,34 @@ def Product(context):
         if cantidad >= 2:
             set_cantidad(cantidad - 1)
 
+    async def fetchProducts():
+        prods = await getProducts()
+        # print("Api response: ", prods[0]["props"]["images"])
+        set_products(prods)
+        # print(products)
+        set_selected_product(prods[0]["props"]["images"])
+        # print(products)
+
+    use_effect(fetchProducts)
+
+    def color_changed():
+        print(color_selected)
+        for product in products:
+            if product["props"]["color"] == color_selected:
+                set_selected_product(product["props"]["images"])
+
+    use_effect(color_changed)
+
+    def create_table_row(product):
+        return html.div({
+            "class": "carousel-item active"
+        },
+            html.img({
+                "src": product["src"],
+                "alt": "Nombre del Producto",
+                "class": "img-fluid product-image"
+            }),
+        )
     return html.div(
         Base(
             (
@@ -68,43 +102,7 @@ def Product(context):
                             html.div({
                                 "class": "carousel-inner"
                             },
-                                html.div({
-                                    "class": "carousel-item active"
-                                },
-                                    html.img({
-                                        "src": "static/img/item-1.jpg",
-                                        "alt": "Nombre del Producto",
-                                        "class": "img-fluid product-image"
-                                    })
-                                ),
-                                html.div({
-                                    "class": "carousel-item"
-                                },
-                                    html.img({
-                                        "src": "static/img/item-2.jpg",
-                                        "alt": "Nombre del Producto",
-                                        "class": "img-fluid product-image"
-                                    })
-                                ),
-                                html.div({
-                                    "class": "carousel-item"
-                                },
-                                    html.img({
-                                        "src": "static/img/item-3.jpg",
-                                        "alt": "Nombre del Producto",
-                                        "class": "img-fluid product-image"
-                                    })
-                                ),
-                                html.div({
-                                    "class": "carousel-item"
-                                },
-                                    html.img({
-                                        "src": "static/img/item-4.jpeg",
-                                        "alt": "Nombre del Producto",
-                                        "class": "img-fluid product-image"
-                                    })
-                                )
-                                # Agrega más imágenes aquí en el mismo formato
+                                [create_table_row(row) for row in selected_product],
                             ),
                             html.a({
                                 "class": "carousel-control-prev",
@@ -168,39 +166,52 @@ def Product(context):
                                           html.form([
                                               html.div({"class": "custom-control custom-radio custom-control-inline"}, [
                                                   html.input({"type": "radio", "class": "custom-control-input",
-                                                              "id": "color-1", "name": "color"}),
+                                                              "id": "color-1", "name": "color",
+                                                              "value": "Azul",
+                                                              "on_change": lambda e: set_color_selected("Azul")}),
                                                   html.label({"class": "custom-control-label", "for": "color-1"},
-                                                             "Negro"),
-                                              ]),
-                                              html.div({"class": "custom-control custom-radio custom-control-inline"}, [
-                                                  html.input({"type": "radio", "class": "custom-control-input",
-                                                              "id": "color-2", "name": "color"}),
-                                                  html.label({"class": "custom-control-label", "for": "color-2"},
-                                                             "Blanco"),
-                                              ]),
-                                              html.div({"class": "custom-control custom-radio custom-control-inline"}, [
-                                                  html.input({"type": "radio", "class": "custom-control-input",
-                                                              "id": "color-3", "name": "color"}),
-                                                  html.label({"class": "custom-control-label", "for": "color-3"},
-                                                             "Lila"),
-                                              ]),
-                                              html.div({"class": "custom-control custom-radio custom-control-inline"}, [
-                                                  html.input({"type": "radio", "class": "custom-control-input",
-                                                              "id": "color-4", "name": "color"}),
-                                                  html.label({"class": "custom-control-label", "for": "color-4"},
                                                              "Azul"),
                                               ]),
                                               html.div({"class": "custom-control custom-radio custom-control-inline"}, [
                                                   html.input({"type": "radio", "class": "custom-control-input",
-                                                              "id": "color-5", "name": "color"}),
-                                                  html.label({"class": "custom-control-label", "for": "color-5"},
-                                                             "Rojo"),
+                                                              "id": "color-2", "name": "color",
+                                                              "value": "Morado",
+                                                              "on_change": lambda e: set_color_selected("Morado")}),
+                                                  html.label({"class": "custom-control-label", "for": "color-2"},
+                                                             "Morado"),
                                               ]),
                                               html.div({"class": "custom-control custom-radio custom-control-inline"}, [
                                                   html.input({"type": "radio", "class": "custom-control-input",
-                                                              "id": "color-5", "name": "color"}),
+                                                              "id": "color-3", "name": "color",
+                                                              "value": "Amarillo",
+                                                              "on_change": lambda e: set_color_selected("Amarillo")}),
+                                                  html.label({"class": "custom-control-label", "for": "color-3"},
+                                                             "Amarillo"),
+                                              ]),
+                                              html.div({"class": "custom-control custom-radio custom-control-inline"}, [
+                                                  html.input({"type": "radio", "class": "custom-control-input",
+                                                              "id": "color-4", "name": "color",
+                                                              "value": "Medianoche",
+                                                              "on_change": lambda e: set_color_selected("Medianoche")}),
+                                                  html.label({"class": "custom-control-label", "for": "color-4"},
+                                                             "Medianoche"),
+                                              ]),
+                                              html.div({"class": "custom-control custom-radio custom-control-inline"}, [
+                                                  html.input({"type": "radio", "class": "custom-control-input",
+                                                              "id": "color-5", "name": "color",
+                                                              "value": "Blanco estelar",
+                                                              "on_change": lambda e: set_color_selected(
+                                                                  "Blanco estelar")}),
                                                   html.label({"class": "custom-control-label", "for": "color-5"},
-                                                             "Amarillo Canario"),
+                                                             "Blanco estelar"),
+                                              ]),
+                                              html.div({"class": "custom-control custom-radio custom-control-inline"}, [
+                                                  html.input({"type": "radio", "class": "custom-control-input",
+                                                              "id": "color-5", "name": "color",
+                                                              "value": "RED",
+                                                              "on_change": lambda e: set_color_selected("RED")}),
+                                                  html.label({"class": "custom-control-label", "for": "color-5"},
+                                                             "RED"),
                                               ]),
                                           ]),
                                           ),
@@ -234,3 +245,4 @@ def Product(context):
             value
         )
     )
+

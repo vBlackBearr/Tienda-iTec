@@ -14,9 +14,9 @@ CREATE TABLE partners (
 -- Datos de prueba para la tabla partners
 INSERT INTO partners (name, details, direction, api_endpoint, props, enabled)
 VALUES
-    ('Partner 1', 'Details 1', 'Direction 1', 'http://api.example.com/partner1', '{"key": "value1"}', 1),
-    ('Partner 2', 'Details 2', 'Direction 2', 'http://api.example.com/partner2', '{"key": "value2"}', 1),
-    ('Partner 3', 'Details 3', 'Direction 3', 'http://api.example.com/partner3', '{"key": "value3"}', 1);
+    ('Partner 1', 'Details 1', 'Direction 1', 'http://api.example.com/', '{"key": "value1"}', 1),
+    ('Partner 2', 'Details 2', 'Direction 2', 'http://api.example.com/', '{"key": "value2"}', 1),
+    ('Partner 3', 'Details 3', 'Direction 3', 'http://api.example.com/', '{"key": "value3"}', 1);
 
 -- Creación de la tabla raw_materials
 CREATE TABLE raw_materials (
@@ -49,7 +49,8 @@ CREATE TABLE products (
 INSERT INTO products (name, description, props, stock, enabled)
 VALUES
     ('iPhone 14 Azul', 'Description 1', '
-{"images": [
+{"color": "Azul",
+"images": [
         {
           "alt": "",
           "src": "static/img/IPHONE14/Azul/iphone-14-finish-select-202209-6-1inch-blue.jpeg"
@@ -65,7 +66,8 @@ VALUES
     ]
 }', 500, 1),
     ('iPhone 14 Morado', 'Description 2', '
-{"images": [
+{"color": "Morado",
+"images": [
         {
           "alt": "",
           "src": "static/img/IPHONE14/Morado/iphone-14-finish-select-202209-6-1inch-purple.jpeg"
@@ -81,7 +83,8 @@ VALUES
     ]
 }', 75, 1),
     ('iPhone 14 Amarillo', 'Description 3', '
-{"images": [
+{"color": "Amarillo",
+"images": [
         {
           "alt": "",
           "src": "static/img/IPHONE14/Amarillo/iphone-14-finish-select-202209-6-1inch-yellow.jpeg"
@@ -97,7 +100,8 @@ VALUES
     ]
 }', 60, 1),
     ('iPhone 14 Medianoche', 'Description 2', '
-{"images": [
+{"color": "Medianoche",
+"images": [
         {
           "alt": "",
           "src": "static/img/IPHONE14/Medianoche/iphone-14-finish-select-202209-6-1inch-midnight.jpeg"
@@ -113,7 +117,8 @@ VALUES
     ]
 }', 75, 1),
     ('iPhone 14 Blanco estelar', 'Description 2', '
-{"images": [
+{"color": "Blanco estelar",
+"images": [
         {
           "alt": "",
           "src": "static/img/IPHONE14/Blanco estelar/iphone-14-finish-select-202209-6-1inch-starlight.jpeg"
@@ -129,7 +134,8 @@ VALUES
     ]
 }', 75, 1),
     ('iPhone 14 RED', 'Description 2', '
-{"images": [
+{"color": "RED",
+"images": [
         {
           "alt": "",
           "src": "static/img/IPHONE14/RED/iphone-14-finish-select-202209-6-1inch-product-red.jpeg"

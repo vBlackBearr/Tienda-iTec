@@ -3,6 +3,7 @@ import reactpy
 import asyncio
 from admin.content.api import getProducts, postProduct, deleteProduct, updateProduct
 
+
 @component
 def ProductsCrud():
     products, set_products = use_state([])
