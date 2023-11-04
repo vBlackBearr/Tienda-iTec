@@ -28,9 +28,7 @@ def Product(context):
 
     async def fetchProducts():
         prods = await getProducts()
-        # print("Api response: ", prods[0]["props"]["images"])
         set_products(prods)
-        # print(products)
         set_selected_product([
             {
                 "src": "static/img/IPHONE14/iphone-14-finish-select-202209-6-1inch.jpeg"
@@ -42,12 +40,10 @@ def Product(context):
                 "src": "static/img/IPHONE14/Amarillo/iphone-14-finish-select-202209-6-1inch-yellow_AV1.jpeg"
             },
         ])
-        # print(products)
 
     use_effect(fetchProducts)
 
     def color_changed():
-        print(color_selected)
         for product in products:
             if product["props"]["color"] == color_selected:
                 set_selected_product(product["props"]["images"])

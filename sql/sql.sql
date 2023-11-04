@@ -247,6 +247,8 @@ CREATE TABLE users (
     password VARCHAR(255) NOT NULL,
     email VARCHAR(255) NOT NULL,
     role_id INT,
+    cart JSON,
+    props JSON,
     enabled BOOLEAN DEFAULT TRUE,
     FOREIGN KEY (role_id) REFERENCES roles(id)
 );
