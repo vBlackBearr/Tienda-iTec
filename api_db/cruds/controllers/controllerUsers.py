@@ -1,6 +1,6 @@
 from typing import Annotated
 
-from fastapi import APIRouter, Depends, HTTPException, Header
+from fastapi import APIRouter, Depends, HTTPException, Header, status
 from sqlalchemy.orm import Session
 from api_db.database import get_db
 from api_db.cruds.schemas.schemas import User, UserCreate, ValidUser
@@ -55,7 +55,7 @@ else:
 
 
 # Define una función para generar tokens JWT
-def generate_jwt_token(data, expiration_minutes=30):
+def generate_jwt_token(data, expiration_minutes=300):
     payload = {
         "data": data,
         "exp": datetime.utcnow() + timedelta(minutes=expiration_minutes)
@@ -68,22 +68,28 @@ def generate_jwt_token(data, expiration_minutes=30):
 def create_session(user: ValidUser, db: Session = Depends(get_db)):
     user = db.query(User).filter(User.email == user.email).filter(User.password == user.password).first()
     if not user:
-        return {"Message": "Username or password incorrect"}
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Username or password incorrect")
     else:
-
-        token = generate_jwt_token({"user_id": 123})
-
+        token = generate_jwt_token({"email": user.email, "password": user.password})
         return {"user": user, "token": token}
 
 
-@router.get("/protected")
-def protected_route(Authorization: Annotated[str | None, Header()] = None):
+def login(user: ValidUser, db):
+    user = db.query(User).filter(User.email == user["email"]).filter(User.password == user["password"]).first()
+    if not user:
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Username or password incorrect")
+    else:
+        return user
+
+
+@router.post("/protected")
+def protected_route(Authorization: Annotated[str | None, Header()] = None,  db: Session = Depends(get_db)):
     token = Authorization
 
     try:
         payload = jwt.decode(token, public_pem, algorithms=['RS256'])
-        user_id = payload['data']['user_id']
-        return f"User ID: {user_id}"
+        data = payload['data']
+        return login(data, db)
     except jwt.ExpiredSignatureError:
         return "Token expirado", 401
     except jwt.InvalidTokenError:

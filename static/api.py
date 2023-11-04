@@ -480,3 +480,24 @@ async def getSession(credentials):
         return result
     else:
         return None
+
+
+async def Login(credentials):
+    async with httpx.AsyncClient() as client:
+        response = await client.post("http://localhost:8000/backend/login", json=credentials)
+    if response.status_code == 200:
+        result = {"status": response.status_code, "data": response.json()}
+        return result
+    else:
+        return {"status": response.status_code}
+
+
+async def ValidateSession(token: str):
+    async with httpx.AsyncClient() as client:
+        headers = {"Authorization": token}
+        response = await client.post("http://localhost:8000/protected", headers=headers)
+    if response.status_code == 200:
+        result = {"status": response.status_code, "data": response.json()}
+        return result
+    else:
+        return {"status": response.status_code}

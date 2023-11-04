@@ -60,6 +60,7 @@ def Product(context):
                 "class": "img-fluid product-image"
             }),
         )
+
     return html.div(
         Base(
             (

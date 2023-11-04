@@ -1,11 +1,14 @@
-from reactpy import html, use_state, web
+from reactpy import html, use_state, web, use_effect
 import reactpy
-from static.components.modal import Modal
-from static.api import getSession
+# from static.components.modal import Modal
+from static.api import Login
+from localStoragePy import localStoragePy
+import httpx
+
+localStorage = localStoragePy('iTec_space', 'your-storage-backend')
 
 
 def LoginForm():
-
     modal_text, set_modal_text = use_state("")
     modal_style, set_modal_style = use_state({"display": "none"})
     email, set_email = use_state("")
@@ -13,11 +16,15 @@ def LoginForm():
 
     @reactpy.event(prevent_default=True)
     async def handleLogin(e):
-        response = await getSession({"email": email, "password": password})
-        if response:
+        response = await Login({"email": email, "password": password})
+        if response["status"] == 200:
             set_modal_text("Login Success!")
+            localStorage.setItem('token', response["data"]["token"])
         else:
-            set_modal_text("Login Failed!")
+            if response["status"] == 401:
+                set_modal_text("Usuario y/o contraseña incorrecta!")
+            else:
+                set_modal_text("Error al iniciar sesion")
         show_modal(None)
 
     def show_modal(e):
@@ -28,7 +35,6 @@ def LoginForm():
         set_modal_text("")
 
     return html.div({"class": "container"}, [
-        # Modal(login_result="jkljkl", show_modal=show_modal),
 
         #
         #    MODAL
