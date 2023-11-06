@@ -76,19 +76,11 @@ def NavigationBar(is_loged, user):
                         html.div({"class": "container-sub-menu"}, [
                             html.ul({"class": "sub-menu-ul"}, [
                                 html.li({"class": "nav-menu-item"}, [
-                                    html.a({"class": "nav-menu-link", "href": "#"}, [
-                                        html.strong("iPhone 14"),
-                                        html.i({"class": "zmdi zmdi-chevron-down"})
-                                    ]),
+
                                     html.ul({"class": "sub-menu-ul"}, [
                                         html.li({"class": "nav-menu-item"},
-                                                html.a({"class": "nav-menu-link", "href": "#"}, "iPhone 14")),
-                                        html.li({"class": "nav-menu-item"},
-                                                html.a({"class": "nav-menu-link", "href": "#"}, "iPhone 14 plus")),
-                                        html.li({"class": "nav-menu-item"},
-                                                html.a({"class": "nav-menu-link", "href": "#"}, "iPhone 14 pro")),
-                                        html.li({"class": "nav-menu-item"},
-                                                html.a({"class": "nav-menu-link", "href": "#"}, "iPhone 14 pro max"))
+                                                html.a({"class": "nav-menu-link", "href": "/product"}, "iPhone 14")),
+
                                     ])
                                 ])
                             ])
@@ -102,7 +94,7 @@ def NavigationBar(is_loged, user):
                             html.a({"class": "nav-menu-link", "href": "login"}, "Iniciar Sesión")),
                     html.li({"class": "nav-menu-item", "style": {"display": ["block" if is_loged else "none"]}},
                             html.a({"class": "nav-menu-link", "href": "#", "on_click": logout},
-                                   ("Sesion iniciada   Usuario:", ((user["email"]) if is_loged else ""))))
+                                   ("Sesion iniciada como: ", ((user["username"]) if is_loged else ""))))
                 ])
             ])
         ])

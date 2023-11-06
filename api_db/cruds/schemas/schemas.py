@@ -252,7 +252,6 @@ class Role(RoleBase):
 class UserBase(BaseModel):
     username: str
     email: str
-    cart: dict
 
 
 class UserCreate(UserBase):

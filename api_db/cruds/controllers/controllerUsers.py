@@ -110,8 +110,9 @@ def protected_route(data: dict, db: Session = Depends(get_db)):
     return {"token": token, "user": getUserWithToken(token, db)}
 
 
-@router.patch("/backend/users/cart")
-def update_cart(Authorization: Annotated[str | None, Header()] = None, data: UserCartChangeQuantity = None, db: Session = Depends(get_db)):
+@router.put("/backend/users/cart")
+def update_cart_replace(Authorization: Annotated[str | None, Header()] = None, data: UserCartChangeQuantity = None,
+                db: Session = Depends(get_db)):
     if data is None:
         data = {}
     user = getUserWithToken(Authorization, db)
@@ -123,6 +124,37 @@ def update_cart(Authorization: Annotated[str | None, Header()] = None, data: Use
 
     if existing_cart_item:
         existing_cart_item.quantity = data.quantity
+        msg = {"Message": "Cantidad del producto actaulizada"}
+    else:
+        data_insert = {
+            "user_id": user.id,
+            "product_id": data.product_id,
+            "quantity": data.quantity
+        }
+        db_cart_item = UserCart(**data_insert)
+        db.add(db_cart_item)
+        msg = {"Message": "Producto agregado al carrito"}
+
+    db.commit()
+    db.refresh(user)
+
+    return msg
+
+
+@router.patch("/backend/users/cart")
+def update_cart_sum(Authorization: Annotated[str | None, Header()] = None, data: UserCartChangeQuantity = None,
+                db: Session = Depends(get_db)):
+    if data is None:
+        data = {}
+    user = getUserWithToken(Authorization, db)
+    if user is None:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    existing_cart_item = db.query(UserCart).filter(UserCart.user_id == user.id,
+                                                   UserCart.product_id == data.product_id).first()
+
+    if existing_cart_item:
+        existing_cart_item.quantity += data.quantity
         msg = {"Message": "Cantidad del producto actaulizada"}
     else:
         data_insert = {
@@ -153,17 +185,17 @@ def update_cart(Authorization: Annotated[str | None, Header()] = None, db: Sessi
     for cart_item in cart:
         # print(cart_item.product_id)
         product = get_product(cart_item.product_id, db)
-        final_cart.append({"id": product.id, "name": product.name, "price": product.price, "quantity": cart_item.quantity})
+        final_cart.append(
+            {"id": product.id, "name": product.name, "price": product.price, "quantity": cart_item.quantity})
 
     return final_cart
 
 
-
 @router.delete("/backend/users/cart")
 def delete_product_from_cart(
-    Authorization: Annotated[str | None, Header()] = None,
-    product_id: int = 0,
-    db: Session = Depends(get_db)
+        Authorization: Annotated[str | None, Header()] = None,
+        product_id: int = 0,
+        db: Session = Depends(get_db)
 ):
     user = getUserWithToken(Authorization, db)
     if user is None:

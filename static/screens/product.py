@@ -9,7 +9,7 @@ from static.screens._base import Base
 from static.components.base.banner import banner as banner_login
 
 # api
-from static.api import getProducts, updateCartQuantity
+from static.api import getProducts, patchCartQuantity
 
 # LocalStorage
 from static.localStorage.localStorage import getSession
@@ -25,12 +25,17 @@ def Product(context):
     products, set_products = use_state([])
     selected_product, set_selected_product = use_state({})
 
+    # Modal
+    modal_text, set_modal_text = use_state("")
+    modal_style, set_modal_style = use_state({"display": "none"})
+
     # User - Tokens
     session = getSession()
     token = session["token"]
+    is_logged_id = session["is_logged_in"]
 
     context = create_context({
-        "is_logged_in": session["is_logged_in"],
+        "is_logged_in": is_logged_id,
         "user": session["user"]
     })
 
@@ -77,8 +82,22 @@ def Product(context):
         )
 
     async def handle_submit(e):
-        print("agregando al carrito ")
-        await updateCartQuantity(token, product_id_selected, cantidad)
+        if is_logged_id:
+            print("agregando al carrito ")
+            await patchCartQuantity(token, product_id_selected, cantidad)
+            set_modal_text("Producto agregado al carrito")
+            show_modal(None)
+        else:
+            set_modal_text("Primero tienes que iniciar sesion")
+            show_modal(None)
+
+    def show_modal(e):
+        set_modal_style({"display": "block"})
+
+    def hide_modal(e):
+        set_modal_style({"display": "none"})
+        set_modal_text("")
+
 
     return html.div(
         Base(
@@ -114,6 +133,40 @@ def Product(context):
                 }),
                 banner_login,
                 # Contenedor principal de información del producto
+                #
+                #    MODAL
+                #
+                html.div({
+                    "style": modal_style,
+                    "class": "modal"
+                },
+                    html.div({
+                        "class": "modal-dialog modal-dialog-centered"
+                    },
+                        html.div({
+                            "class": "modal-content"
+                        },
+                            html.div({
+                                "class": "modal-header"
+                            },
+                                html.h1({
+                                    "class": "modal-title fs-5",
+                                    "id": "exampleModalToggleLabel"
+                                }, modal_text),
+                                html.button({
+                                    "type": "button",
+                                    "class": "btn-close",
+                                    "data-bs-dismiss": "modal",
+                                    "aria-label": "Close",
+                                    "on_click": hide_modal
+                                })
+                            )
+                        )
+                    )
+                ),
+                #
+                #   Fin MODAL
+                #
                 html.div({
                     "class": "product-container row row-cols-1 row-cols-md-10 g-2 g-lg-3 d-flex justify-content-center",
                     "style": {
