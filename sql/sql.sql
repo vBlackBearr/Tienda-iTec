@@ -42,13 +42,14 @@ CREATE TABLE products (
     description TEXT,
     props JSON,
     stock INT,
+    price FLOAT,
     enabled BOOLEAN
 );
 
 -- Datos de prueba para la tabla products
-INSERT INTO products (name, description, props, stock, enabled)
+INSERT INTO products (id, name, description, props, stock, price, enabled)
 VALUES
-    ('iPhone 14 Azul', 'Description 1', '
+    (17, 'iPhone 14 Azul', 'Description 1', '
 {"color": "Azul",
 "images": [
         {
@@ -64,8 +65,8 @@ VALUES
           "src": "static/img/IPHONE14/Azul/iphone-14-finish-select-202209-6-1inch-blue_AV2.jpeg"
         }
     ]
-}', 500, 1),
-    ('iPhone 14 Morado', 'Description 2', '
+}', 500, 949.99, 1),
+    (18, 'iPhone 14 Morado', 'Description 2', '
 {"color": "Morado",
 "images": [
         {
@@ -81,8 +82,8 @@ VALUES
           "src": "static/img/IPHONE14/Morado/iphone-14-finish-select-202209-6-1inch-purple_AV2.jpeg"
         }
     ]
-}', 75, 1),
-    ('iPhone 14 Amarillo', 'Description 3', '
+}', 75, 949.99, 1),
+    (19, 'iPhone 14 Amarillo', 'Description 3', '
 {"color": "Amarillo",
 "images": [
         {
@@ -98,8 +99,8 @@ VALUES
           "src": "static/img/IPHONE14/Amarillo/iphone-14-finish-select-202209-6-1inch-yellow_AV2.jpeg"
         }
     ]
-}', 60, 1),
-    ('iPhone 14 Medianoche', 'Description 2', '
+}', 60, 949.99, 1),
+    (20, 'iPhone 14 Medianoche', 'Description 2', '
 {"color": "Medianoche",
 "images": [
         {
@@ -115,8 +116,8 @@ VALUES
           "src": "static/img/IPHONE14/Medianoche/iphone-14-finish-select-202209-6-1inch-midnight_AV2.jpeg"
         }
     ]
-}', 75, 1),
-    ('iPhone 14 Blanco estelar', 'Description 2', '
+}', 75, 949.99, 1),
+    (21, 'iPhone 14 Blanco estelar', 'Description 2', '
 {"color": "Blanco estelar",
 "images": [
         {
@@ -132,8 +133,8 @@ VALUES
           "src": "static/img/IPHONE14/Blanco estelar/iphone-14-finish-select-202209-6-1inch-starlight_AV2.jpeg"
         }
     ]
-}', 75, 1),
-    ('iPhone 14 RED', 'Description 2', '
+}', 75, 949.99, 1),
+    (22, 'iPhone 14 RED', 'Description 2', '
 {"color": "RED",
 "images": [
         {
@@ -149,7 +150,7 @@ VALUES
           "src": "static/img/IPHONE14/RED/iphone-14-finish-select-202209-6-1inch-product-red_AV2.jpeg"
         }
     ]
-}', 75, 1);
+}', 75, 949.99, 1);
 
 -- Creación de la tabla raw_materials_partners (relación muchos a muchos entre raw_materials y partners)
 CREATE TABLE raw_materials_partners (
@@ -158,8 +159,8 @@ CREATE TABLE raw_materials_partners (
     partner_id INT,
     props JSON,
     enabled BOOLEAN,
-    FOREIGN KEY (raw_material_id) REFERENCES raw_materials(id),
-    FOREIGN KEY (partner_id) REFERENCES partners(id)
+    FOREIGN KEY (raw_material_id) REFERENCES raw_materials(id) ON DELETE CASCADE,
+    FOREIGN KEY (partner_id) REFERENCES partners(id) ON DELETE CASCADE
 );
 
 -- Datos de prueba para la tabla raw_materials_partners
@@ -177,8 +178,8 @@ CREATE TABLE bom (
     quantity INT,
     props JSON,
     enabled BOOLEAN,
-    FOREIGN KEY (product_id) REFERENCES products(id),
-    FOREIGN KEY (raw_material_id) REFERENCES raw_materials(id)
+    FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE,
+    FOREIGN KEY (raw_material_id) REFERENCES raw_materials(id) ON DELETE CASCADE
 );
 
 -- Datos de prueba para la tabla bom
@@ -213,8 +214,8 @@ CREATE TABLE products_sales (
     subtotal DECIMAL(10, 2),
     props JSON,
     enabled BOOLEAN,
-    FOREIGN KEY (product_id) REFERENCES products(id),
-    FOREIGN KEY (sale_id) REFERENCES sales(id)
+    FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE,
+    FOREIGN KEY (sale_id) REFERENCES sales(id) ON DELETE CASCADE
 );
 
 -- Datos de prueba para la tabla products_sales
@@ -250,7 +251,7 @@ CREATE TABLE users (
     cart JSON NOT NULL,
     props JSON,
     enabled BOOLEAN DEFAULT TRUE,
-    FOREIGN KEY (role_id) REFERENCES roles(id)
+    FOREIGN KEY (role_id) REFERENCES roles(id) ON DELETE CASCADE
 );
 
 

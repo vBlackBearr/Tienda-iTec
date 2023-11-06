@@ -519,3 +519,17 @@ async def updateCartQuantity(token: str, product_id: int, quantity: int):
         return result
     else:
         return {"status": response.status_code}
+
+
+async def getCart(token: str):
+    async with httpx.AsyncClient() as client:
+        headers = {
+            "Authorization": token
+        }
+
+        response = await client.get("http://localhost:8000/backend/users/cart", headers=headers)
+    if response.status_code == 200:
+        result = {"status": response.status_code, "data": response.json()}
+        return result
+    else:
+        return {"status": response.status_code}

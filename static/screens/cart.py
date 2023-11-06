@@ -1,8 +1,10 @@
 from reactpy import component, html
+import asyncio
 
 # contexto
-from reactpy.core.hooks import use_context, create_context
+from reactpy.core.hooks import use_context, create_context, use_state, use_effect
 
+from static.components.cart.item import item
 # componentes
 from static.screens._base import Base
 from static.components.base.banner import banner as banner_login
@@ -11,6 +13,9 @@ from reactpy_router import route
 
 # LocalStorage
 from static.localStorage.localStorage import getSession
+
+# Api
+from static.api import getCart
 
 
 @component
@@ -25,6 +30,23 @@ def Cart(context):
         "is_logged_in": session["is_logged_in"],
         "user": session["user"]
     })
+
+    products, set_products = use_state([])
+    subtotal, set_subtotal = use_state(0)
+    total, set_total = use_state(0)
+
+    async def fetch_products():
+        prods = await getCart(token)
+        if prods["status"] == 200:
+            set_products(prods["data"])
+        else:
+            print("Error on fetch_products in cart.py: ", prods["status"])
+        # set_products(prods)
+
+    use_effect(fetch_products, [])
+
+    def product_rows():
+        return [item(product, index) for index, product in enumerate(products)]
 
     return html.div(
         Base(
@@ -73,51 +95,8 @@ def Cart(context):
                                                                  )
                                                                  ),
                                                       html.tbody({"class": "align-middle"},
-                                                                 html.tr(
-                                                                     html.td({"class": "align-middle"},
-                                                                             html.div({
-                                                                                          "style": "display: flex; align-items: center;"},
-                                                                                      html.img({
-                                                                                                   "src": "static/img/item-1.jpg",
-                                                                                                   "alt": "",
-                                                                                                   "style": "width: 50px;"}),
-                                                                                      "iPhone 14 pro Max"
-                                                                                      )
-                                                                             ),
-                                                                     html.td({"class": "align-middle"}, "$150"),
-                                                                     html.td({"class": "align-middle"},
-                                                                             html.div({
-                                                                                          "class": "input-group quantity mx-auto",
-                                                                                          "style": "width: 100px;"},
-                                                                                      html.div(
-                                                                                          {"class": "input-group-btn"},
-                                                                                          html.button({
-                                                                                                          "class": "btn btn-sm btn-primary btn-minus"},
-                                                                                                      html.i({
-                                                                                                                 "class": "fa fa-minus"})
-                                                                                                      )
-                                                                                          ),
-                                                                                      html.input({"type": "text",
-                                                                                                  "class": "form-control form-control-sm bg-secondary text-center",
-                                                                                                  "value": "1"}),
-                                                                                      html.div(
-                                                                                          {"class": "input-group-btn"},
-                                                                                          html.button({
-                                                                                                          "class": "btn btn-sm btn-primary btn-plus"},
-                                                                                                      html.i({
-                                                                                                                 "class": "fa fa-plus"})
-                                                                                                      )
-                                                                                          )
-                                                                                      )
-                                                                             ),
-                                                                     html.td({"class": "align-middle"}, "$150"),
-                                                                     html.td({"class": "align-middle"},
-                                                                             html.button(
-                                                                                 {"class": "btn btn-sm btn-primary"},
-                                                                                 html.i({"class": "fa fa-times"})
-                                                                                 )
-                                                                             )
-                                                                 ),
+
+                                                                 *product_rows()
                                                                  # Repite este bloque para cada fila de la tabla
                                                                  )
                                                       )
@@ -142,7 +121,7 @@ def Cart(context):
                                                                  {"class": "d-flex justify-content-between mb-3 pt-1"},
                                                                  html.h6({"class": "font-weight-medium"}, "Subtotal"),
                                                                  html.h6({"class": "font-weight-medium"}, "$150")
-                                                                 ),
+                                                             ),
                                                              html.div({"class": "d-flex justify-content-between"},
                                                                       html.h6({"class": "font-weight-medium"}, "IVA"),
                                                                       html.h6({"class": "font-weight-medium"}, "$10")

@@ -50,6 +50,7 @@ class Product(Base):
     description = Column(String)
     props = Column(JSON)
     stock = Column(Integer)
+    price = Column(DECIMAL)
     enabled = Column(Boolean)
 
     bom = relationship("BOM", back_populates="product")

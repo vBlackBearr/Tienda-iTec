@@ -2,6 +2,8 @@ from typing import Annotated
 
 from fastapi import APIRouter, Depends, HTTPException, Header, status
 from sqlalchemy.orm import Session
+
+from api_db.cruds.controllers.controllerProducts import get_product
 from api_db.database import get_db
 from api_db.cruds.schemas.schemas import UserCreate, ValidUser, UserCartCreate, UserCartChangeQuantity, \
     UserCartChangeQuantityIncDec
@@ -136,6 +138,24 @@ def update_cart(Authorization: Annotated[str | None, Header()] = None, data: Use
     db.refresh(user)
 
     return msg
+
+
+@router.get("/backend/users/cart")
+def update_cart(Authorization: Annotated[str | None, Header()] = None, db: Session = Depends(get_db)):
+    user = getUserWithToken(Authorization, db)
+    if user is None:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    cart = db.query(UserCart).filter(UserCart.user_id == user.id).all()
+
+    final_cart = []
+
+    for cart_item in cart:
+        # print(cart_item.product_id)
+        product = get_product(cart_item.product_id, db)
+        final_cart.append({"name": product.name, "price": product.price, "quantity": cart_item.quantity})
+
+    return final_cart
 
 
 # @router.patch("/backend/users/{user_id}/cart/increase1")
