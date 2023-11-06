@@ -58,7 +58,7 @@ else:
 
 
 # Define una función para generar tokens JWT
-def generate_jwt_token(data, expiration_minutes=300):
+def generate_jwt_token(data, expiration_minutes=3000):
     payload = {
         "data": data,
         "exp": datetime.utcnow() + timedelta(minutes=expiration_minutes)
@@ -93,9 +93,9 @@ def getUserWithToken(Authorization: Annotated[str | None, Header()] = None, db: 
         data = payload['data']
         return login(data, db)  # retorna el user
     except jwt.ExpiredSignatureError:
-        return "Token expirado", 401
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Token expirado")
     except jwt.InvalidTokenError:
-        return "Token inválido", 401
+        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Token inválido")
 
 
 @router.post("/protected")
@@ -153,9 +153,35 @@ def update_cart(Authorization: Annotated[str | None, Header()] = None, db: Sessi
     for cart_item in cart:
         # print(cart_item.product_id)
         product = get_product(cart_item.product_id, db)
-        final_cart.append({"name": product.name, "price": product.price, "quantity": cart_item.quantity})
+        final_cart.append({"id": product.id, "name": product.name, "price": product.price, "quantity": cart_item.quantity})
 
     return final_cart
+
+
+
+@router.delete("/backend/users/cart")
+def delete_product_from_cart(
+    Authorization: Annotated[str | None, Header()] = None,
+    product_id: int = 0,
+    db: Session = Depends(get_db)
+):
+    user = getUserWithToken(Authorization, db)
+    if user is None:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    cart_item = db.query(UserCart).filter(
+        UserCart.user_id == user.id,
+        UserCart.product_id == product_id
+    ).first()
+
+    if cart_item:
+        db.delete(cart_item)
+        db.commit()
+        msg = {"Message": "Producto eliminado del carrito"}
+    else:
+        raise HTTPException(status_code=404, detail="Product not found in the cart")
+
+    return msg
 
 
 # @router.patch("/backend/users/{user_id}/cart/increase1")

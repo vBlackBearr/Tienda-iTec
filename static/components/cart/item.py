@@ -1,25 +1,30 @@
 from reactpy import use_state, html, component
 
+from static.api import updateCartQuantity, deleteProductFromCart
+
 
 @component
-def item(product, index):
+def item(product, token, fetch_products):
     quantity, set_quantity = use_state(product['quantity'])
 
-    def increase_quantity(e):
+    async def increase_quantity(e):
         new_quantity = quantity + 1
+        await updateCartQuantity(token, product["id"], new_quantity)
         set_quantity(new_quantity)
-        # update_product_quantity(index, new_quantity)
+        await fetch_products()
 
-    def decrease_quantity(e):
+    async def decrease_quantity(e):
         if quantity >= 2:
             new_quantity = quantity - 1
+            await updateCartQuantity(token, product["id"], new_quantity)
             set_quantity(new_quantity)
+            await fetch_products()
             # update_product_quantity(index, new_quantity)
 
-    # def update_product_quantity(index, new_quantity):
-    #     products_copy = products.copy()
-    #     products_copy[index]['quantity'] = new_quantity
-    #     set_products(products_copy)
+    async def handle_delete_item(e):
+        print("eliminando producto")
+        await deleteProductFromCart(token, product["id"])
+        await fetch_products()
 
     return (
         html.tr(
@@ -52,7 +57,7 @@ def item(product, index):
                             "type": "text",
                             "class": "form-control form-control-sm bg-secondary text-center",
                             "value": quantity,
-                            "on_change": lambda e: set_quantity(int(e.target.value))
+                            "readonly": ""
                             # Actualizar el estado cuando cambia el input
                         }),
                         html.div(
@@ -67,11 +72,12 @@ def item(product, index):
                         )
                     )
                     ),
-            html.td({"class": "align-middle"}, f"${product['price']}"),
+            html.td({"class": "align-middle"}, f"${round(product['price'] * quantity, 2)}"),
             html.td({"class": "align-middle"},
                     html.button(
-                        {"class": "btn btn-sm btn-primary"},
-                        html.i({"class": "fa fa-times"})
+                        {"class": "btn btn-sm btn-primary",
+                         "on_click": handle_delete_item},
+                        html.i({"class": "fa fa-times"}, "x")
                     )
                     )
         )

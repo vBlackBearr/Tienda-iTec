@@ -102,7 +102,7 @@ def NavigationBar(is_loged, user):
                             html.a({"class": "nav-menu-link", "href": "login"}, "Iniciar Sesión")),
                     html.li({"class": "nav-menu-item", "style": {"display": ["block" if is_loged else "none"]}},
                             html.a({"class": "nav-menu-link", "href": "#", "on_click": logout},
-                                   ("Sesion iniciada   Usuario:" + (user["email"] if is_loged else ""))))
+                                   ("Sesion iniciada   Usuario:", ((user["email"]) if is_loged else ""))))
                 ])
             ])
         ])

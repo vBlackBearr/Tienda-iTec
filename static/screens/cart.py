@@ -33,20 +33,26 @@ def Cart(context):
 
     products, set_products = use_state([])
     subtotal, set_subtotal = use_state(0)
+    iva, set_iva = use_state(0)
     total, set_total = use_state(0)
 
     async def fetch_products():
         prods = await getCart(token)
         if prods["status"] == 200:
             set_products(prods["data"])
+
+            sub_total = sum(product["price"] * product["quantity"] for product in prods["data"])
+            set_subtotal(sub_total)
+            set_iva(sub_total * 0.16)
+            set_total(sub_total * 1.16)
+
         else:
             print("Error on fetch_products in cart.py: ", prods["status"])
-        # set_products(prods)
 
     use_effect(fetch_products, [])
 
     def product_rows():
-        return [item(product, index) for index, product in enumerate(products)]
+        return [item(product, token, fetch_products) for product in products]
 
     return html.div(
         Base(
@@ -120,17 +126,20 @@ def Cart(context):
                                                              html.div(
                                                                  {"class": "d-flex justify-content-between mb-3 pt-1"},
                                                                  html.h6({"class": "font-weight-medium"}, "Subtotal"),
-                                                                 html.h6({"class": "font-weight-medium"}, "$150")
+                                                                 html.h6({"class": "font-weight-medium"},
+                                                                         ("$", round(subtotal, 2)))
                                                              ),
                                                              html.div({"class": "d-flex justify-content-between"},
                                                                       html.h6({"class": "font-weight-medium"}, "IVA"),
-                                                                      html.h6({"class": "font-weight-medium"}, "$10")
+                                                                      html.h6({"class": "font-weight-medium"},
+                                                                              ("$", round(iva, 2)))
                                                                       )
                                                              ),
                                                     html.div({"class": "card-footer border-secondary bg-transparent"},
                                                              html.div({"class": "d-flex justify-content-between mt-2"},
                                                                       html.h5({"class": "font-weight-bold"}, "Total"),
-                                                                      html.h5({"class": "font-weight-bold"}, "$160")
+                                                                      html.h5({"class": "font-weight-bold"},
+                                                                              ("$", round(total, 2)))
                                                                       ),
                                                              html.a({"class": "btn btn-block btn-primary my-3 py-3",
                                                                      "href": "/payment"}, "Generar compra")

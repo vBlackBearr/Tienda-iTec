@@ -533,3 +533,19 @@ async def getCart(token: str):
         return result
     else:
         return {"status": response.status_code}
+
+
+async def deleteProductFromCart(token: str, product_id: int):
+    async with httpx.AsyncClient() as client:
+        headers = {
+            "Authorization": token
+        }
+
+        response = await client.delete(f"http://localhost:8000/backend/users/cart?product_id={product_id}",
+                                       headers=headers)
+
+    if response.status_code == 200:
+        result = {"status": response.status_code, "data": response.json()}
+        return result
+    else:
+        return {"status": response.status_code}
