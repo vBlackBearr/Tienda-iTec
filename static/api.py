@@ -501,3 +501,21 @@ async def ValidateSession(token: str):
         return result
     else:
         return {"status": response.status_code}
+
+
+async def updateCartQuantity(token: str, product_id: int, quantity: int):
+    async with httpx.AsyncClient() as client:
+        headers = {
+            "Authorization": token
+        }
+        json = {
+            "product_id": product_id,
+            "quantity": quantity
+        }
+
+        response = await client.patch("http://localhost:8000/backend/users/cart", headers=headers, json=json)
+    if response.status_code == 200:
+        result = {"status": response.status_code, "data": response.json()}
+        return result
+    else:
+        return {"status": response.status_code}

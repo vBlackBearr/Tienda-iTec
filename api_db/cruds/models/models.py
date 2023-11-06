@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, JSON, Boolean, ForeignKey, Date, DECIMAL
+from sqlalchemy import Column, Integer, String, JSON, Boolean, ForeignKey, Date, DECIMAL, UniqueConstraint
 from sqlalchemy.orm import relationship
 from api_db.database import Base
 
@@ -112,6 +112,18 @@ class User(Base):
     password = Column(String, nullable=False)
     email = Column(String, nullable=False)
     role_id = Column(Integer, ForeignKey('roles.id'))
+    cart = Column(JSON)
     enabled = Column(Boolean, default=True)
-
     role = relationship("Role", back_populates="users")
+
+
+class UserCart(Base):
+    __tablename__ = "user_cart"
+
+    id = Column(Integer, primary_key=True)
+    user_id = Column(Integer, ForeignKey('users.id'))
+    product_id = Column(Integer, ForeignKey('products.id'))
+    quantity = Column(Integer)
+    props = Column(JSON)
+    enabled = Column(Boolean, default=True)
+    UniqueConstraint('user_id', 'product_id', name='unique_user_product')

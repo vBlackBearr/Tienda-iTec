@@ -1,14 +1,18 @@
 from reactpy import component, html, use_state, use_effect
+import httpx
 
 # contexto
-from reactpy.core.hooks import use_context
+from reactpy.core.hooks import use_context, create_context
 
 # componentes
 from static.screens._base import Base
 from static.components.base.banner import banner as banner_login
 
 # api
-from static.api import getProducts
+from static.api import getProducts, updateCartQuantity
+
+# LocalStorage
+from static.localStorage.localStorage import getSession
 
 
 @component
@@ -16,8 +20,19 @@ def Product(context):
     value = use_context(context)
     cantidad, set_cantidad = use_state(1)
     color_selected, set_color_selected = use_state("")
+    product_id_selected, set_product_id_selected = use_state(0)
+    size_selected, set_size_selected = use_state(0)
     products, set_products = use_state([])
     selected_product, set_selected_product = use_state({})
+
+    # User - Tokens
+    session = getSession()
+    token = session["token"]
+
+    context = create_context({
+        "is_logged_in": session["is_logged_in"],
+        "user": session["user"]
+    })
 
     def increaseCantidad(e):
         set_cantidad(cantidad + 1)
@@ -60,6 +75,10 @@ def Product(context):
                 "class": "img-fluid product-image"
             }),
         )
+
+    async def handle_submit(e):
+        print("agregando al carrito ")
+        await updateCartQuantity(token, product_id_selected, cantidad)
 
     return html.div(
         Base(
@@ -154,21 +173,24 @@ def Product(context):
                                               html.div({"class": "custom-control custom-radio custom-control-inline"}, [
                                                   html.input(
                                                       {"type": "radio", "class": "custom-control-input", "id": "size-1",
-                                                       "name": "size"}),
+                                                       "name": "size",
+                                                       "on_change": lambda e: set_size_selected(128)}),
                                                   html.label({"class": "custom-control-label", "for": "size-1"},
                                                              "128 GB"),
                                               ]),
                                               html.div({"class": "custom-control custom-radio custom-control-inline"}, [
                                                   html.input(
                                                       {"type": "radio", "class": "custom-control-input", "id": "size-2",
-                                                       "name": "size"}),
+                                                       "name": "size",
+                                                       "on_change": lambda e: set_size_selected(256)}),
                                                   html.label({"class": "custom-control-label", "for": "size-2"},
                                                              "256 GB"),
                                               ]),
                                               html.div({"class": "custom-control custom-radio custom-control-inline"}, [
                                                   html.input(
                                                       {"type": "radio", "class": "custom-control-input", "id": "size-3",
-                                                       "name": "size"}),
+                                                       "name": "size",
+                                                       "on_change": lambda e: set_size_selected(512)}),
                                                   html.label({"class": "custom-control-label", "for": "size-3"},
                                                              "512 GB"),
                                               ]),
@@ -182,7 +204,8 @@ def Product(context):
                                                   html.input({"type": "radio", "class": "custom-control-input",
                                                               "id": "color-1", "name": "color",
                                                               "value": "Azul",
-                                                              "on_change": lambda e: set_color_selected("Azul")}),
+                                                              "on_change": lambda e: [set_color_selected("Azul"),
+                                                                                      set_product_id_selected(17)]}),
                                                   html.label({"class": "custom-control-label", "for": "color-1"},
                                                              "Azul"),
                                               ]),
@@ -190,7 +213,8 @@ def Product(context):
                                                   html.input({"type": "radio", "class": "custom-control-input",
                                                               "id": "color-2", "name": "color",
                                                               "value": "Morado",
-                                                              "on_change": lambda e: set_color_selected("Morado")}),
+                                                              "on_change": lambda e: [set_color_selected("Morado"),
+                                                                                      set_product_id_selected(18)]}),
                                                   html.label({"class": "custom-control-label", "for": "color-2"},
                                                              "Morado"),
                                               ]),
@@ -198,7 +222,8 @@ def Product(context):
                                                   html.input({"type": "radio", "class": "custom-control-input",
                                                               "id": "color-3", "name": "color",
                                                               "value": "Amarillo",
-                                                              "on_change": lambda e: set_color_selected("Amarillo")}),
+                                                              "on_change": lambda e: [set_color_selected("Amarillo"),
+                                                                                      set_product_id_selected(19)]}),
                                                   html.label({"class": "custom-control-label", "for": "color-3"},
                                                              "Amarillo"),
                                               ]),
@@ -206,7 +231,8 @@ def Product(context):
                                                   html.input({"type": "radio", "class": "custom-control-input",
                                                               "id": "color-4", "name": "color",
                                                               "value": "Medianoche",
-                                                              "on_change": lambda e: set_color_selected("Medianoche")}),
+                                                              "on_change": lambda e: [set_color_selected("Medianoche"),
+                                                                                      set_product_id_selected(209)]}),
                                                   html.label({"class": "custom-control-label", "for": "color-4"},
                                                              "Medianoche"),
                                               ]),
@@ -214,8 +240,8 @@ def Product(context):
                                                   html.input({"type": "radio", "class": "custom-control-input",
                                                               "id": "color-5", "name": "color",
                                                               "value": "Blanco estelar",
-                                                              "on_change": lambda e: set_color_selected(
-                                                                  "Blanco estelar")}),
+                                                              "on_change": lambda e: [set_color_selected(
+                                                                  "Blanco estelar"), set_product_id_selected(21)]}),
                                                   html.label({"class": "custom-control-label", "for": "color-5"},
                                                              "Blanco estelar"),
                                               ]),
@@ -223,7 +249,8 @@ def Product(context):
                                                   html.input({"type": "radio", "class": "custom-control-input",
                                                               "id": "color-6", "name": "color",
                                                               "value": "RED",
-                                                              "on_change": lambda e: set_color_selected("RED")}),
+                                                              "on_change": lambda e: [set_color_selected("RED"),
+                                                                                      set_product_id_selected(22)]}),
                                                   html.label({"class": "custom-control-label", "for": "color-6"},
                                                              "RED"),
                                               ]),
@@ -248,15 +275,17 @@ def Product(context):
                                           ),
                                  html.br(),
                                  # Botón de agregar al carrito
-                                 html.button({"class": "btn btn-primary px-3"},
-                                             html.i({"class": "fa fa-shopping-cart mr-1"}),
-                                             "Add To Cart"
-                                             ),
+                                 html.button({
+                                     "class": "btn btn-primary px-3",
+                                     "on_click": handle_submit
+                                 },
+                                     html.i({"class": "fa fa-shopping-cart mr-1"}),
+                                     "Add To Cart"
+                                 ),
                              ),
                              )
                 )
             ),
-            value
+            context
         )
     )
-

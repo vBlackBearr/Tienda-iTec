@@ -5,7 +5,7 @@ import asyncio
 import reactpy
 
 # contexto
-from reactpy.core.hooks import use_context
+from reactpy.core.hooks import use_context, create_context
 
 # componentes
 from static.screens._base import Base
@@ -16,12 +16,24 @@ from reactpy import use_state
 from dotenv import load_dotenv
 load_dotenv()
 
+# LocalStorage
+from static.localStorage.localStorage import getSession
+
 
 @component
 def Payment(context):
     value = use_context(context)
 
     cantidad, set_cantidad = use_state(1)
+
+    # User - Tokens
+    session = getSession()
+    token = session["token"]
+
+    context = create_context({
+        "is_logged_in": session["is_logged_in"],
+        "user": session["user"]
+    })
 
     def buy():
         async def post():
@@ -243,6 +255,6 @@ def Payment(context):
                                   ),
                          )
             ),
-            value
+            context
         )
     )

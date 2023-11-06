@@ -247,7 +247,7 @@ CREATE TABLE users (
     password VARCHAR(255) NOT NULL,
     email VARCHAR(255) NOT NULL,
     role_id INT,
-    cart JSON,
+    cart JSON NOT NULL,
     props JSON,
     enabled BOOLEAN DEFAULT TRUE,
     FOREIGN KEY (role_id) REFERENCES roles(id)
@@ -255,8 +255,21 @@ CREATE TABLE users (
 
 
 -- Valores de prueba para la tabla "usuarios"
-INSERT INTO users (username, password, email, role_id) VALUES
-    ('admin', 'hashed_password_admin', 'admin@example.com', 1),
-    ('editor', 'hashed_password_editor', 'editor@example.com', 2),
-    ('usuario1', 'hashed_password_user1', 'usuario1@example.com', 3),
-    ('usuario2', 'hashed_password_user2', 'usuario2@example.com', 3);
+INSERT INTO users (username, password, email, role_id, cart) VALUES
+    ('admin', 'hashed_password_admin', 'admin@example.com', 1, '{}'),
+    ('editor', 'hashed_password_editor', 'editor@example.com', 2, '{}'),
+    ('usuario1', 'hashed_password_user1', 'usuario1@example.com', 3, '{}'),
+    ('usuario2', 'hashed_password_user2', 'usuario2@example.com', 3, '{}');
+
+
+CREATE TABLE user_cart (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,
+    product_id INT,
+    quantity INT,
+    props JSON,
+    enabled BOOLEAN DEFAULT TRUE,
+    UNIQUE KEY (user_id, product_id),
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE
+);

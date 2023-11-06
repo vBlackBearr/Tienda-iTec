@@ -1,6 +1,8 @@
+import reactpy_router
 from localStoragePy import localStoragePy
-from reactpy import html
+from reactpy import html, web
 import reactpy
+from reactpy_router import link
 
 
 def NavigationBar(is_loged, user):
@@ -12,6 +14,8 @@ def NavigationBar(is_loged, user):
     def logout(e):
         print("Logging out")
         localStorage.removeItem('token')
+        # redidijir a https://youtube.com
+
 
     def ifLogged():
         print(user)

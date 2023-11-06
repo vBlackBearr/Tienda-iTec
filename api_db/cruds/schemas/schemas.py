@@ -252,6 +252,7 @@ class Role(RoleBase):
 class UserBase(BaseModel):
     username: str
     email: str
+    cart: dict
 
 
 class UserCreate(UserBase):
@@ -271,3 +272,32 @@ class User(UserBase):
 class ValidUser(BaseModel):
     email: str
     password: str
+
+
+class UserCartBase(BaseModel):
+    user_id: int
+    product_id: int
+    quantity: int
+    props: dict
+    enabled: bool
+
+
+class UserCartCreate(UserCartBase):
+    pass
+
+
+class UserCart(UserCartBase):
+    id: int
+
+    class Config:
+        orm_mode = True
+
+
+class UserCartChangeQuantity(BaseModel):
+    quantity: int
+    product_id: int
+
+
+class UserCartChangeQuantityIncDec(BaseModel):
+    user_id: int
+    product_id: int

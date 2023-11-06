@@ -3,8 +3,9 @@ from typing import Annotated
 from fastapi import APIRouter, Depends, HTTPException, Header, status
 from sqlalchemy.orm import Session
 from api_db.database import get_db
-from api_db.cruds.schemas.schemas import User, UserCreate, ValidUser
-from api_db.cruds.models.models import User
+from api_db.cruds.schemas.schemas import UserCreate, ValidUser, UserCartCreate, UserCartChangeQuantity, \
+    UserCartChangeQuantityIncDec
+from api_db.cruds.models.models import User, UserCart
 
 # Token
 import jwt
@@ -82,18 +83,111 @@ def login(user: ValidUser, db):
         return user
 
 
-@router.post("/protected")
-def protected_route(Authorization: Annotated[str | None, Header()] = None,  db: Session = Depends(get_db)):
+def getUserWithToken(Authorization: Annotated[str | None, Header()] = None, db: Session = Depends(get_db)):
     token = Authorization
 
     try:
         payload = jwt.decode(token, public_pem, algorithms=['RS256'])
         data = payload['data']
-        return login(data, db)
+        return login(data, db)  # retorna el user
     except jwt.ExpiredSignatureError:
         return "Token expirado", 401
     except jwt.InvalidTokenError:
         return "Token inválido", 401
+
+
+@router.post("/protected")
+def protected_route(Authorization: Annotated[str | None, Header()] = None, db: Session = Depends(get_db)):
+    return getUserWithToken(Authorization, db)
+
+
+# Esto no valida si las credenciales estan correctas, solo lo encripta
+@router.options("/protected/generate_token")
+def protected_route(data: dict, db: Session = Depends(get_db)):
+    token = generate_jwt_token({"email": data["email"], "password": data["password"]})
+    return {"token": token, "user": getUserWithToken(token, db)}
+
+
+@router.patch("/backend/users/cart")
+def update_cart(Authorization: Annotated[str | None, Header()] = None, data: UserCartChangeQuantity = None, db: Session = Depends(get_db)):
+    if data is None:
+        data = {}
+    user = getUserWithToken(Authorization, db)
+    if user is None:
+        raise HTTPException(status_code=404, detail="User not found")
+
+    existing_cart_item = db.query(UserCart).filter(UserCart.user_id == user.id,
+                                                   UserCart.product_id == data.product_id).first()
+
+    if existing_cart_item:
+        existing_cart_item.quantity = data.quantity
+        msg = {"Message": "Cantidad del producto actaulizada"}
+    else:
+        data_insert = {
+            "user_id": user.id,
+            "product_id": data.product_id,
+            "quantity": data.quantity
+        }
+        db_cart_item = UserCart(**data_insert)
+        db.add(db_cart_item)
+        msg = {"Message": "Producto agregado al carrito"}
+
+    db.commit()
+    db.refresh(user)
+
+    return msg
+
+
+# @router.patch("/backend/users/{user_id}/cart/increase1")
+# def update_cart(user_id: int, data: UserCartChangeQuantityIncDec, db: Session = Depends(get_db)):
+#     user = get_user(user_id, db)
+#     if user is None:
+#         raise HTTPException(status_code=404, detail="User not found")
+#
+#     user = db.query(User).filter(User.id == user_id).first()
+#     existing_cart_item = db.query(UserCart).filter(UserCart.user_id == user_id,
+#                                                    UserCart.product_id == data.product_id).first()
+#
+#     if existing_cart_item:
+#         existing_cart_item.quantity += data.quantity
+#         msg = {"Message": "Cantidad del producto actaulizada"}
+#     else:
+#         db_cart_item = UserCart(**data.dict())
+#         db.add(db_cart_item)
+#         msg = {"Message": "Producto agregado al carrito"}
+#
+#     db.commit()
+#     db.refresh(user)
+#
+#     return msg
+#
+#
+# @router.patch("/backend/users/{user_id}/cart/decrease1")
+# def update_cart(user_id: int, data: UserCartChangeQuantityIncDec, db: Session = Depends(get_db)):
+#     user = get_user(user_id, db)
+#     if user is None:
+#         raise HTTPException(status_code=404, detail="User not found")
+#
+#     user = db.query(User).filter(User.id == user_id).first()
+#     existing_cart_item = db.query(UserCart).filter(UserCart.user_id == user_id,
+#                                                    UserCart.product_id == data.product_id).first()
+#
+#     if existing_cart_item:
+#         if existing_cart_item.quantity - data.quantity >= 1:
+#             existing_cart_item.quantity -= data.quantity
+#             msg = {"Message": "Cantidad del producto actaulizada"}
+#         else:
+#             db.delete(user)
+#             db.commit()
+#             msg = {"Message": "Producto eliminado del carrito"}
+#     else:
+#         msg = {"Message": "Producto no existente en el carrito"}
+#
+#
+#     db.commit()
+#     db.refresh(user)
+#
+#     return msg
 
 
 @router.get("/backend/users")
