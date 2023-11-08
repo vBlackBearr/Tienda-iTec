@@ -14,8 +14,6 @@ def NavigationBar(is_loged, user):
     def logout(e):
         print("Logging out")
         localStorage.removeItem('token')
-        # redidijir a https://youtube.com
-
 
     def ifLogged():
         print(user)

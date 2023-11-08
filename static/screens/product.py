@@ -215,7 +215,7 @@ def Product(context):
                              # Nombre del producto
                              html.h2({"class": "h4 product-name"}, "iPhone 14"),
                              # Precio del producto
-                             html.p({"class": "text-primary h5 product-price"}, "$949.99"),
+                             html.p({"class": "text-primary h5 product-price"}, "$14,499"),
                              html.div({
                                  "class": "d-inline p-2"
                              },

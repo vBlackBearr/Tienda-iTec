@@ -30,7 +30,7 @@ def Index(context):
         Base(
             (
                 banner,
-                secondary_nav,
+                # secondary_nav,
                 main_content
             ),
             context
