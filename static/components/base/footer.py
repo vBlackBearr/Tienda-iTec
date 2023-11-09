@@ -18,10 +18,10 @@ footer = html.footer({"class": "footer"}, [
                     html.li({"class": "footer-item"}, [
                         html.h3({"class": "has-text-weight-bold"}, "Tu cuenta")
                     ]),
-                    html.li({"class": "footer-item"}, html.a({"class": "footer-link", "href": "#"}, "Iniciar sesión")),
-                    html.li({"class": "footer-item"}, html.a({"class": "footer-link", "href": "#"}, "Registro")),
-                    html.li({"class": "footer-item"}, html.a({"class": "footer-link", "href": "#"}, "Ver carrito")),
-                    html.li({"class": "footer-item"}, html.a({"class": "footer-link", "href": "#"}, "Ver catálogo"))
+                    html.li({"class": "footer-item"}, html.a({"class": "footer-link", "href": "/login"}, "Iniciar sesión")),
+                    html.li({"class": "footer-item"}, html.a({"class": "footer-link", "href": "/login"}, "Registro")),
+                    html.li({"class": "footer-item"}, html.a({"class": "footer-link", "href": "/cart"}, "Ver carrito")),
+                    html.li({"class": "footer-item"}, html.a({"class": "footer-link", "href": "/product"}, "Ver catálogo"))
                 ])
             ]),
             html.div({"class": "column"}, [
@@ -29,9 +29,9 @@ footer = html.footer({"class": "footer"}, [
                     html.li({"class": "footer-item"}, [
                         html.h3({"class": "has-text-weight-bold"}, "Catalogo")
                     ]),
-                    html.li({"class": "footer-item"}, html.a({"class": "footer-link", "href": "#"}, "Ver tu Catalogo")),
-                    html.li({"class": "footer-item"}, html.a({"class": "footer-link", "href": "#"}, "Privacidad y cookies")),
-                    html.li({"class": "footer-item"}, html.a({"class": "footer-link", "href": "#"}, "Borrar tu catalogo"))
+                    html.li({"class": "footer-item"}, html.a({"class": "footer-link"}, "Ver tu Catalogo")),
+                    html.li({"class": "footer-item"}, html.a({"class": "footer-link"}, "Privacidad y cookies")),
+                    html.li({"class": "footer-item"}, html.a({"class": "footer-link"}, "Borrar tu catalogo"))
                 ])
             ]),
             html.div({"class": "column is-full"}, [
