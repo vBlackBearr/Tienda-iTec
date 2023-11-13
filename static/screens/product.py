@@ -28,14 +28,15 @@ def Product(context):
     # Modal
     modal_text, set_modal_text = use_state("")
     modal_style, set_modal_style = use_state({"display": "none"})
+    modal_content, set_modal_content = use_state([])
 
     # User - Tokens
     session = getSession()
     token = session["token"]
-    is_logged_id = session["is_logged_in"]
+    is_logged = session["is_logged_in"]
 
     context = create_context({
-        "is_logged_in": is_logged_id,
+        "is_logged_in": is_logged,
         "user": session["user"]
     })
 
@@ -64,9 +65,10 @@ def Product(context):
     use_effect(fetchProducts)
 
     def color_changed():
-        for product in products:
-            if product["props"]["color"] == color_selected:
-                set_selected_product(product["props"]["images"])
+        if products:
+            for product in products:
+                if product["props"]["color"] == color_selected:
+                    set_selected_product(product["props"]["images"])
 
     use_effect(color_changed)
 
@@ -82,13 +84,13 @@ def Product(context):
         )
 
     async def handle_submit(e):
-        if is_logged_id:
+        if is_logged:
             print("agregando al carrito ")
             await patchCartQuantity(token, product_id_selected, cantidad)
             set_modal_text("Producto agregado al carrito")
             show_modal(None)
         else:
-            set_modal_text("Primero tienes que iniciar sesion")
+            set_modal_text("Inicia sesion antes:")
             show_modal(None)
 
     def show_modal(e):
@@ -97,7 +99,6 @@ def Product(context):
     def hide_modal(e):
         set_modal_style({"display": "none"})
         set_modal_text("")
-
 
     return html.div(
         Base(
@@ -133,6 +134,7 @@ def Product(context):
                 }),
                 banner_login,
                 # Contenedor principal de información del producto
+
                 #
                 #    MODAL
                 #
@@ -149,10 +151,24 @@ def Product(context):
                             html.div({
                                 "class": "modal-header"
                             },
-                                html.h1({
-                                    "class": "modal-title fs-5",
-                                    "id": "exampleModalToggleLabel"
-                                }, modal_text),
+                                html.div(
+                                    html.h1({
+                                        "class": "modal-title fs-5",
+                                        "id": "exampleModalToggleLabel"
+                                    }, modal_text),
+                                    html.a({
+                                        "href": "/login",
+                                        "style": {
+                                            "display": ["none" if is_logged else "block"]
+                                        }
+                                    },
+                                        html.button({
+                                            "class": "btn btn-primary"
+                                        },
+                                            "Login"
+                                        ),
+                                    ),
+                                ),
                                 html.button({
                                     "type": "button",
                                     "class": "btn-close",

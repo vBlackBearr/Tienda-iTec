@@ -9,7 +9,7 @@ from static.components.cart.item import item
 from static.screens._base import Base
 from static.components.base.banner import banner as banner_login
 from static.screens.payment import Payment
-from reactpy_router import route
+from reactpy_router import route, create_router
 
 # LocalStorage
 from static.localStorage.localStorage import getSession
@@ -20,6 +20,7 @@ from static.api import getCart
 
 @component
 def Cart(context):
+
     value = use_context(context)
 
     # User - Tokens

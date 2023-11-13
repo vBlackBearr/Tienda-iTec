@@ -6,7 +6,6 @@ from reactpy_router import link
 
 
 def NavigationBar(is_loged, user):
-    # print(user)
 
     localStorage = localStoragePy('iTec_space', 'your-storage-backend')
 

@@ -233,16 +233,16 @@ def Payment(context):
                                                                                ),
                                                                       ),
                                                              ),
-                                                    html.div({
-                                                        "class": "px-5"
-                                                    },
-                                                        html.input({
-                                                            "value": cantidad,
-                                                            "on_change": lambda e: set_cantidad(e["target"]["value"]),
-                                                            "type": "number",
-                                                            "class": "form-control"
-                                                        })
-                                                    ),
+                                                    # html.div({
+                                                    #     "class": "px-5"
+                                                    # },
+                                                    #     html.input({
+                                                    #         "value": cantidad,
+                                                    #         "on_change": lambda e: set_cantidad(e["target"]["value"]),
+                                                    #         "type": "number",
+                                                    #         "class": "form-control"
+                                                    #     })
+                                                    # ),
                                                     html.div({"class": "card-footer border-secondary bg-transparent"},
                                                              html.button({
                                                                  "class": "btn btn-lg btn-block btn-primary font-weight-bold my-3 py-3",

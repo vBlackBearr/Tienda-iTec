@@ -15,6 +15,8 @@ def ProductsCrud():
     editing, set_editing = use_state(False)
     product_id, set_product_id = use_state(None)
 
+    dropdown_option, set_dropdown_option = use_state(None)
+
     async def fillItems():
         products_data = await getProducts()
         set_products(products_data)
@@ -86,19 +88,37 @@ def ProductsCrud():
             html.td(product['stock']),
             html.td(product['enabled']),
             html.td(
-                html.button({
-                    "on_click": lambda e, product_id=product["id"]: delete_button_click_handler(e, product_id),
-                    "class_name": "btn btn-danger"
-                }, "delete"),
-                html.button({
-                    "on_click": lambda e, product=product: edit_button_click_handler(e, product),
-                    "class_name": "btn btn-secondary"
-                }, "edit"),
+                html.div(
+                    {"class": "dropdown"},
+                    html.button(
+                        {"class": "btn btn-secondary dropdown-toggle", "type": "button", "id": "dropdownMenuButton",
+                         "data-toggle": "dropdown", "aria-haspopup": "true", "aria-expanded": "false"},
+                        "Actions"
+                    ),
+                    html.div(
+                        {"class": "dropdown-menu", "aria-labelledby": "dropdownMenuButton"},
+                        html.a(
+                            {"class": "dropdown-item",
+                             "on_click": lambda e, product_id=product["id"]: delete_button_click_handler(e,
+                                                                                                         product_id)},
+                            "Delete"
+                        ),
+                        html.a(
+                            {"class": "dropdown-item",
+                             "on_click": lambda e, product=product: edit_button_click_handler(e, product)},
+                            "Edit"
+                        )
+                    )
+                )
             )
         )
 
     list_items = html.div(
-        {"class": "card shadow mb-4"},
+        {"class": "card shadow mb-4",
+         "style": {
+             "height": "400px"
+         }
+         },
         html.div(
             {"class": "card-header py-3"},
             html.h6({"class": "m-0 font-weight-bold text-primary"}, "Products Example"),
@@ -106,9 +126,16 @@ def ProductsCrud():
         html.div(
             {"class": "card-body"},
             html.div(
-                {"class": "table-responsive"},
+                {"class": "table-responsive h-100",
+                 "style": {
+                     # "height": "100px"
+                 }},
                 html.table(
-                    {"class": "table table-bordered", "id": "dataTable", "width": "100%", "cellspacing": "0"},
+                    {"class": "table table-bordered", "id": "dataTable", "width": "100%", "cellspacing": "0",
+                     # "style": {
+                     #     "height": "100px"
+                     # }
+                     },
                     html.thead(
                         html.tr(
                             html.th("Name"),
@@ -119,16 +146,16 @@ def ProductsCrud():
                             html.th(""),
                         ),
                     ),
-                    html.tfoot(
-                        html.tr(
-                            html.th("Name"),
-                            html.th("Description"),
-                            html.th("Props"),
-                            html.th("Stock"),
-                            html.th("Enabled"),
-                            html.th(""),
-                        ),
-                    ),
+                    # html.tfoot(
+                    #     html.tr(
+                    #         html.th("Name"),
+                    #         html.th("Description"),
+                    #         html.th("Props"),
+                    #         html.th("Stock"),
+                    #         html.th("Enabled"),
+                    #         html.th(""),
+                    #     ),
+                    # ),
                     html.tbody(
                         [create_table_row(row) for row in products]
                     ),
@@ -137,12 +164,25 @@ def ProductsCrud():
         ),
     )
 
+    filters = html.div(
+        {"class": "mb-4"},
+        html.label({"class": "mr-2"}, "Filter by Enabled:"),
+        html.select(
+            {"class": "form-control", "on_change": lambda e: set_dropdown_option(e["target"]["value"])},
+            html.option({"value": ""}, "All"),
+            html.option({"value": "true"}, "Enabled"),
+            html.option({"value": "false"}, "Disabled"),
+        )
+    )
+
     return html.div(
         {
             "style": {
                 "padding": "3rem",
+                # "height": "300px"
             }
         },
+        filters,
         list_items,
         html.form(
             {
