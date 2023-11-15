@@ -1,5 +1,7 @@
 # dotenv
 import os
+
+import aiohttp
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -187,14 +189,27 @@ async def deleteRawMaterial(raw_material_id):
 #
 import httpx
 
+#
+# async def getProducts():
+#     async with httpx.AsyncClient() as client:
+#         response = await client.get(home + "/backend/products")
+#
+#     if response.status_code == 200:
+#         result = response.json()
+#         return result
+
 
 async def getProducts():
-    async with httpx.AsyncClient() as client:
-        response = await client.get(home + "/backend/products")
+    url = "http://localhost:8000/backend/products"
 
-    if response.status_code == 200:
-        result = response.json()
-        return result
+    async with aiohttp.ClientSession() as session:
+        async with session.get(url) as response:
+            if response.status == 200:
+                result = await response.json()
+                return result
+            else:
+                # Manejar otros códigos de estado si es necesario
+                print(f"Error: {response.status}")
 
 
 async def getProduct(product_id):

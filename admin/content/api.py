@@ -156,14 +156,27 @@ async def deleteProduct(product_id):
         return False
 
 
+# async def getSales():
+#     response = await request("GET", "http://localhost:8000/backend/sales")
+#
+#     if response.status == 200:
+#         result = await response.json()
+#         return result
+#     else:
+#         return []
 async def getSales():
-    response = await request("GET", "http://localhost:8000/backend/sales")
+    url = "http://localhost:8000/backend/sales"
 
-    if response.status == 200:
-        result = await response.json()
-        return result
-    else:
-        return []
+    async with aiohttp.ClientSession() as session:
+        async with session.get(url) as response:
+            if response.status == 200:
+                result = await response.json()
+                return result
+            else:
+                # Manejar otros códigos de estado si es necesario
+                print(f"Error: {response.status}")
+    
+
 
 async def getSale(sale_id):
     response = await request("GET", f"http://localhost:8000/backend/sales/{sale_id}")
@@ -199,3 +212,29 @@ async def deleteSale(sale_id):
         return True
     else:
         return False
+
+
+async def getUsers():
+    url = "http://localhost:8000/backend/users"
+
+    async with aiohttp.ClientSession() as session:
+        async with session.get(url) as response:
+            if response.status == 200:
+                result = await response.json()
+                return result
+            else:
+                # Manejar otros códigos de estado si es necesario
+                print(f"Error: {response.status}")
+
+
+async def getSaleStates():
+    url = "http://localhost:8000/backend/users"
+
+    async with aiohttp.ClientSession() as session:
+        async with session.get(url) as response:
+            if response.status == 200:
+                result = await response.json()
+                return result
+            else:
+                # Manejar otros códigos de estado si es necesario
+                print(f"Error: {response.status}")
