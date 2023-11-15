@@ -189,29 +189,13 @@ VALUES
     (1, 2, 3, '{"key": "value2"}', 1),
     (2, 3, 4, '{"key": "value3"}', 1);
 
-
--- Crear la tabla de estados de ventas
-CREATE TABLE sale_states (
-    id INT PRIMARY KEY,
-    name VARCHAR(255) NOT NULL
-);
-
--- Insertar los estados posibles
-INSERT INTO sale_states (id, name) VALUES
-    (1, 'en ensamble'),
-    (2, 'en ruta'),
-    (3, 'completado');
-
-
 -- Creación de la tabla sales
 CREATE TABLE sales (
     id INT AUTO_INCREMENT PRIMARY KEY,
     date DATE,
     total DECIMAL(10, 2),
-    user_id INT,
     props JSON,
-    enabled BOOLEAN,
-    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE;
+    enabled BOOLEAN
 );
 
 -- Datos de prueba para la tabla sales
