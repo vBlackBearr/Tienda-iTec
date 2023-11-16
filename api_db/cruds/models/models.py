@@ -70,6 +70,15 @@ class BOM(Base):
     raw_material = relationship("RawMaterial", back_populates="bom")
 
 
+class SaleState(Base):
+    __tablename__ = "sale_states"
+
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String, index=True)
+
+    sales = relationship("Sale", back_populates="sale_state")
+
+
 class Sale(Base):
     __tablename__ = "sales"
 
@@ -79,6 +88,15 @@ class Sale(Base):
     props = Column(JSON)
     enabled = Column(Boolean)
     product_sale = relationship("ProductSale", back_populates="sale")
+
+    user_id = Column(Integer, ForeignKey('users.id'))
+    state_id = Column(Integer, ForeignKey('sale_states.id'))
+
+    # Relaciones
+    user = relationship("User",
+                        back_populates="sales")
+    sale_state = relationship("SaleState",
+                              back_populates="sales")
 
 
 class ProductSale(Base):
@@ -116,6 +134,7 @@ class User(Base):
     cart = Column(JSON)
     enabled = Column(Boolean, default=True)
     role = relationship("Role", back_populates="users")
+    sales = relationship("Sale", back_populates="user")
 
 
 class UserCart(Base):
@@ -128,3 +147,5 @@ class UserCart(Base):
     props = Column(JSON)
     enabled = Column(Boolean, default=True)
     UniqueConstraint('user_id', 'product_id', name='unique_user_product')
+
+
