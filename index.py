@@ -6,7 +6,7 @@ from fastapi import FastAPI
 from reactpy.backend.fastapi import configure
 from reactpy import component, html
 from reactpy.core.hooks import create_context
-from reactpy_router import route, simple
+from reactpy_router import route, simple, use_params
 
 # Screens Admin
 from admin.content.screens.index import Index as AdminIndex
@@ -14,6 +14,7 @@ from admin.content.screens.Partners import Partners as AdminPartners
 from admin.content.screens.RawMaterials import RawMaterials
 from admin.content.screens.Products import Products as AdminProducts
 from admin.content.screens.Sales import Sales
+from admin.content.screens.SalesDetails import SalesDetails
 
 # Screens Shop
 from static.screens.index import Index
@@ -44,6 +45,7 @@ app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
 app.mount("/api_db", StaticFiles(directory="api_db"), name="api_db")
 app.mount("/admin/content", StaticFiles(directory="admin/content"), name="admin")
+# app.mount("/admin/sales_details", StaticFiles(directory="admin/content"), name="admin")
 
 
 @component
@@ -66,6 +68,7 @@ def App():
         route("/admin/raw_materials", RawMaterials(context)),
         route("/admin/products", AdminProducts(context)),
         route("/admin/sales", Sales(context)),
+        route("/admin/sales_details/{id:int}", SalesDetails(context)),
         route("*", html.h1("Missing Link 🔗‍💥")),
     )
 

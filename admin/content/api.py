@@ -157,13 +157,16 @@ async def deleteProduct(product_id):
 
 
 async def getSales():
-    response = await request("GET", "http://localhost:8000/backend/sales")
+    url = "http://localhost:8000/backend/sales"
 
-    if response.status == 200:
-        result = await response.json()
-        return result
-    else:
-        return []
+    async with aiohttp.ClientSession() as session:
+        async with session.get(url) as response:
+            if response.status == 200:
+                result = await response.json()
+                return result
+            else:
+                print(f"Error: {response.status}")
+
 
 async def getSale(sale_id):
     response = await request("GET", f"http://localhost:8000/backend/sales/{sale_id}")

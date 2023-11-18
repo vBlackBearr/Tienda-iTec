@@ -92,7 +92,7 @@ class Sale(Base):
     user_id = Column(Integer, ForeignKey('users.id'))
     state_id = Column(Integer, ForeignKey('sale_states.id'))
 
-    # Relaciones
+
     user = relationship("User",
                         back_populates="sales")
     sale_state = relationship("SaleState",
