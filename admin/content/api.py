@@ -169,13 +169,23 @@ async def getSales():
 
 
 async def getSale(sale_id):
-    response = await request("GET", f"http://localhost:8000/backend/sales/{sale_id}")
+    url = f"http://localhost:8000/backend/sales/{sale_id}"
 
-    if response.status == 200:
-        result = await response.json()
-        return result
-    else:
-        return None
+    async with aiohttp.ClientSession() as session:
+        async with session.get(url) as response:
+            if response.status == 200:
+                result = await response.json()
+                return {"status_code": 200, "data": result}
+            elif response.status == 404:
+                # Venta no encontrada
+                print(f"Error: Sale with id {sale_id} not found.")
+                return {"error": "Sale not found", "status_code": 404}
+            else:
+                # Otro tipo de error
+                print(f"Error: {response.status}")
+                return {"error": f"Unexpected error: {response.status}", "status_code": response.status}
+
+
 
 async def postSale(new_sale):
     response = await request("POST", "http://localhost:8000/backend/sales", json=new_sale)

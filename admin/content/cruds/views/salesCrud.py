@@ -92,10 +92,13 @@ def SalesCrud():
             html.td(sale['total']),
             html.td(sale['sale_state']["name"]),
             html.td(
-                html.button({
-                    "on_click": lambda e, sales_id=sale["id"]: details_button_click_handler(e, sales_id),
-                    "class_name": "btn btn-info"
-                }, "details"),
+                html.a({
+                    "href": f"/admin/sales_details/{sale['id']}",
+                },
+                       html.button({
+                           "class_name": "btn btn-info"
+                       }, "details"),
+                       ),
             )
         )
 
@@ -286,8 +289,6 @@ def SalesCrud():
         )
     )
 
-
-
     return html.div(
         {
             "style": {
@@ -323,8 +324,3 @@ def SalesCrud():
         ),
 
     )
-
-
-app = FastAPI()
-
-configure(app, SalesCrud)

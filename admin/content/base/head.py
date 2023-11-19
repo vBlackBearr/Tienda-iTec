@@ -2,28 +2,28 @@ from reactpy import html
 
 head = (
     html.link({
-        "href": "content/css/sb-admin-2.min.css",
+        "href": "/admin/content/css/sb-admin-2.min.css",
         "rel": "stylesheet"
     }),
     html.link({
-        "href": "content/css/all.min.css",
+        "href": "/admin/content/css/all.min.css",
         "rel": "stylesheet",
         "type": "text/css"
     }),
     html.script(
-        {"src": "content/js/jquery.min.js"}),
+        {"src": "/admin/content/js/jquery.min.js"}),
     html.script(
-        {"src": "content/js/bootstrap.bundle.min.js"}),
+        {"src": "/admin/content/js/bootstrap.bundle.min.js"}),
     html.script(
-        {"src": "content/js/jquery.easing.min.js"}),
+        {"src": "/admin/content/js/jquery.easing.min.js"}),
     html.script(
-        {"src": "content/js/sb-admin-2.min.js"}),
+        {"src": "/admin/content/js/sb-admin-2.min.js"}),
     html.script(
-        {"src": "content/js/Chart.min.js"}),
+        {"src": "/admin/content/js/Chart.min.js"}),
     html.script(
-        {"src": "content/js/chart-area-demo.js"}),
+        {"src": "/admin/content/js/chart-area-demo.js"}),
     html.script(
-        {"src": "content/js/chart-pie-demo.js"}),
+        {"src": "/admin/content/js/chart-pie-demo.js"}),
     html.meta({
         "charset": "utf-8"
     }),

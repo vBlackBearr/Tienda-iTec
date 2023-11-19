@@ -137,7 +137,7 @@ sidebar = html.ul({
                 ),
                 html.a({
                     "class": "collapse-item",
-                    "href": "raw_materials"
+                    "href": "/admin/raw_materials"
                 },
                     "Raw Materials"
                 )
@@ -150,7 +150,7 @@ sidebar = html.ul({
         },
             html.a({
                 "class": "nav-link",
-                "href": "sales"
+                "href": "/admin/sales"
             },
                 html.i({
                     "class": "fas fa-fw fa-table"
