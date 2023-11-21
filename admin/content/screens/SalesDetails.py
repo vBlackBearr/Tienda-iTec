@@ -97,7 +97,7 @@ def SalesDetails(context):
                 "value": sale_data["user"]["username"],
                 "disabled": True
             })
-        ),
+        ), 
     )
 
     list_items = html.div(
@@ -119,7 +119,6 @@ def SalesDetails(context):
                  }},
                 html.table(
                     {"class": "table table-bordered", "id": "dataTable", "width": "100%", "cellspacing": "0",
-
                      },
                     html.thead(
                         html.tr(
@@ -138,13 +137,11 @@ def SalesDetails(context):
     )
 
     return Base((
-
         html.div({"style": {
             "padding-bottom": "30px"
         }},
             html.a({
                 "href": "/admin/sales",
-
             },
                 html.button({
                     "class": "btn btn-secondary",

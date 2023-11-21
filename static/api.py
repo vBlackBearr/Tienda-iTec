@@ -8,6 +8,15 @@ home = os.getenv('HOME')
 print(home)
 
 
+async def order(data):
+    async with httpx.AsyncClient() as client:
+        response = await client.post(home + "/api/order", json=data)
+
+    if response.status_code == 200:
+        result = response.json()
+        return result
+
+
 async def getPartners():
     async with httpx.AsyncClient() as client:
         response = await client.get(home + "/backend/partners")
@@ -387,6 +396,7 @@ async def getSale(sale_id):
 
 
 async def postSale(new_sale):
+
     async with httpx.AsyncClient() as client:
         response = await client.post(home + "/backend/sales", json=new_sale)
 
@@ -395,6 +405,18 @@ async def postSale(new_sale):
         return result
     else:
         return None
+
+
+# async def postProductSale(new_prod_sale):
+#
+#     async with httpx.AsyncClient() as client:
+#         response = await client.post(home + "/backend/sales", json=new_prod_sale)
+#
+#     if response.status_code == 200:
+#         result = response.json()
+#         return result
+#     else:
+#         return None
 
 
 async def updateSale(sale_id, updated_sale):
@@ -570,6 +592,20 @@ async def getCart(token: str):
         return {"status": response.status_code}
 
 
+async def getUserWithToken(token: str):
+    async with httpx.AsyncClient() as client:
+        headers = {
+            "Authorization": token
+        }
+
+        response = await client.get(home + "/api/get_user", headers=headers)
+    if response.status_code == 200:
+        result = {"status": response.status_code, "data": response.json()}
+        return result
+    else:
+        return {"status": response.status_code}
+
+
 async def deleteProductFromCart(token: str, product_id: int):
     async with httpx.AsyncClient() as client:
         headers = {
@@ -584,3 +620,5 @@ async def deleteProductFromCart(token: str, product_id: int):
         return result
     else:
         return {"status": response.status_code}
+
+

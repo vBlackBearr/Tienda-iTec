@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from admin.content.database import get_db
-from admin.content.cruds.models.models import ProductSale
-from admin.content.cruds.schemas.schemas import ProductSaleCreate, ProductSaleUpdate
+from api_db.database import get_db
+from api_db.cruds.models.models import ProductSale
+from api_db.cruds.schemas.schemas import ProductSaleCreate, ProductSaleUpdate
 
 router = APIRouter()
 

@@ -85,13 +85,16 @@ def NavigationBar(is_loged, user):
                     ]),
                     # html.div(ifLogged())
                     html.li({"class": "nav-menu-item", "style": {"display": ["none" if is_loged else "block"]}},
-                            html.a({"class": "nav-menu-link", "href": "login"}, "Registro")
+                            html.a({"class": "nav-menu-link", "href": "/login"}, "Registro")
                             ),
                     html.li({"class": "nav-menu-item", "style": {"display": ["none" if is_loged else "block"]}},
-                            html.a({"class": "nav-menu-link", "href": "login"}, "Iniciar Sesión")),
+                            html.a({"class": "nav-menu-link", "href": "/login"}, "Iniciar Sesión")),
                     html.li({"class": "nav-menu-item", "style": {"display": ["block" if is_loged else "none"]}},
                             html.a({"class": "nav-menu-link", "href": "#", "on_click": logout},
                                    ("Sesion iniciada como: ", ((user["username"]) if is_loged else "")))),
+                    html.li({"class": "nav-menu-item"},
+                            html.a({"class": "nav-menu-link", "href": "/admin/index"}, "Admin")
+                            ),
                     html.li({"class": "nav-menu-item"}, html.a({"href": "/cart", "class": "nav-menu-link"},
                                                                html.i({"class": "zmdi zmdi-shopping-cart"}),
                                                                " Carrito")

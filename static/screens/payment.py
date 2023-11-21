@@ -1,12 +1,12 @@
+import aiohttp
 from reactpy import component, html
 from reactpy_router import route
 import httpx
 import asyncio
 import reactpy
+from reactpy import use_context, create_context
 
-# contexto
-from reactpy.core.hooks import use_context, create_context
-
+from static.api import order
 # componentes
 from static.screens._base import Base
 from static.components.base.banner import banner as banner_login
@@ -14,6 +14,7 @@ from reactpy import use_state
 
 # dotenv
 from dotenv import load_dotenv
+
 load_dotenv()
 
 # LocalStorage
@@ -29,33 +30,55 @@ def Payment(context):
     # User - Tokens
     session = getSession()
     token = session["token"]
+    is_logged_in = session["is_logged_in"]
+    user = session["user"]
 
     context = create_context({
-        "is_logged_in": session["is_logged_in"],
-        "user": session["user"]
+        "is_logged_in": is_logged_in,
+        "user": user
     })
 
-    def buy():
-        async def post():
-            print("compra")
-            async with httpx.AsyncClient() as client:
+    async def handle_buy(e):
+        print("compra")
 
-                data = {
-                    "cantidad": cantidad
-                }
+        data = {
+            # "user_id": session["user"]["id"],
+            "token": token,
+        }
 
-                response = await client.post("http://localhost:8002/api/products", json=data)
+        # getCart
 
-            if response.status_code == 200:
-                result = response.json()
-                return result
-            else:
-                return None
+        await order(data)
 
-        asyncio.ensure_future(post())
+        # async def getSales():
+        #     url = "http://localhost:8000/backend/sales"
+        #
+        #     async with aiohttp.ClientSession() as session:
+        #         async with session.get(url) as response:
+        #             if response.status == 200:
+        #                 result = await response.json()
+        #                 return result
+        #             else:
+        #                 print(f"Error: {response.status}")
 
+        # async def post():
+        #
+        # async with aiohttp.ClientSession() as client:
+        #
+        #     data = {
+        #         "user_id": session["user"],
+        #         "token": token,
+        #     }
+        #
+        #     response = await client.post("http://localhost:8000/api/order", json=data)
+        #
+        #     if response.status == 200:
+        #         result = response.json()
+        #         return result
+        #     else:
+        #         return None
 
-
+        # asyncio.ensure_future(post())
 
     return html.div(
         Base(
@@ -246,7 +269,7 @@ def Payment(context):
                                                     html.div({"class": "card-footer border-secondary bg-transparent"},
                                                              html.button({
                                                                  "class": "btn btn-lg btn-block btn-primary font-weight-bold my-3 py-3",
-                                                                 "on_click": lambda e: buy()},
+                                                                 "on_click": handle_buy},
                                                                  "Comprar"),
                                                              ),
 

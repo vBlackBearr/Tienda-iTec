@@ -85,6 +85,7 @@ def login(user: ValidUser, db):
         return user
 
 
+@router.get("/api/get_user")
 def getUserWithToken(Authorization: Annotated[str | None, Header()] = None, db: Session = Depends(get_db)):
     token = Authorization
 
@@ -173,7 +174,7 @@ def update_cart_sum(Authorization: Annotated[str | None, Header()] = None, data:
 
 
 @router.get("/backend/users/cart")
-def update_cart(Authorization: Annotated[str | None, Header()] = None, db: Session = Depends(get_db)):
+def get_cart(Authorization: Annotated[str | None, Header()] = None, db: Session = Depends(get_db)):
     user = getUserWithToken(Authorization, db)
     if user is None:
         raise HTTPException(status_code=404, detail="User not found")

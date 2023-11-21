@@ -180,6 +180,8 @@ class SaleBase(BaseModel):
 
 
 class SaleCreate(SaleBase):
+    user_id: int
+    state_id: int
     pass
 
 
@@ -204,7 +206,6 @@ class ProductSaleBase(BaseModel):
     sale_id: int
     quantity: int
     subtotal: float
-    props: dict
     enabled: bool
 
 
