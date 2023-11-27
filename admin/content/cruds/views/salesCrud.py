@@ -1,10 +1,11 @@
 from fastapi import FastAPI
 from reactpy.backend.fastapi import configure
 from reactpy import component, html, use_state, use_effect
-
+import pandas
+import matplotlib
 import asyncio
 import reactpy
-from admin.content.api import getSales, postSale, deleteSale  # Cambia los nombres de las funciones de API
+from admin.content.api import getSales, postSale, deleteSale, getEarnings
 
 
 @component
@@ -14,15 +15,27 @@ def SalesCrud():
     total, set_total = use_state("")
     props, set_props = use_state({})
     enabled, set_enabled = use_state(True)
+    earnings, set_earnings = use_state(0)
+    count_sales, set_count_sales = use_state(0)
 
     editing, set_editing = use_state(False)
     sale_id, set_sale_id = use_state(None)
 
+    interval_id, set_interval_id = use_state(None)
+
+    pd = pandas
+
     async def fillItems():
         sales_data = await getSales()
+        set_earnings((await getEarnings())["total_earnings"])
+        set_count_sales(len(sales_data))
         set_sales(sales_data)
+        print("Filling items")
 
-    use_effect(fillItems)
+        # new_interval_id = set_interval(fillItems, 5000)
+        # set_interval_id(new_interval_id)
+
+    use_effect(fillItems, [])
 
     @reactpy.event(prevent_default=True)
     async def handle_submit(e):
@@ -68,21 +81,6 @@ def SalesCrud():
         set_enabled(sale["enabled"])
         set_sale_id(sale["id"])
 
-    def delete_button_click_handler(e, sale_id):
-        async def async_handler():
-            await handle_delete(sale_id)
-
-        asyncio.ensure_future(async_handler())
-
-    def edit_button_click_handler(e, sale):
-        async def async_handler():
-            await handle_edit(sale)
-
-        asyncio.ensure_future(async_handler())
-
-    def details_button_click_handler(e, sale_id):
-        print(sale_id)
-
     def create_table_row(sale):
 
         return html.tr(
@@ -95,10 +93,10 @@ def SalesCrud():
                 html.a({
                     "href": f"/admin/sales_details/{sale['id']}",
                 },
-                       html.button({
-                           "class_name": "btn btn-info"
-                       }, "details"),
-                       ),
+                    html.button({
+                        "class_name": "btn btn-info"
+                    }, "details"),
+                ),
             )
         )
 
@@ -110,7 +108,7 @@ def SalesCrud():
          },
         html.div(
             {"class": "card-header py-3"},
-            html.h6({"class": "m-0 font-weight-bold text-primary"}, "Products Example"),
+            html.h6({"class": "m-0 font-weight-bold text-primary"}, "Sales List"),
         ),
         html.div(
             {"class": "card-body"},
@@ -121,9 +119,6 @@ def SalesCrud():
                  }},
                 html.table(
                     {"class": "table table-bordered", "id": "dataTable", "width": "100%", "cellspacing": "0",
-                     # "style": {
-                     #     "height": "100px"
-                     # }
                      },
                     html.thead(
                         html.tr(
@@ -135,16 +130,6 @@ def SalesCrud():
                             html.th(""),
                         ),
                     ),
-                    # html.tfoot(
-                    #     html.tr(
-                    #         html.th("Name"),
-                    #         html.th("Description"),
-                    #         html.th("Props"),
-                    #         html.th("Stock"),
-                    #         html.th("Enabled"),
-                    #         html.th(""),
-                    #     ),
-                    # ),
                     html.tbody(
                         [create_table_row(row) for row in sales]
                     ),
@@ -154,7 +139,13 @@ def SalesCrud():
     )
 
     cards = html.div(
-        {"class": "row"},
+        {"class": "row",
+         "style": {
+             "display": "flex",
+             "justify-content": "flex-start",
+             "gap": "10px",
+             "margin-left": "40px"
+         }},
         # Earnings (Monthly) Card Example
         html.div(
             {"class": "col-xl-3 col-md-6 mb-4"},
@@ -168,22 +159,22 @@ def SalesCrud():
                             {"class": "col mr-2"},
                             html.div(
                                 {"class": "text-xs font-weight-bold text-primary text-uppercase mb-1"},
-                                "Earnings (Monthly)"
+                                "Orders"
                             ),
                             html.div(
                                 {"class": "h5 mb-0 font-weight-bold text-gray-800"},
-                                "$40,000"
+                                count_sales
                             )
                         ),
                         html.div(
                             {"class": "col-auto"},
-                            html.i({"class": "fas fa-calendar fa-2x text-gray-300"})
+                            html.i({"class": "fas fa-clipboard-list fa-2x text-gray-300"})
                         )
                     )
                 )
             )
         ),
-        # Earnings (Annual) Card Example
+        # Earnings
         html.div(
             {"class": "col-xl-3 col-md-6 mb-4"},
             html.div(
@@ -200,7 +191,7 @@ def SalesCrud():
                             ),
                             html.div(
                                 {"class": "h5 mb-0 font-weight-bold text-gray-800"},
-                                "$215,000"
+                                f"${earnings}"
                             )
                         ),
                         html.div(
@@ -211,83 +202,88 @@ def SalesCrud():
                 )
             )
         ),
-        # Tasks Card Example
-        html.div(
-            {"class": "col-xl-3 col-md-6 mb-4"},
-            html.div(
-                {"class": "card border-left-info shadow h-100 py-2"},
-                html.div(
-                    {"class": "card-body"},
-                    html.div(
-                        {"class": "row no-gutters align-items-center"},
-                        html.div(
-                            {"class": "col mr-2"},
-                            html.div(
-                                {"class": "text-xs font-weight-bold text-info text-uppercase mb-1"},
-                                "Tasks"
-                            ),
-                            html.div(
-                                {"class": "row no-gutters align-items-center"},
-                                html.div(
-                                    {"class": "col-auto"},
-                                    html.div(
-                                        {"class": "h5 mb-0 mr-3 font-weight-bold text-gray-800"},
-                                        "50%"
-                                    )
-                                ),
-                                html.div(
-                                    {"class": "col"},
-                                    html.div(
-                                        {"class": "progress progress-sm mr-2"},
-                                        html.div(
-                                            {"class": "progress-bar bg-info",
-                                             "role": "progressbar",
-                                             "style": {"width": "50%"},
-                                             "aria-valuenow": "50",
-                                             "aria-valuemin": "0",
-                                             "aria-valuemax": "100"}
-                                        )
-                                    )
-                                )
-                            )
-                        ),
-                        html.div(
-                            {"class": "col-auto"},
-                            html.i({"class": "fas fa-clipboard-list fa-2x text-gray-300"})
-                        )
-                    )
-                )
-            )
-        ),
-        # Pending Requests Card Example
-        html.div(
-            {"class": "col-xl-3 col-md-6 mb-4"},
-            html.div(
-                {"class": "card border-left-warning shadow h-100 py-2"},
-                html.div(
-                    {"class": "card-body"},
-                    html.div(
-                        {"class": "row no-gutters align-items-center"},
-                        html.div(
-                            {"class": "col mr-2"},
-                            html.div(
-                                {"class": "text-xs font-weight-bold text-warning text-uppercase mb-1"},
-                                "Pending Requests"
-                            ),
-                            html.div(
-                                {"class": "h5 mb-0 font-weight-bold text-gray-800"},
-                                "18"
-                            )
-                        ),
-                        html.div(
-                            {"class": "col-auto"},
-                            html.i({"class": "fas fa-comments fa-2x text-gray-300"})
-                        )
-                    )
-                )
-            )
-        )
+        # # Tasks Card Example
+        # html.div(
+        #     {"class": "col-xl-3 col-md-6 mb-4"},
+        #     html.div(
+        #         {"class": "card border-left-info shadow h-100 py-2"},
+        #         html.div(
+        #             {"class": "card-body"},
+        #             html.div(
+        #                 {"class": "row no-gutters align-items-center"},
+        #                 html.div(
+        #                     {"class": "col mr-2"},
+        #                     html.div(
+        #                         {"class": "text-xs font-weight-bold text-info text-uppercase mb-1"},
+        #                         "Tasks"
+        #                     ),
+        #                     html.div(
+        #                         {"class": "row no-gutters align-items-center"},
+        #                         html.div(
+        #                             {"class": "col-auto"},
+        #                             html.div(
+        #                                 {"class": "h5 mb-0 mr-3 font-weight-bold text-gray-800"},
+        #                                 "50%"
+        #                             )
+        #                         ),
+        #                         html.div(
+        #                             {"class": "col"},
+        #                             html.div(
+        #                                 {"class": "progress progress-sm mr-2"},
+        #                                 html.div(
+        #                                     {"class": "progress-bar bg-info",
+        #                                      "role": "progressbar",
+        #                                      "style": {"width": "50%"},
+        #                                      "aria-valuenow": "50",
+        #                                      "aria-valuemin": "0",
+        #                                      "aria-valuemax": "100"}
+        #                                 )
+        #                             )
+        #                         )
+        #                     )
+        #                 ),
+        #                 html.div(
+        #                     {"class": "col-auto"},
+        #                     html.i({"class": "fas fa-clipboard-list fa-2x text-gray-300"})
+        #                 )
+        #             )
+        #         )
+        #     )
+        # ),
+        # # Pending Requests Card Example
+        # html.div(
+        #     {"class": "col-xl-3 col-md-6 mb-4"},
+        #     html.div(
+        #         {"class": "card border-left-warning shadow h-100 py-2"},
+        #         html.div(
+        #             {"class": "card-body"},
+        #             html.div(
+        #                 {"class": "row no-gutters align-items-center"},
+        #                 html.div(
+        #                     {"class": "col mr-2"},
+        #                     html.div(
+        #                         {"class": "text-xs font-weight-bold text-warning text-uppercase mb-1"},
+        #                         "Pending Requests"
+        #                     ),
+        #                     html.div(
+        #                         {"class": "h5 mb-0 font-weight-bold text-gray-800"},
+        #                         "18"
+        #                     )
+        #                 ),
+        #                 html.div(
+        #                     {"class": "col-auto"},
+        #                     html.i({"class": "fas fa-comments fa-2x text-gray-300"})
+        #                 )
+        #             )
+        #         )
+        #     )
+        # )
     )
+
+    df = pd.DataFrame({'mass': [0.330, 4.87, 5.97],
+                       'radius': [2439.7, 6051.8, 6378.1]},
+                      index=['Mercury', 'Venus', 'Earth'])
+    graph = df.plot.pie(y='mass', figsize=(5, 5))
 
     return html.div(
         {
@@ -295,32 +291,33 @@ def SalesCrud():
                 "padding": "3rem",
             }
         },
+        # graph,
         cards,
         html.ul(
             list_items
         ),
-        html.form(
-            {
-                "on_submit": handle_submit
-            },
-            html.input({
-                "type": "date",
-                "placeholder": "Date",
-                "on_change": lambda e: set_date(e["target"]["value"]),
-                "value": date,
-                "class_name": "form-control mb-2"
-            }),
-            html.input({
-                "type": "number",
-                "placeholder": "Total",
-                "on_change": lambda e: set_total(e["target"]["value"]),
-                "value": total,
-                "class_name": "form-control mb-2"
-            }),
-            html.button({
-                "type": "submit",
-                "class_name": "btn btn-primary btn-block"
-            }, "Create" if not editing else "Update"),
-        ),
+        # html.form(
+        #     {
+        #         "on_submit": handle_submit
+        #     },
+        #     html.input({
+        #         "type": "date",
+        #         "placeholder": "Date",
+        #         "on_change": lambda e: set_date(e["target"]["value"]),
+        #         "value": date,
+        #         "class_name": "form-control mb-2"
+        #     }),
+        #     html.input({
+        #         "type": "number",
+        #         "placeholder": "Total",
+        #         "on_change": lambda e: set_total(e["target"]["value"]),
+        #         "value": total,
+        #         "class_name": "form-control mb-2"
+        #     }),
+        #     html.button({
+        #         "type": "submit",
+        #         "class_name": "btn btn-primary btn-block"
+        #     }, "Create" if not editing else "Update"),
+        # ),
 
     )

@@ -168,6 +168,18 @@ async def getSales():
                 print(f"Error: {response.status}")
 
 
+async def getEarnings():
+    url = "http://localhost:8000/backend/earnings"
+
+    async with aiohttp.ClientSession() as session:
+        async with session.get(url) as response:
+            if response.status == 200:
+                result = await response.json()
+                return result
+            else:
+                print(f"Error: {response.status}")
+
+
 async def getSale(sale_id):
     url = f"http://localhost:8000/backend/sales/{sale_id}"
 

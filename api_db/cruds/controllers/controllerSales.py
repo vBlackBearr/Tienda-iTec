@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException
+from sqlalchemy import func
 from sqlalchemy.orm import Session, joinedload
 from api_db.cruds.models import models
 from api_db.cruds.schemas import schemas
@@ -44,6 +45,15 @@ def read_sales(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
         .all()
     )
     return sales
+
+
+@router.get("/backend/earnings")
+def read_earnings(db: Session = Depends(get_db)):
+    total_earnings = (
+        db.query(func.sum(models.Sale.total))
+        .scalar()
+    )
+    return {"total_earnings": total_earnings}
 
 
 @router.put("/backend/sales/{sale_id}")
