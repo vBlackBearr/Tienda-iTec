@@ -1,25 +1,32 @@
 from reactpy import html, use_state
 import reactpy
+from localStoragePy import localStoragePy
+from static.api import Login
+
+localStorage = localStoragePy('iTec_space', 'your-storage-backend')
 
 
 def login():
 
     email, set_email = use_state("")
-    password1, set_password = use_state("")
+    password, set_password = use_state("")
 
     @reactpy.event(prevent_default=True)
     async def handleLogin(e):
+        # print("handleLogin")
         response = await Login({"email": email, "password": password})
         if response["status"] == 200:
-            set_modal_text("Login Success!")
+            # set_modal_text("Login Success!")
+            print("Inicio de sesion exitoso")
             localStorage.setItem('token', response["data"]["token"])
         else:
             if response["status"] == 401:
-                set_modal_text("Usuario y/o contraseña incorrecta!")
+                # set_modal_text("Usuario y/o contraseña incorrecta!")
+                print("Usuario y/o contraseña incorrecta!")
             else:
-                set_modal_text("Error al iniciar sesion")
-        show_modal(None)
-
+                print("Ocurrio un error desconocido al iniciar sesion")
+                # set_modal_text("Error al iniciar sesion")
+        # show_modal(None)
     return (
         html.div({"class": "container"},
                  html.div({"class": "row justify-content-center"},
@@ -45,7 +52,8 @@ def login():
                                                                                                   "class": "form-control form-control-user",
                                                                                                   "id": "exampleInputEmail",
                                                                                                   "aria-describedby": "emailHelp",
-                                                                                                  "placeholder": "Enter Email Address..."
+                                                                                                  "placeholder": "Enter Email Address...",
+                                                                                                  "on_change": lambda e: set_email(e["target"]["value"]),
                                                                                               })
                                                                                           ),
                                                                                           html.div({
@@ -54,7 +62,8 @@ def login():
                                                                                                   "type": "password",
                                                                                                   "class": "form-control form-control-user",
                                                                                                   "id": "exampleInputPassword",
-                                                                                                  "placeholder": "Password"
+                                                                                                  "placeholder": "Password",
+                                                                                                  "on_change": lambda e: set_password(e["target"]["value"]),
                                                                                               })
                                                                                           ),
                                                                                           html.div({
@@ -74,24 +83,25 @@ def login():
                                                                                               ),
                                                                                           ),
                                                                                           html.a({
-                                                                                              "href": "index.html",
-                                                                                              "class": "btn btn-primary btn-user btn-block"},
+                                                                                              # "href": "index.html",
+                                                                                              "class": "btn btn-primary btn-user btn-block",
+                                                                                              "on_click": handleLogin},
                                                                                               "Login"),
                                                                                           html.hr(),
-                                                                                          html.a({
-                                                                                              "href": "index.html",
-                                                                                              "class": "btn btn-google btn-user btn-block"},
-                                                                                              html.i({
-                                                                                                  "class": "fab fa-google fa-fw"}),
-                                                                                              "Login with Google"
-                                                                                          ),
-                                                                                          html.a({
-                                                                                              "href": "index.html",
-                                                                                              "class": "btn btn-facebook btn-user btn-block"},
-                                                                                              html.i({
-                                                                                                  "class": "fab fa-facebook-f fa-fw"}),
-                                                                                              "Login with Facebook"
-                                                                                          )
+                                                                                          # html.a({
+                                                                                          #     "href": "index.html",
+                                                                                          #     "class": "btn btn-google btn-user btn-block"},
+                                                                                          #     html.i({
+                                                                                          #         "class": "fab fa-google fa-fw"}),
+                                                                                          #     "Login with Google"
+                                                                                          # ),
+                                                                                          # html.a({
+                                                                                          #     "href": "index.html",
+                                                                                          #     "class": "btn btn-facebook btn-user btn-block"},
+                                                                                          #     html.i({
+                                                                                          #         "class": "fab fa-facebook-f fa-fw"}),
+                                                                                          #     "Login with Facebook"
+                                                                                          # )
                                                                                           ),
                                                                                 html.hr(),
                                                                                 html.div(
@@ -100,12 +110,12 @@ def login():
                                                                                             "href": "#"},
                                                                                            "Forgot Password?")
                                                                                 ),
-                                                                                html.div(
-                                                                                    {"class": "text-center"},
-                                                                                    html.a({"class": "small",
-                                                                                            "href": "#"},
-                                                                                           "Create an Account!")
-                                                                                )
+                                                                                # html.div(
+                                                                                #     {"class": "text-center"},
+                                                                                #     html.a({"class": "small",
+                                                                                #             "href": "#"},
+                                                                                #            "Create an Account!")
+                                                                                # )
                                                                                 )
                                                                        )
                                                               )
@@ -115,3 +125,4 @@ def login():
                           )
                  )
     )
+

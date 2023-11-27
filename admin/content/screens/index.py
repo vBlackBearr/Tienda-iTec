@@ -11,5 +11,5 @@ def Index(context):
     context_value = use_context(context)
 
     return Base((
-        login
+        login()
     ), context_value)
