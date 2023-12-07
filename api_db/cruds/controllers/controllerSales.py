@@ -1,5 +1,5 @@
 from fastapi import APIRouter, Depends, HTTPException
-from sqlalchemy import func
+from sqlalchemy import func, desc
 from sqlalchemy.orm import Session, joinedload
 from api_db.cruds.models import models
 from api_db.cruds.schemas import schemas
@@ -39,7 +39,7 @@ def read_sales(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
         db.query(models.Sale)
         .options(joinedload(models.Sale.sale_state))
         .options(joinedload(models.Sale.user))
-
+        .order_by(desc(models.Sale.id))
         .offset(skip)
         .limit(limit)
         .all()
