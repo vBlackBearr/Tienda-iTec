@@ -1,13 +1,18 @@
 from reactpy import component, html, use_state, use_effect
-import pandas
-import matplotlib
-import asyncio
 import reactpy
+from reactpy.core.hooks import use_context
+
+# content
+from admin.content.cruds.views.salesCrud import SalesCrud
+from admin.content.screens._base import Base
+
 from admin.content.api import getSales, postSale, deleteSale, getEarnings
 
 
 @component
-def SalesCrud():
+def PurchasesLogistica(context):
+    context_value = use_context(context)
+
     sales, set_sales = use_state([])
     date, set_date = use_state("")
     total, set_total = use_state("")
@@ -21,13 +26,13 @@ def SalesCrud():
 
     interval_id, set_interval_id = use_state(None)
 
-    pd = pandas
+    # pd = pandas
 
     async def fillItems():
-        sales_data = await getSales()
+        # sales_data = await getSales()
         set_earnings((await getEarnings())["total_earnings"])
-        set_count_sales(len(sales_data))
-        set_sales(sales_data)
+        # set_count_sales(len(sales_data))
+        # set_sales(sales_data)
         print("Filling items")
 
         # new_interval_id = set_interval(fillItems, 5000)
@@ -106,7 +111,7 @@ def SalesCrud():
          },
         html.div(
             {"class": "card-header py-3"},
-            html.h6({"class": "m-0 font-weight-bold text-primary"}, "Sales List"),
+            html.h6({"class": "m-0 font-weight-bold text-primary"}, "Purchases on the road List"),
         ),
         html.div(
             {"class": "card-body"},
@@ -122,7 +127,7 @@ def SalesCrud():
                         html.tr(
                             html.th("ORDER"),
                             html.th("DATE"),
-                            html.th("USER"),
+                            html.th("PROVIDER"),
                             html.th("TOTAL"),
                             html.th("STATE"),
                             html.th(""),
@@ -157,7 +162,7 @@ def SalesCrud():
                             {"class": "col mr-2"},
                             html.div(
                                 {"class": "text-xs font-weight-bold text-primary text-uppercase mb-1"},
-                                "ORDERS COUNT"
+                                "Orders"
                             ),
                             html.div(
                                 {"class": "h5 mb-0 font-weight-bold text-gray-800"},
@@ -185,7 +190,7 @@ def SalesCrud():
                             {"class": "col mr-2"},
                             html.div(
                                 {"class": "text-xs font-weight-bold text-success text-uppercase mb-1"},
-                                "Earnings (TOTAL)"
+                                "Earnings (Annual)"
                             ),
                             html.div(
                                 {"class": "h5 mb-0 font-weight-bold text-gray-800"},
@@ -278,44 +283,17 @@ def SalesCrud():
         # )
     )
 
-    df = pd.DataFrame({'mass': [0.330, 4.87, 5.97],
-                       'radius': [2439.7, 6051.8, 6378.1]},
-                      index=['Mercury', 'Venus', 'Earth'])
-    graph = df.plot.pie(y='mass', figsize=(5, 5))
+    return Base((
+        html.div(
+            {
+                "style": {
+                    "padding": "3rem",
+                }
+            },
+            # cards,
+            html.ul(
+                list_items
+            ),
 
-    return html.div(
-        {
-            "style": {
-                "padding": "3rem",
-            }
-        },
-        # graph,
-        cards,
-        html.ul(
-            list_items
-        ),
-        # html.form(
-        #     {
-        #         "on_submit": handle_submit
-        #     },
-        #     html.input({
-        #         "type": "date",
-        #         "placeholder": "Date",
-        #         "on_change": lambda e: set_date(e["target"]["value"]),
-        #         "value": date,
-        #         "class_name": "form-control mb-2"
-        #     }),
-        #     html.input({
-        #         "type": "number",
-        #         "placeholder": "Total",
-        #         "on_change": lambda e: set_total(e["target"]["value"]),
-        #         "value": total,
-        #         "class_name": "form-control mb-2"
-        #     }),
-        #     html.button({
-        #         "type": "submit",
-        #         "class_name": "btn btn-primary btn-block"
-        #     }, "Create" if not editing else "Update"),
-        # ),
-
-    )
+        )
+    ), context_value)

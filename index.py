@@ -15,6 +15,10 @@ from admin.content.screens.RawMaterials import RawMaterials
 from admin.content.screens.Products import Products as AdminProducts
 from admin.content.screens.Sales import Sales
 from admin.content.screens.SalesDetails import SalesDetails
+from admin.content.screens.Purchases import Purchases
+from admin.content.screens.PurchasesLogistica import PurchasesLogistica
+from admin.content.screens.SalesLogistica import SalesLogistica
+from admin.content.screens.Management import Management
 
 # Screens Shop
 from static.screens.index import Index
@@ -69,6 +73,11 @@ def App():
         route("/admin/products", AdminProducts(context)),
         route("/admin/sales", Sales(context)),
         route("/admin/sales_details/{id:int}", SalesDetails(context)),
+        route("/admin/purchases", Purchases(context)),
+        route("/admin/purchases_logistica", PurchasesLogistica(context)),
+        route("/admin/sales_logistica", SalesLogistica(context)),
+        route("/admin/management", Management(context)),
+
         route("*", html.h1("Missing Link 🔗‍💥")),
     )
 
