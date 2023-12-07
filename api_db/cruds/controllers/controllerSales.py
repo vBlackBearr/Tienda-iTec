@@ -14,6 +14,10 @@ def create_sale(sale: schemas.SaleCreate, db: Session = Depends(get_db)):
     db.add(db_sale)
     db.commit()
     db.refresh(db_sale)
+
+    # proceso de gestion de inventario y pedidos a proveedores
+
+
     return db_sale
 
 
