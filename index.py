@@ -38,6 +38,9 @@ from api_db.cruds.controllers.controllerSales import router as router_sales
 from api_db.cruds.controllers.controllerProductsSales import router as router_products_sales
 from admin.content.endp.pedidos import router as router_pedidos
 
+
+
+
 # routers shop
 # from static.cruds.controllers.controllerRoles import router as router_roles
 
@@ -49,6 +52,7 @@ app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
 app.mount("/api_db", StaticFiles(directory="api_db"), name="api_db")
 app.mount("/admin/content", StaticFiles(directory="admin/content"), name="admin")
+app.mount("/red_neuronal", StaticFiles(directory="red_neuronal"), name="red_neuronal")
 # app.mount("/admin/sales_details", StaticFiles(directory="admin/content"), name="admin")
 
 

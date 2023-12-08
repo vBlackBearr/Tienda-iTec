@@ -4,6 +4,7 @@ from sqlalchemy.orm import Session, joinedload
 from api_db.cruds.models import models
 from api_db.cruds.schemas import schemas
 from api_db.database import get_db
+from red_neuronal.RedMetricas import Prediction
 
 router = APIRouter()
 
@@ -16,7 +17,7 @@ def create_sale(sale: schemas.SaleCreate, db: Session = Depends(get_db)):
     db.refresh(db_sale)
 
     # proceso de gestion de inventario y pedidos a proveedores
-
+    Prediction(10)
 
     return db_sale
 
