@@ -38,6 +38,7 @@ class RawMaterialPartner(Base):
     partner_id = Column(Integer, ForeignKey('partners.id'))
     props = Column(JSON)
     enabled = Column(Boolean)
+    purchases = relationship("Purchase", back_populates="raw_materials_partners")
     partner = relationship("Partner", back_populates="raw_materials_partners")
     raw_material = relationship("RawMaterial", back_populates="raw_materials_partners")
 
@@ -149,3 +150,15 @@ class UserCart(Base):
     UniqueConstraint('user_id', 'product_id', name='unique_user_product')
 
 
+class Purchase(Base):
+    __tablename__ = "purchases"
+
+    id = Column(Integer, primary_key=True, index=True)
+    raw_materials_partners_id = Column(Integer, ForeignKey('raw_materials_partners.id'))
+    date = Column(Date)
+    total = Column(DECIMAL(10, 2))
+    props = Column(JSON)
+    enabled = Column(Boolean, default=True)
+
+    # Relaciones
+    raw_materials_partners = relationship("RawMaterialPartner", back_populates="purchases")

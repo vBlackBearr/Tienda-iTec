@@ -6,14 +6,14 @@ from reactpy.core.hooks import use_context
 from admin.content.cruds.views.salesCrud import SalesCrud
 from admin.content.screens._base import Base
 
-from admin.content.api import getSales, postSale, deleteSale, getEarnings
+from admin.content.api import postSale, deleteSale, getPurchases
 
 
 @component
 def Purchases(context):
     context_value = use_context(context)
 
-    sales, set_sales = use_state([])
+    purchases, set_purchases = use_state([])
     date, set_date = use_state("")
     total, set_total = use_state("")
     props, set_props = use_state({})
@@ -29,14 +29,9 @@ def Purchases(context):
     # pd = pandas
 
     async def fillItems():
-        # sales_data = await getSales()
-        set_earnings((await getEarnings())["total_earnings"])
-        # set_count_sales(len(sales_data))
-        # set_sales(sales_data)
+        purchases_data = await getPurchases()
+        set_purchases(purchases_data)
         print("Filling items")
-
-        # new_interval_id = set_interval(fillItems, 5000)
-        # set_interval_id(new_interval_id)
 
     use_effect(fillItems, [])
 
@@ -62,8 +57,8 @@ def Purchases(context):
                 "props": props,
                 "enabled": enabled,
                 "id": sale_id
-            } for sale in sales]
-            set_sales(updated_sales)
+            } for sale in purchases]
+            set_purchases(updated_sales)
 
         set_date("")
         set_total("")
@@ -134,7 +129,7 @@ def Purchases(context):
                         ),
                     ),
                     html.tbody(
-                        [create_table_row(row) for row in sales]
+                        [create_table_row(row) for row in purchases]
                     ),
                 ),
             ),

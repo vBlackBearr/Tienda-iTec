@@ -239,3 +239,15 @@ async def deleteSale(sale_id):
         return True
     else:
         return False
+
+
+async def getPurchases():
+    url = "http://localhost:8000/backend/purchases"
+
+    async with aiohttp.ClientSession() as session:
+        async with session.get(url) as response:
+            if response.status == 200:
+                result = await response.json()
+                return result
+            else:
+                print(f"Error: {response.status}")

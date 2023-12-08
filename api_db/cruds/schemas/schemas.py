@@ -1,5 +1,8 @@
 from pydantic import BaseModel
 from typing import Dict
+from datetime import date
+from typing import Optional
+
 
 
 class PartnerBase(BaseModel):
@@ -301,3 +304,33 @@ class UserCartChangeQuantity(BaseModel):
 class UserCartChangeQuantityIncDec(BaseModel):
     user_id: int
     product_id: int
+
+
+
+
+
+class PurchaseBase(BaseModel):
+    user_id: int
+    raw_materials_partners_id: int
+    date: date
+    total: float
+    props: Optional[dict]
+
+class PurchaseCreate(PurchaseBase):
+    pass
+
+class PurchaseUpdate(PurchaseBase):
+    pass
+
+class PurchaseInDBBase(PurchaseBase):
+    id: int
+    enabled: bool
+
+    class Config:
+        orm_mode = True
+
+class Purchase(PurchaseInDBBase):
+    pass
+
+class PurchaseInDB(PurchaseInDBBase):
+    pass

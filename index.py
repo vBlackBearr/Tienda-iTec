@@ -36,6 +36,8 @@ from api_db.cruds.controllers.controllerUsers import router as router_users
 from api_db.cruds.controllers.controllerSaleState import router as router_sale_states
 from api_db.cruds.controllers.controllerSales import router as router_sales
 from api_db.cruds.controllers.controllerProductsSales import router as router_products_sales
+from api_db.cruds.controllers.controllerPurchases import router as router_purchases
+
 from admin.content.endp.pedidos import router as router_pedidos
 
 # routers shop
@@ -95,6 +97,7 @@ app.include_router(router_pedidos)
 app.include_router(router_roles)
 app.include_router(router_users)
 app.include_router(router_sale_states)
+app.include_router(router_purchases)
 
 
 configure(app, App)
