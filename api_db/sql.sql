@@ -274,3 +274,16 @@ CREATE TABLE user_cart (
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
     FOREIGN KEY (product_id) REFERENCES products(id) ON DELETE CASCADE
 );
+
+-- Creación de la tabla purchases
+CREATE TABLE purchases (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    user_id INT,
+    raw_materials_partners_id INT,
+    date DATE,
+    total DECIMAL(10, 2),
+    props JSON,
+    enabled BOOLEAN DEFAULT TRUE,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+    FOREIGN KEY (raw_materials_partners_id) REFERENCES raw_materials_partners(id) ON DELETE CASCADE
+);

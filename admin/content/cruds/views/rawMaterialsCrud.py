@@ -103,32 +103,32 @@ def RawMaterialsCrud():
         )
 
     list_items = html.div(
-        {"class": "card shadow mb-4"},
+        {"class": "card shadow mb-4",
+         "style": {
+             "height": "400px"
+         }
+         },
         html.div(
             {"class": "card-header py-3"},
-            html.h6({"class": "m-0 font-weight-bold text-primary"}, "DataTables Example"),
+            html.h6({"class": "m-0 font-weight-bold text-primary"}, "Sales List"),
         ),
         html.div(
             {"class": "card-body"},
             html.div(
-                {"class": "table-responsive"},
+                {"class": "table-responsive h-100",
+                 "style": {
+                     # "height": "100px"
+                 }},
                 html.table(
-                    {"class": "table table-bordered", "id": "dataTable", "width": "100%", "cellspacing": "0"},
+                    {"class": "table table-bordered", "id": "dataTable", "width": "100%", "cellspacing": "0",
+                     },
                     html.thead(
                         html.tr(
-                            html.th("Nombre"),
-                            html.th("Descripcion"),
-                            html.th("Stock"),
-                            html.th("Proveedor"),
-                            html.th(""),
-                        ),
-                    ),
-                    html.tfoot(
-                        html.tr(
-                            html.th("Nombre"),
-                            html.th("Descripcion"),
-                            html.th("Stock"),
-                            html.th("Proveedor"),
+                            html.th("ORDER"),
+                            html.th("DATE"),
+                            html.th("USER"),
+                            html.th("TOTAL"),
+                            html.th("STATE"),
                             html.th(""),
                         ),
                     ),
@@ -146,36 +146,33 @@ def RawMaterialsCrud():
                 "padding": "3rem",
             }
         },
-        html.form(
-            {
-                "on_submit": handle_submit
-            },
-            html.input({
-                "type": "text",
-                "placeholder": "Name",
-                "on_change": lambda e: set_name(e["target"]["value"]),
-                "autofocus": True,
-                "value": name,
-                "class_name": "form-control mb-2"
-            }),
-            html.input({
-                "type": "text",
-                "placeholder": "Description",
-                "on_change": lambda e: set_description(e["target"]["value"]),
-                "value": description,
-                "class_name": "form-control mb-2"
-            }),
-            html.input({
-                "type": "number",
-                "placeholder": "Partner ID",
-                "on_change": lambda e: set_partner_id(int(e["target"]["value"])),
-                "value": partner_id,
-                "class_name": "form-control mb-2"
-            }),
-            html.button({
-                "type": "submit",
-                "class_name": "btn btn-primary btn-block"
-            }, "Create" if not editing else "Update"),
+        # graph,
+        # cards,
+        html.ul(
+            list_items
         ),
-        list_items
+        # html.form(
+        #     {
+        #         "on_submit": handle_submit
+        #     },
+        #     html.input({
+        #         "type": "date",
+        #         "placeholder": "Date",
+        #         "on_change": lambda e: set_date(e["target"]["value"]),
+        #         "value": date,
+        #         "class_name": "form-control mb-2"
+        #     }),
+        #     html.input({
+        #         "type": "number",
+        #         "placeholder": "Total",
+        #         "on_change": lambda e: set_total(e["target"]["value"]),
+        #         "value": total,
+        #         "class_name": "form-control mb-2"
+        #     }),
+        #     html.button({
+        #         "type": "submit",
+        #         "class_name": "btn btn-primary btn-block"
+        #     }, "Create" if not editing else "Update"),
+        # ),
+
     )

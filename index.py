@@ -15,6 +15,10 @@ from admin.content.screens.RawMaterials import RawMaterials
 from admin.content.screens.Products import Products as AdminProducts
 from admin.content.screens.Sales import Sales
 from admin.content.screens.SalesDetails import SalesDetails
+from admin.content.screens.Purchases import Purchases
+from admin.content.screens.PurchasesLogistica import PurchasesLogistica
+from admin.content.screens.SalesLogistica import SalesLogistica
+from admin.content.screens.Management import Management
 
 # Screens Shop
 from static.screens.index import Index
@@ -32,7 +36,12 @@ from api_db.cruds.controllers.controllerUsers import router as router_users
 from api_db.cruds.controllers.controllerSaleState import router as router_sale_states
 from api_db.cruds.controllers.controllerSales import router as router_sales
 from api_db.cruds.controllers.controllerProductsSales import router as router_products_sales
+from api_db.cruds.controllers.controllerPurchases import router as router_purchases
+
 from admin.content.endp.pedidos import router as router_pedidos
+
+
+
 
 # routers shop
 # from static.cruds.controllers.controllerRoles import router as router_roles
@@ -45,6 +54,7 @@ app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
 app.mount("/api_db", StaticFiles(directory="api_db"), name="api_db")
 app.mount("/admin/content", StaticFiles(directory="admin/content"), name="admin")
+app.mount("/red_neuronal", StaticFiles(directory="red_neuronal"), name="red_neuronal")
 # app.mount("/admin/sales_details", StaticFiles(directory="admin/content"), name="admin")
 
 
@@ -69,6 +79,11 @@ def App():
         route("/admin/products", AdminProducts(context)),
         route("/admin/sales", Sales(context)),
         route("/admin/sales_details/{id:int}", SalesDetails(context)),
+        route("/admin/purchases", Purchases(context)),
+        route("/admin/purchases_logistica", PurchasesLogistica(context)),
+        route("/admin/sales_logistica", SalesLogistica(context)),
+        route("/admin/management", Management(context)),
+
         route("*", html.h1("Missing Link 🔗‍💥")),
     )
 
@@ -86,6 +101,7 @@ app.include_router(router_pedidos)
 app.include_router(router_roles)
 app.include_router(router_users)
 app.include_router(router_sale_states)
+app.include_router(router_purchases)
 
 
 configure(app, App)

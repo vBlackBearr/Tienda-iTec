@@ -27,6 +27,21 @@ def login():
                 print("Ocurrio un error desconocido al iniciar sesion")
                 # set_modal_text("Error al iniciar sesion")
         # show_modal(None)
+
+    # @reactpy.event(prevent_default=True)
+    # async def handleLogin(e):
+    #     response = await Login({"email": email, "password": password})
+    #     if response["status"] == 200:
+    #         set_modal_text("Login Success!")
+    #         localStorage.setItem('token', response["data"]["token"])
+    #     else:
+    #         if response["status"] == 401:
+    #             set_modal_text("Usuario y/o contraseña incorrecta!")
+    #         else:
+    #             set_modal_text("Error al iniciar sesion")
+    #     show_modal(None)
+
+
     return (
         html.div({"class": "container"},
                  html.div({"class": "row justify-content-center"},

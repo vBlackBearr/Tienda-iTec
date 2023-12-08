@@ -146,63 +146,31 @@ sidebar = html.ul({
     ),
 
     html.li({
-            "class": "nav-item active"
-        },
-            html.a({
-                "class": "nav-link",
-                "href": "/admin/sales"
-            },
-                html.i({
-                    "class": "fas fa-fw fa-table"
-                }),
-                html.span("Ventas")
-            ),
-
-        ),
-
-    # Nav Item - Pages Collapse Menu (TIER3)
-    html.li({
-        "class": "nav-item"
+        "class": "nav-item active"
     },
         html.a({
-            "class": "nav-link collapsed",
-            "href": "#",
-            "data-toggle": "collapse",
-            "data-target": "#collapseTIER3"
+            "class": "nav-link",
+            "href": "/admin/sales"
         },
             html.i({
-                "class": "fas fa-fw fa-cog"
+                "class": "fas fa-fw fa-table"
             }),
-            "Compras"
+            html.span("Ventas")
         ),
-        html.div({
-            "class": "collapse",
-            "id": "collapseTIER3",
-            "aria-labelledby": "headingTwo",
-            "data-parent": "#accordionSidebar"
+    ),
+
+    html.li({
+        "class": "nav-item active"
+    },
+        html.a({
+            "class": "nav-link",
+            "href": "/admin/purchases"
         },
-            html.div({
-                "class": "bg-white py-2 collapse-inner rounded"
-            },
-                html.h6({
-                    "class": "collapse-header"
-                },
-                    "Custom Components:"
-                ),
-                html.a({
-                    "class": "collapse-item",
-                    "href": "buttons.html"
-                },
-                    "Buttons"
-                ),
-                html.a({
-                    "class": "collapse-item",
-                    "href": "cards.html"
-                },
-                    "Cards"
-                )
-            )
-        )
+            html.i({
+                "class": "fas fa-fw fa-table"
+            }),
+            html.span("Compras")
+        ),
     ),
 
     # Nav Item - Pages Collapse Menu (LOGISTICA)
@@ -216,7 +184,7 @@ sidebar = html.ul({
             "data-target": "#collapseLOGISTICA"
         },
             html.i({
-                "class": "fas fa-fw fa-cog"
+                "class": "fas fa-fw fa-table"
             }),
             "LOGISTICA"
         ),
@@ -236,15 +204,15 @@ sidebar = html.ul({
                 ),
                 html.a({
                     "class": "collapse-item",
-                    "href": "buttons.html"
+                    "href": "/admin/purchases_logistica"
                 },
-                    "Buttons"
+                    "Purchases on the road"
                 ),
                 html.a({
                     "class": "collapse-item",
-                    "href": "cards.html"
+                    "href": "/admin/sales_logistica"
                 },
-                    "Cards"
+                    "Sales on the road"
                 )
             )
         )
@@ -254,5 +222,19 @@ sidebar = html.ul({
     html.hr({
         "class": "sidebar-divider"
     }),
+
+    html.li({
+        "class": "nav-item active"
+    },
+        html.a({
+            "class": "nav-link",
+            "href": "/admin/management"
+        },
+            html.i({
+                "class": "fas fa-fw fa-cog"
+            }),
+            html.span("Manage")
+        ),
+    ),
 
 )

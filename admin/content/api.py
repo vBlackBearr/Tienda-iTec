@@ -1,6 +1,8 @@
 import aiohttp
 
 
+
+
 async def request(method, url, **kwargs):
     async with aiohttp.ClientSession() as session:
         async with session.request(method, url, **kwargs) as response:
@@ -103,6 +105,18 @@ async def deleteRawMaterial(raw_material_id):
     else:
         return False
 
+async def getRawMaterials():
+    url = "http://localhost:8000/backend/raw_materials"
+
+    async with aiohttp.ClientSession() as session:
+        async with session.get(url) as response:
+            if response.status == 200:
+                result = await response.json()
+                return result
+            else:
+                # Manejar otros códigos de estado si es necesario
+                print(f"Error: {response.status}")
+
 
 async def getProducts():
     url = "http://localhost:8000/backend/products"
@@ -198,7 +212,6 @@ async def getSale(sale_id):
                 return {"error": f"Unexpected error: {response.status}", "status_code": response.status}
 
 
-
 async def postSale(new_sale):
     response = await request("POST", "http://localhost:8000/backend/sales", json=new_sale)
 
@@ -207,6 +220,7 @@ async def postSale(new_sale):
         return result
     else:
         return None
+
 
 async def updateSale(sale_id, updated_sale):
     response = await request("PUT", f"http://localhost:8000/backend/sales/{sale_id}", json=updated_sale)
@@ -217,6 +231,7 @@ async def updateSale(sale_id, updated_sale):
     else:
         return None
 
+
 async def deleteSale(sale_id):
     response = await request("DELETE", f"http://localhost:8000/backend/sales/{sale_id}")
 
@@ -224,3 +239,15 @@ async def deleteSale(sale_id):
         return True
     else:
         return False
+
+
+async def getPurchases():
+    url = "http://localhost:8000/backend/purchases"
+
+    async with aiohttp.ClientSession() as session:
+        async with session.get(url) as response:
+            if response.status == 200:
+                result = await response.json()
+                return result
+            else:
+                print(f"Error: {response.status}")
