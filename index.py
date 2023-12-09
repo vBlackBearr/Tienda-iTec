@@ -12,6 +12,7 @@ from reactpy_router import route, simple, use_params
 from admin.content.screens.index import Index as AdminIndex
 from admin.content.screens.Partners import Partners as AdminPartners
 from admin.content.screens.RawMaterials import RawMaterials
+from admin.content.screens.RawMaterialsDetails import RawMaterialsDetails
 from admin.content.screens.Products import Products as AdminProducts
 from admin.content.screens.Sales import Sales
 from admin.content.screens.SalesDetails import SalesDetails
@@ -78,6 +79,7 @@ def App():
         route("/admin/index", AdminIndex(context)),
         route("/admin/partners", AdminPartners(context)),
         route("/admin/raw_materials", RawMaterials(context)),
+        route("/admin/raw_materials_details/{id:int}", RawMaterialsDetails(context)),
         route("/admin/products", AdminProducts(context)),
         route("/admin/sales", Sales(context)),
         route("/admin/sales_details/{id:int}", SalesDetails(context)),

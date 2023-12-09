@@ -66,14 +66,22 @@ async def getRawMaterials():
         return []
 
 
-async def getRawMaterial(raw_material_id):
-    response = await request("GET", f"http://localhost:8000/backend/raw_materials/{raw_material_id}")
+async def getRawMaterial(raw_material):
+    url = f"http://localhost:8000/backend/raw_materials/{raw_material}"
 
-    if response.status == 200:
-        result = await response.json()
-        return result
-    else:
-        return {}
+    async with aiohttp.ClientSession() as session:
+        async with session.get(url) as response:
+            if response.status == 200:
+                result = await response.json()
+                return {"status_code": 200, "data": result}
+            elif response.status == 404:
+                # Venta no encontrada
+                print(f"Error: Sale with id {raw_material} not found.")
+                return {"error": "Raw Material not found", "status_code": 404}
+            else:
+                # Otro tipo de error
+                print(f"Error: {response.status}")
+                return {"error": f"Unexpected error: {response.status}", "status_code": response.status}
 
 
 async def postRawMaterial(new_raw_material):

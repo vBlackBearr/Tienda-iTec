@@ -7,18 +7,18 @@ from admin.content.api import getRawMaterials, postRawMaterial, deleteRawMateria
 
 @component
 def RawMaterialsCrud():
-    raw_materials, set_raw_materials = use_state([])  # Cambia el nombre de las variables
-    name, set_name = use_state("")  # Cambia el nombre de las variables
-    description, set_description = use_state("")  # Cambia el nombre de las variables
-    partner_id, set_partner_id = use_state(None)  # Cambia el nombre de las variables
-    props, set_props = use_state({})  # Cambia el nombre de las variables
-    enabled, set_enabled = use_state(True)  # Cambia el nombre de las variables
+    raw_materials, set_raw_materials = use_state([])
+    name, set_name = use_state("")
+    description, set_description = use_state("")
+    partner_id, set_partner_id = use_state(None)
+    props, set_props = use_state({})
+    enabled, set_enabled = use_state(True)
 
     editing, set_editing = use_state(False)
-    raw_material_id, set_raw_material_id = use_state(None)  # Cambia el nombre de las variables
+    raw_material_id, set_raw_material_id = use_state(None)
 
     async def fillItems():
-        raw_materials_data = await getRawMaterials()  # Cambia el nombre de la función
+        raw_materials_data = await getRawMaterials()
         set_raw_materials(raw_materials_data)
 
     use_effect(fillItems)
@@ -37,7 +37,7 @@ def RawMaterialsCrud():
                 "enabled": enabled
             }
 
-            await postRawMaterial(new_raw_material)  # Cambia el nombre de la función
+            await postRawMaterial(new_raw_material)
             await fillItems()
         else:
             updated_raw_materials = [raw_material if raw_material["id"] != raw_material_id else {
@@ -59,7 +59,7 @@ def RawMaterialsCrud():
         set_raw_material_id(None)
 
     async def handle_delete(raw_material):
-        await deleteRawMaterial(raw_material)  # Cambia el nombre de la función
+        await deleteRawMaterial(raw_material)
         await fillItems()
 
     async def handle_edit(raw_material):
@@ -83,22 +83,19 @@ def RawMaterialsCrud():
 
         asyncio.ensure_future(async_handler())
 
-
-    def create_table_row(raw_materials):
+    def create_table_row(raw_material):
         return html.tr(
-            html.td(raw_materials['name']),
-            html.td(raw_materials['description']),
-            html.td(raw_materials['props']),
-            html.td(raw_materials['props']),
+            html.td(raw_material['name']),
+            html.td(raw_material['description']),
+            html.td(raw_material['stock']),
             html.td(
-                html.button({
-                    "on_click": lambda e, raw_materials_id=raw_materials["id"]: delete_button_click_handler(e, raw_materials_id),
-                    "class_name": "btn btn-danger"
-                }, "delete"),
-                html.button({
-                    "on_click": lambda e, raw_material=raw_materials: edit_button_click_handler(e, raw_material),
-                    "class_name": "btn btn-secondary"
-                }, "edit"),
+                html.a({
+                    "href": f"/admin/raw_materials_details/{raw_material['id']}",
+                },
+                    html.button({
+                        "class_name": "btn btn-info"
+                    }, "details"),
+                ),
             )
         )
 
@@ -110,7 +107,7 @@ def RawMaterialsCrud():
          },
         html.div(
             {"class": "card-header py-3"},
-            html.h6({"class": "m-0 font-weight-bold text-primary"}, "Sales List"),
+            html.h6({"class": "m-0 font-weight-bold text-primary"}, "Raw Materials List"),
         ),
         html.div(
             {"class": "card-body"},
@@ -124,11 +121,9 @@ def RawMaterialsCrud():
                      },
                     html.thead(
                         html.tr(
-                            html.th("ORDER"),
-                            html.th("DATE"),
-                            html.th("USER"),
-                            html.th("TOTAL"),
-                            html.th("STATE"),
+                            html.th("NAME"),
+                            html.th("DESCRIPTION"),
+                            html.th("STOCK"),
                             html.th(""),
                         ),
                     ),

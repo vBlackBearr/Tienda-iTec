@@ -1,7 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
 from api_db.database import get_db, SessionLocal
 from api_db.cruds.models.models import RawMaterial
+from api_db.cruds.models import models
 
 router = APIRouter()
 
@@ -23,7 +24,13 @@ def create_raw_material(raw_material_data: dict, db: Session = Depends(get_db)):
 
 @router.get("/backend/raw_materials/{raw_material_id}")
 def get_raw_material(raw_material_id: int, db: Session = Depends(get_db)):
-    raw_material = db.query(RawMaterial).filter(RawMaterial.id == raw_material_id).first()
+    raw_material =(db.query(RawMaterial)
+                   .options(joinedload(models.RawMaterial.raw_materials_partners)
+                            .options(joinedload(models.RawMaterialPartner.partner))
+                            )
+                   .filter(RawMaterial.id == raw_material_id)
+                   .first()
+                   )
     if not raw_material:
         raise HTTPException(status_code=404, detail="Raw Material not found")
     return raw_material
