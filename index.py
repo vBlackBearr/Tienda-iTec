@@ -19,6 +19,7 @@ from admin.content.screens.Purchases import Purchases
 from admin.content.screens.PurchasesLogistica import PurchasesLogistica
 from admin.content.screens.SalesLogistica import SalesLogistica
 from admin.content.screens.Management import Management
+from admin.content.screens.Login import Login as AdminLogin
 
 # Screens Shop
 from static.screens.index import Index
@@ -73,6 +74,7 @@ def App():
 
 
         # Admin
+        route("/admin/login", AdminLogin(context)),
         route("/admin/index", AdminIndex(context)),
         route("/admin/partners", AdminPartners(context)),
         route("/admin/raw_materials", RawMaterials(context)),

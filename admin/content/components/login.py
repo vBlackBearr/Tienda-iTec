@@ -7,42 +7,155 @@ localStorage = localStoragePy('iTec_space', 'your-storage-backend')
 
 
 def login():
+    modal_content, set_modal_content = use_state("")
+    modal_style, set_modal_style = use_state({"display": "none"})
 
     email, set_email = use_state("")
     password, set_password = use_state("")
+
+    def show_modal():
+        set_modal_style({"display": "block"})
+
+    def hide_modal(e):
+        set_modal_style({"display": "none"})
+
+    modal_success = (
+        html.div({
+
+            "class": "modal-dialog modal-dialog-centered"
+        },
+            html.div({
+                "class": "modal-content",
+                "style": {
+                    "align-content": "center",
+                    "justify-content": "center",
+                    "margin": "30px",
+                    "padding": "30px",
+                },
+            },
+                html.div({
+                    "class": "modal-header"
+                },
+                    html.div(
+                        html.h1({
+                            "class": "modal-title fs-5",
+                            "id": "exampleModalToggleLabel"
+                        }, "Login Success!"),
+                        html.a({
+                            "href": "/admin/index",
+                        },
+                            html.button({
+                                "class": "btn btn-primary"
+                            },
+                                "Go to Dashboard"
+                            ),
+                        ),
+                    ),
+                    # html.button({
+                    #     "type": "button",
+                    #     "class": "btn-close",
+                    #     "data-bs-dismiss": "modal",
+                    #     "aria-label": "Close",
+                    #     "on_click": hide_modal
+                    # }, "x")
+                )
+            )
+        )
+    )
+
+    modal_fail = (
+        html.div({
+
+            "class": "modal-dialog modal-dialog-centered"
+        },
+            html.div({
+                "class": "modal-content",
+                "style": {
+                    "align-content": "center",
+                    "justify-content": "center",
+                    "margin": "30px",
+                    "padding": "30px",
+                },
+            },
+                html.div({
+                    "class": "modal-header"
+                },
+                    html.div(
+                        html.h1({
+                            "class": "modal-title fs-5",
+                            "id": "exampleModalToggleLabel"
+                        }, "Login failed"),
+                        html.h5("Usuario y/o contraseña incorrecta!")
+                        # html.a({
+                        #     "href": "/admin/index",
+                        # },
+                        #     html.button({
+                        #         "class": "btn btn-primary"
+                        #     },
+                        #         "Go to Dashboard"
+                        #     ),
+                        # ),
+                    ),
+                    html.button({
+                        "type": "button",
+                        "class": "btn-close",
+                        "data-bs-dismiss": "modal",
+                        "aria-label": "Close",
+                        "on_click": hide_modal
+                    }, "x")
+                )
+            )
+        )
+    )
 
     @reactpy.event(prevent_default=True)
     async def handleLogin(e):
         # print("handleLogin")
         response = await Login({"email": email, "password": password})
         if response["status"] == 200:
-            # set_modal_text("Login Success!")
+            set_modal_content(modal_success)
+            # set_modal_content("Hola")
+            show_modal()
             print("Inicio de sesion exitoso")
             localStorage.setItem('token', response["data"]["token"])
         else:
             if response["status"] == 401:
-                # set_modal_text("Usuario y/o contraseña incorrecta!")
+                # set_modal_content("Usuario y/o contraseña incorrecta!")
+                set_modal_content(modal_fail)
+                show_modal()
                 print("Usuario y/o contraseña incorrecta!")
             else:
                 print("Ocurrio un error desconocido al iniciar sesion")
-                # set_modal_text("Error al iniciar sesion")
+                # set_modal_content("Error al iniciar sesion")
         # show_modal(None)
 
     # @reactpy.event(prevent_default=True)
     # async def handleLogin(e):
     #     response = await Login({"email": email, "password": password})
     #     if response["status"] == 200:
-    #         set_modal_text("Login Success!")
+    #         set_modal_content("Login Success!")
     #         localStorage.setItem('token', response["data"]["token"])
     #     else:
     #         if response["status"] == 401:
-    #             set_modal_text("Usuario y/o contraseña incorrecta!")
+    #             set_modal_content("Usuario y/o contraseña incorrecta!")
     #         else:
-    #             set_modal_text("Error al iniciar sesion")
+    #             set_modal_content("Error al iniciar sesion")
     #     show_modal(None)
 
-
     return (
+        #
+        #    MODAL
+        #
+        html.div({
+            "style": modal_style,
+            "class": "modal"
+        },
+            modal_content
+        ),
+        #
+        #   Fin MODAL
+        #
+
         html.div({"class": "container"},
                  html.div({"class": "row justify-content-center"},
                           html.div({"class": "col-xl-10 col-lg-12 col-md-9"},
@@ -68,7 +181,10 @@ def login():
                                                                                                   "id": "exampleInputEmail",
                                                                                                   "aria-describedby": "emailHelp",
                                                                                                   "placeholder": "Enter Email Address...",
-                                                                                                  "on_change": lambda e: set_email(e["target"]["value"]),
+                                                                                                  "on_change": lambda
+                                                                                                      e: set_email(
+                                                                                                      e["target"][
+                                                                                                          "value"]),
                                                                                               })
                                                                                           ),
                                                                                           html.div({
@@ -78,7 +194,10 @@ def login():
                                                                                                   "class": "form-control form-control-user",
                                                                                                   "id": "exampleInputPassword",
                                                                                                   "placeholder": "Password",
-                                                                                                  "on_change": lambda e: set_password(e["target"]["value"]),
+                                                                                                  "on_change": lambda
+                                                                                                      e: set_password(
+                                                                                                      e["target"][
+                                                                                                          "value"]),
                                                                                               })
                                                                                           ),
                                                                                           html.div({
@@ -140,4 +259,3 @@ def login():
                           )
                  )
     )
-
