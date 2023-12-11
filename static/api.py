@@ -9,12 +9,19 @@ print(home)
 
 
 async def order(data):
-    async with httpx.AsyncClient() as client:
+    timeout = httpx.Timeout(30.0)
+    async with httpx.AsyncClient(timeout=timeout) as client:
         response = await client.post(home + "/api/order", json=data)
 
     if response.status_code == 200:
         result = response.json()
-        return result
+
+        return {"status": 200, "Message": result["Message"]}
+    elif response.status_code == 402:
+        result = response.json()
+        return {"status": 402, "Message": result["Message"]}
+    else:
+        return {"status": 404, "Message": "Unexpected Error"}
 
 
 async def getPartners():

@@ -1,9 +1,12 @@
 from fastapi import APIRouter, Depends, HTTPException
 from reactpy import use_state
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, joinedload
+
+from api_db.cruds.models import models
 from api_db.database import get_db
 from api_db.cruds.schemas.schemas import ProductCreate, ProductUpdate
 from api_db.cruds.models.models import Product
+
 
 router = APIRouter()
 
@@ -25,7 +28,11 @@ def create_product(product: ProductCreate, db: Session = Depends(get_db)):
 
 @router.get("/backend/products/{product_id}")
 def get_product(product_id: int, db: Session = Depends(get_db)):
-    product = db.query(Product).filter(Product.id == product_id).first()
+    product = (
+        db.query(Product)
+        .options(joinedload(models.Product.bom).options(joinedload(models.BOM.raw_material).options(joinedload(models.RawMaterial.raw_materials_partners).options(joinedload(models.RawMaterialPartner.partner)))))
+        .filter(Product.id == product_id)
+        .first())
     if not product:
         raise HTTPException(status_code=404, detail="Product not found")
     return product

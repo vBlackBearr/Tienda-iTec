@@ -1,6 +1,11 @@
 import aiohttp
 
+import os
+from dotenv import load_dotenv
 
+load_dotenv()
+
+home = os.getenv('HOME')
 
 
 async def request(method, url, **kwargs):
@@ -11,7 +16,7 @@ async def request(method, url, **kwargs):
 
 async def getPartners():
 
-    url = "http://localhost:8000/backend/partners"
+    url = home + "/backend/partners"
 
     async with aiohttp.ClientSession() as session:
         async with session.get(url) as response:
@@ -25,7 +30,7 @@ async def getPartners():
 
 
 async def getPartner(partner_id):
-    url = f"http://localhost:8000/backend/partners/{partner_id}"
+    url = f"{home}/backend/partners/{partner_id}"
 
     async with aiohttp.ClientSession() as session:
         async with session.get(url) as response:
@@ -43,7 +48,7 @@ async def getPartner(partner_id):
 
 
 async def postPartner(new_partner):
-    response = await request("POST", "http://localhost:8000/backend/partners", json=new_partner)
+    response = await request("POST", (home + "/backend/partners"), json=new_partner)
 
     if response.status == 200:
         result = await response.json()
@@ -53,7 +58,7 @@ async def postPartner(new_partner):
 
 
 async def updatePartner(partner_id, partner_data):
-    url = f"http://localhost:8000/backend/partners/{partner_id}"
+    url = f"{home}/backend/partners/{partner_id}"
 
     async with aiohttp.ClientSession() as session:
         async with session.put(url, json=partner_data) as response:
@@ -69,7 +74,7 @@ async def updatePartner(partner_id, partner_data):
 
 
 async def deletePartner(partner_id):
-    response = await request("DELETE", f"http://localhost:8000/backend/partners/{partner_id}")
+    response = await request("DELETE", f"{home}/backend/partners/{partner_id}")
 
     if response.status == 200:
         return True
@@ -77,18 +82,8 @@ async def deletePartner(partner_id):
         return False
 
 
-async def getRawMaterials():
-    response = await request("GET", "http://localhost:8000/backend/raw_materials")
-
-    if response.status == 200:
-        result = await response.json()
-        return result
-    else:
-        return []
-
-
 async def getRawMaterial(raw_material):
-    url = f"http://localhost:8000/backend/raw_materials/{raw_material}"
+    url = f"{home}/backend/raw_materials/{raw_material}"
 
     async with aiohttp.ClientSession() as session:
         async with session.get(url) as response:
@@ -106,7 +101,7 @@ async def getRawMaterial(raw_material):
 
 
 async def postRawMaterial(new_raw_material):
-    response = await request("POST", "http://localhost:8000/backend/raw_materials", json=new_raw_material)
+    response = await request("POST", (home + "/backend/raw_materials"), json=new_raw_material)
 
     if response.status == 200:
         result = await response.json()
@@ -116,7 +111,7 @@ async def postRawMaterial(new_raw_material):
 
 
 async def updateRawMaterial(raw_material_id, updated_raw_material):
-    response = await request("PUT", f"http://localhost:8000/backend/raw_materials/{raw_material_id}",
+    response = await request("PUT", f"{home}/backend/raw_materials/{raw_material_id}",
                              json=updated_raw_material)
 
     if response.status == 200:
@@ -127,7 +122,7 @@ async def updateRawMaterial(raw_material_id, updated_raw_material):
 
 
 async def deleteRawMaterial(raw_material_id):
-    response = await request("DELETE", f"http://localhost:8000/backend/raw_materials/{raw_material_id}")
+    response = await request("DELETE", f"{home}/backend/raw_materials/{raw_material_id}")
 
     if response.status == 200:
         return True
@@ -135,7 +130,7 @@ async def deleteRawMaterial(raw_material_id):
         return False
 
 async def getRawMaterials():
-    url = "http://localhost:8000/backend/raw_materials"
+    url = home + "/backend/raw_materials"
 
     async with aiohttp.ClientSession() as session:
         async with session.get(url) as response:
@@ -148,7 +143,7 @@ async def getRawMaterials():
 
 
 async def getProducts():
-    url = "http://localhost:8000/backend/products"
+    url = home + "/backend/products"
 
     async with aiohttp.ClientSession() as session:
         async with session.get(url) as response:
@@ -161,17 +156,25 @@ async def getProducts():
 
 
 async def getProduct(product_id):
-    response = await request("GET", f"http://localhost:8000/backend/products/{product_id}")
+    url = f"{home}/backend/products/{product_id}"
 
-    if response.status == 200:
-        result = await response.json()
-        return result
-    else:
-        return None
+    async with aiohttp.ClientSession() as session:
+        async with session.get(url) as response:
+            if response.status == 200:
+                result = await response.json()
+                return {"status_code": 200, "data": result}
+            elif response.status == 404:
+                # Venta no encontrada
+                print(f"Error: Product with id {product_id} not found.")
+                return {"error": "Sale not found", "status_code": 404}
+            else:
+                # Otro tipo de error
+                print(f"Error: {response.status}")
+                return {"error": f"Unexpected error: {response.status}", "status_code": response.status}
 
 
 async def postProduct(new_product):
-    response = await request("POST", "http://localhost:8000/backend/products", json=new_product)
+    response = await request("POST", (home + "/backend/products"), json=new_product)
 
     if response.status == 200:
         result = await response.json()
@@ -181,17 +184,19 @@ async def postProduct(new_product):
 
 
 async def updateProduct(product_id, updated_product):
-    response = await request("PUT", f"http://localhost:8000/backend/products/{product_id}", json=updated_product)
+    url = f"{home}/backend/products/{product_id}"
 
-    if response.status == 200:
-        result = await response.json()
-        return result
-    else:
-        return None
+    async with aiohttp.ClientSession() as session:
+        async with session.put(url, json=updated_product) as response:
+            if response.status == 200:
+                result = await response.json()
+                return {"status_code": 200, "data": result}
+            else:
+                return None
 
 
 async def deleteProduct(product_id):
-    response = await request("DELETE", f"http://localhost:8000/backend/products/{product_id}")
+    response = await request("DELETE", f"{home}/backend/products/{product_id}")
 
     if response.status == 200:
         return True
@@ -212,7 +217,7 @@ async def getSales():
 
 
 async def getEarnings():
-    url = "http://localhost:8000/backend/earnings"
+    url = home + "/backend/earnings"
 
     async with aiohttp.ClientSession() as session:
         async with session.get(url) as response:
@@ -224,7 +229,7 @@ async def getEarnings():
 
 
 async def getSale(sale_id):
-    url = f"http://localhost:8000/backend/sales/{sale_id}"
+    url = f"{home}/backend/sales/{sale_id}"
 
     async with aiohttp.ClientSession() as session:
         async with session.get(url) as response:
@@ -242,7 +247,7 @@ async def getSale(sale_id):
 
 
 async def postSale(new_sale):
-    response = await request("POST", "http://localhost:8000/backend/sales", json=new_sale)
+    response = await request("POST", (home + "/backend/sales"), json=new_sale)
 
     if response.status == 200:
         result = await response.json()
@@ -252,7 +257,7 @@ async def postSale(new_sale):
 
 
 async def updateSale(sale_id, updated_sale):
-    response = await request("PUT", f"http://localhost:8000/backend/sales/{sale_id}", json=updated_sale)
+    response = await request("PUT", f"{home}/backend/sales/{sale_id}", json=updated_sale)
 
     if response.status == 200:
         result = await response.json()
@@ -262,7 +267,7 @@ async def updateSale(sale_id, updated_sale):
 
 
 async def deleteSale(sale_id):
-    response = await request("DELETE", f"http://localhost:8000/backend/sales/{sale_id}")
+    response = await request("DELETE", f"{home}/backend/sales/{sale_id}")
 
     if response.status == 200:
         return True
@@ -271,7 +276,7 @@ async def deleteSale(sale_id):
 
 
 async def getPurchases():
-    url = "http://localhost:8000/backend/purchases"
+    url = home + "/backend/purchases"
 
     async with aiohttp.ClientSession() as session:
         async with session.get(url) as response:
@@ -280,3 +285,46 @@ async def getPurchases():
                 return result
             else:
                 print(f"Error: {response.status}")
+
+
+async def getStock(product_id):
+    url = f"{home}/backend/products/{product_id}"
+
+    async with aiohttp.ClientSession() as session:
+        async with session.get(url) as response:
+            print(response.status)
+            if response.status == 200:
+                result = await response.json()
+                return {"status_code": 200, "stock": result["stock"]}
+            elif response.status == 404:
+                # Venta no encontrada
+                print(f"Error: Product with id {product_id} not found.")
+                return {"error": "Sale not found", "status_code": 404}
+            else:
+                # Otro tipo de error
+                print(f"Error: {response.status}")
+                return {"error": f"Unexpected error: {response.status}", "status_code": response.status}
+
+async def postTier1():
+    url = "https://tier1pp.azurewebsites.net/clientrequest/"
+
+    update_data = {
+        "carcasa_color_azul": 1,
+        "carcasa_color_verde": 1,
+        "carcasa_color_amarillo": 1,
+        "carcasa_color_morado": 1,
+        "carcasa_color_rosa": 1,
+        "carcasa_color_cyan": 1,
+    }
+
+    async with aiohttp.ClientSession() as session:
+        async with session.post(url, json= update_data) as response:
+            # print(response.status)
+            if response.status == 200:
+                result = await response.json()
+                print(result)
+                return {"status_code": 200, "data": result}
+            else:
+                # Otro tipo de error
+                print(f"Error: {response.status}")
+                return {"error": f"Unexpected error: {response.status}", "status_code": response.status}

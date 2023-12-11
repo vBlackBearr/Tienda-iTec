@@ -27,6 +27,9 @@ def Payment(context):
 
     cantidad, set_cantidad = use_state(1)
 
+    modal_text, set_modal_text = use_state("")
+    modal_style, set_modal_style = use_state({"display": "none"})
+
     # User - Tokens
     session = getSession()
     token = session["token"]
@@ -48,7 +51,11 @@ def Payment(context):
 
         # getCart
 
-        await order(data)
+        order_response = await order(data)
+        print("Order response: ", order_response["Message"])
+        set_modal_text(order_response["Message"])
+        show_modal()
+
 
         # async def getSales():
         #     url = "http://localhost:8000/backend/sales"
@@ -79,6 +86,13 @@ def Payment(context):
         #         return None
 
         # asyncio.ensure_future(post())
+
+    def show_modal():
+        set_modal_style({"display": "block"})
+
+    def hide_modal(e):
+        set_modal_style({"display": "none"})
+        set_modal_text("")
 
     return html.div(
         Base(
@@ -276,7 +290,41 @@ def Payment(context):
                                                     ),
                                            ),
                                   ),
-                         )
+                         ),
+                #
+                #    MODAL
+                #
+                html.div({
+                    "style": modal_style,
+                    "class": "modal"
+                },
+                    html.div({
+                        "class": "modal-dialog modal-dialog-centered"
+                    },
+                        html.div({
+                            "class": "modal-content"
+                        },
+                            html.div({
+                                "class": "modal-header"
+                            },
+                                html.h1({
+                                    "class": "modal-title fs-5",
+                                    "id": "exampleModalToggleLabel"
+                                }, modal_text),
+                                html.button({
+                                    "type": "button",
+                                    "class": "btn-close",
+                                    "data-bs-dismiss": "modal",
+                                    "aria-label": "Close",
+                                    "on_click": hide_modal
+                                })
+                            )
+                        )
+                    )
+                ),
+                #
+                #   Fin MODAL
+                #
             ),
             context
         )

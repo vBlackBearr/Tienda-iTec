@@ -1,7 +1,7 @@
 from reactpy import component, html, use_state
 from reactpy.core.hooks import use_context, use_effect
 
-from admin.content.api import getPartners
+from admin.content.api import getPartners, postTier1
 # content
 from admin.content.cruds.views.salesCrud import SalesCrud
 from admin.content.screens._base import Base
@@ -14,27 +14,19 @@ def Management(context):
     partners, set_partners = use_state([])
 
     def UpdateForm():
-        # Estados para almacenar los valores de los inputs
         input1_value, set_input1_value = use_state("")
         input2_value, set_input2_value = use_state("")
 
 
-        # Función para manejar el evento de cambio en el primer input
         def handle_input1_change(e):
             set_input1_value(e["target"]["value"])
 
-        # Función para manejar el evento de cambio en el segundo input
         def handle_input2_change(e):
             set_input2_value(e["target"]["value"])
 
-        # Función para manejar el evento de clic en el botón "Update"
         def handle_update_click(e):
-            # Aquí puedes realizar la lógica de actualización con los valores de los inputs
             print(f"Input 1: {input1_value}, Input 2: {input2_value}")
 
-            # Puedes agregar aquí la lógica de actualización que necesitas
-
-            # Limpia los valores de los inputs después de la actualización
             set_input1_value("")
             set_input2_value("")
 
@@ -74,26 +66,18 @@ def Management(context):
         )
 
     def RP():
-        # Estados para almacenar los valores de los inputs
         input1_value, set_input1_value = use_state("")
         input2_value, set_input2_value = use_state("")
 
-        # Función para manejar el evento de cambio en el primer input
         def handle_input1_change(e):
             set_input1_value(e["target"]["value"])
 
-        # Función para manejar el evento de cambio en el segundo input
         def handle_input2_change(e):
             set_input2_value(e["target"]["value"])
 
-        # Función para manejar el evento de clic en el botón "Update"
         def handle_update_click(e):
-            # Aquí puedes realizar la lógica de actualización con los valores de los inputs
             print(f"Input 1: {input1_value}, Input 2: {input2_value}")
 
-            # Puedes agregar aquí la lógica de actualización que necesitas
-
-            # Limpia los valores de los inputs después de la actualización
             set_input1_value("")
             set_input2_value("")
 
@@ -153,6 +137,9 @@ def Management(context):
             )
         )
 
+    async def handlePedido(e):
+        await postTier1()
+
     list_items = html.div(
         {"class": "card shadow mb-4",
          "style": {
@@ -160,7 +147,7 @@ def Management(context):
          }
          },
         html.div(
-            {"class": "card-header py-3 d-flex flex-row"},
+                {"class": "card-header py-3 d-flex flex-row"},
             html.h6({"class": "m-0 font-weight-bold text-primary"}, "Partners List"),
             html.a({
                 "class": "ml-3",
@@ -200,5 +187,7 @@ def Management(context):
         UpdateForm(),
         RP(),
         list_items,
+        html.button({"on_click": handlePedido},
+                    "Hacer pedido")
 
     ), context_value)

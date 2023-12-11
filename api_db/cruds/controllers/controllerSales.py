@@ -4,6 +4,7 @@ from sqlalchemy.orm import Session, joinedload
 from api_db.cruds.models import models
 from api_db.cruds.schemas import schemas
 from api_db.database import get_db
+
 # from red_neuronal.RedMetricas import Prediction
 
 router = APIRouter()
@@ -18,7 +19,6 @@ def create_sale(sale: schemas.SaleCreate, db: Session = Depends(get_db)):
 
     # proceso de gestion de inventario y pedidos a proveedores
     # Prediction(10)
-
 
     return db_sale
 
@@ -36,7 +36,6 @@ def read_sale(sale_id: int, db: Session = Depends(get_db)):
     if db_sale is None:
         raise HTTPException(status_code=404, detail="Sale not found")
     return db_sale
-
 
 
 @router.get("/backend/sales")

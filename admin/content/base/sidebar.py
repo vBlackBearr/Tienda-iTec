@@ -98,7 +98,20 @@ sidebar = html.ul({
         "Interface"
     ),
 
-    # Nav Item - Pages Collapse Menu (TIER1)
+    # html.li({
+    #     "class": "nav-item active"
+    # },
+    #     html.a({
+    #         "class": "nav-link",
+    #         "href": "/admin/production"
+    #     },
+    #         html.i({
+    #             "class": "fas fa-fw fa-cog"
+    #         }),
+    #         html.span("Producción")
+    #     ),
+    # ),
+
     html.li({
         "class": "nav-item"
     },
@@ -186,7 +199,7 @@ sidebar = html.ul({
             html.i({
                 "class": "fas fa-fw fa-table"
             }),
-            "LOGISTICA"
+            "Logistica"
         ),
         html.div({
             "class": "collapse",

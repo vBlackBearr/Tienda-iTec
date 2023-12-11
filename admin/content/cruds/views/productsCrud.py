@@ -88,28 +88,13 @@ def ProductsCrud():
             html.td(product['stock']),
             html.td(product['enabled']),
             html.td(
-                html.div(
-                    {"class": "dropdown"},
-                    html.button(
-                        {"class": "btn btn-secondary dropdown-toggle", "type": "button", "id": "dropdownMenuButton",
-                         "data-toggle": "dropdown", "aria-haspopup": "true", "aria-expanded": "false"},
-                        "Actions"
-                    ),
-                    html.div(
-                        {"class": "dropdown-menu", "aria-labelledby": "dropdownMenuButton"},
-                        html.a(
-                            {"class": "dropdown-item",
-                             "on_click": lambda e, product_id=product["id"]: delete_button_click_handler(e,
-                                                                                                         product_id)},
-                            "Delete"
-                        ),
-                        html.a(
-                            {"class": "dropdown-item",
-                             "on_click": lambda e, product=product: edit_button_click_handler(e, product)},
-                            "Edit"
-                        )
-                    )
-                )
+                html.a({
+                    "href": f"/admin/products_details/{product['id']}",
+                },
+                    html.button({
+                        "class_name": "btn btn-info"
+                    }, "details"),
+                ),
             )
         )
 
@@ -120,8 +105,14 @@ def ProductsCrud():
          }
          },
         html.div(
-            {"class": "card-header py-3"},
-            html.h6({"class": "m-0 font-weight-bold text-primary"}, "Products Example"),
+            {"class": "card-header py-3 d-flex flex-row"},
+            html.h6({"class": "m-0 font-weight-bold text-primary"}, "Products Table"),
+            html.a({
+                "class": "ml-3",
+                "href": "/admin/add_product",
+            },
+                html.button({"class": "btn btn-primary"}, "Agregar producto")
+            )
         ),
         html.div(
             {"class": "card-body"},
@@ -182,44 +173,6 @@ def ProductsCrud():
                 # "height": "300px"
             }
         },
-        filters,
         list_items,
-        html.form(
-            {
-                "on_submit": handle_submit
-            },
-            html.input({
-                "type": "text",
-                "placeholder": "Name",
-                "on_change": lambda e: set_name(e["target"]["value"]),
-                "autofocus": True,
-                "value": name,
-                "class_name": "form-control mb-2"
-            }),
-            html.input({
-                "type": "text",
-                "placeholder": "Description",
-                "on_change": lambda e: set_description(e["target"]["value"]),
-                "value": description,
-                "class_name": "form-control mb-2"
-            }),
-            html.input({
-                "type": "number",
-                "placeholder": "Stock",
-                "on_change": lambda e: set_stock(e["target"]["value"]),
-                "value": stock,
-                "class_name": "form-control mb-2"
-            }),
-            html.input({
-                "type": "text",
-                "placeholder": "Props",
-                "on_change": lambda e: set_props(e["target"]["value"]),
-                "value": props,
-                "class_name": "form-control mb-2"
-            }),
-            html.button({
-                "type": "submit",
-                "class_name": "btn btn-primary btn-block"
-            }, "Create" if not editing else "Update"),
-        ),
+
     )

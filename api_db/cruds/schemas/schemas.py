@@ -91,10 +91,7 @@ class RawMaterialStock(RawMaterialStockBase):
 #
 class ProductBase(BaseModel):
     name: str
-    description: str = None
-    props: dict = {}
     stock: int
-    enabled: bool = True
 
 
 class ProductCreate(ProductBase):
