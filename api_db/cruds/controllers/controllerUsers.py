@@ -1,5 +1,6 @@
 from typing import Annotated
 
+import aiohttp
 from fastapi import APIRouter, Depends, HTTPException, Header, status
 from sqlalchemy.orm import Session
 
@@ -314,4 +315,19 @@ def delete_user(user_id: int, db: Session = Depends(get_db)):
 
     db.delete(user)
     db.commit()
+    return True
+
+
+
+@router.get("/backend/pedido")
+async def delete_user(data: int, db: Session = Depends(get_db)):
+    carga = data["carga"]
+    url = data["api_destino"]
+    origen = data["origen"]
+    destino = data["destino"]
+
+    sleep(5000)
+
+    response = await request("POST", api, json={"carga": carga})
+
     return True

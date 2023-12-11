@@ -26,6 +26,8 @@ def PurchasesLogistica(context):
 
     interval_id, set_interval_id = use_state(None)
 
+
+
     # pd = pandas
 
     async def fillItems():

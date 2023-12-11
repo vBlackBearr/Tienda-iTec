@@ -1,6 +1,7 @@
 from reactpy import component, html, use_state
-from reactpy.core.hooks import use_context
+from reactpy.core.hooks import use_context, use_effect
 
+from admin.content.api import getPartners
 # content
 from admin.content.cruds.views.salesCrud import SalesCrud
 from admin.content.screens._base import Base
@@ -123,6 +124,18 @@ def Management(context):
                 "on_click": handle_update_click,
             }, "Update"),
         )
+
+    async def fillData():
+        print("filling items")
+        partners_data = await getPartners()
+        if partners_data["status_code"] != 200:
+            print("Unexpected error")
+        else:
+            set_partners(partners_data["data"])
+
+
+
+    use_effect(fillData)
 
     def create_table_row(partner):
         return html.tr(

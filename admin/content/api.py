@@ -10,21 +10,36 @@ async def request(method, url, **kwargs):
 
 
 async def getPartners():
-    response = await request("GET", "http://localhost:8000/backend/partners")
 
-    if response.status == 200:
-        result = await response.json()
-        return result
+    url = "http://localhost:8000/backend/partners"
+
+    async with aiohttp.ClientSession() as session:
+        async with session.get(url) as response:
+            if response.status == 200:
+                result = await response.json()
+                return {"status_code": 200, "data": result}
+            else:
+                # Otro tipo de error
+                print(f"Error: {response.status}")
+                return {"error": f"Unexpected error: {response.status}", "status_code": response.status}
 
 
 async def getPartner(partner_id):
-    response = await request("GET", f"http://localhost:8000/backend/partners/{partner_id}")
+    url = f"http://localhost:8000/backend/partners/{partner_id}"
 
-    if response.status == 200:
-        result = await response.json()
-        return result
-    else:
-        return None
+    async with aiohttp.ClientSession() as session:
+        async with session.get(url) as response:
+            if response.status == 200:
+                result = await response.json()
+                return {"status_code": 200, "data": result}
+            elif response.status == 404:
+                # Venta no encontrada
+                print(f"Error: Partner with id {partner_id} not found.")
+                return {"error": "Raw Material not found", "status_code": 404}
+            else:
+                # Otro tipo de error
+                print(f"Error: {response.status}")
+                return {"error": f"Unexpected error: {response.status}", "status_code": response.status}
 
 
 async def postPartner(new_partner):
@@ -37,14 +52,20 @@ async def postPartner(new_partner):
         return None
 
 
-async def updatePartner(partner_id, updated_partner):
-    response = await request("PUT", f"http://localhost:8000/backend/partners/{partner_id}", json=updated_partner)
+async def updatePartner(partner_id, partner_data):
+    url = f"http://localhost:8000/backend/partners/{partner_id}"
 
-    if response.status == 200:
-        result = await response.json()
-        return result
-    else:
-        return None
+    async with aiohttp.ClientSession() as session:
+        async with session.put(url, json=partner_data) as response:
+            if response.status == 200:
+                result = await response.json()
+                return {"status_code": 200, "data": result}
+            elif response.status == 404:
+                print(f"Error: Partner with id {partner_id} not found.")
+                return {"error": "Partner not found", "status_code": 404}
+            else:
+                print(f"Error: {response.status}")
+                return {"error": f"Unexpected error: {response.status}", "status_code": response.status}
 
 
 async def deletePartner(partner_id):
