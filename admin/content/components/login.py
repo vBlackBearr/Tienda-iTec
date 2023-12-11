@@ -1,7 +1,7 @@
 from reactpy import html, use_state
 import reactpy
 from localStoragePy import localStoragePy
-from static.api import Login
+from admin.content.api import Login
 
 localStorage = localStoragePy('iTec_space', 'your-storage-backend')
 

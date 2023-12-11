@@ -25,13 +25,6 @@ from admin.content.screens.Login import Login as AdminLogin
 from admin.content.screens.AddPartner import AddPartner
 from admin.content.screens.PartnersDetails import PartnersDetails
 
-# Screens Shop
-from static.screens.index import Index
-from static.screens.login import Login
-from static.screens.product import Product
-from static.screens.cart import Cart
-from static.screens.payment import Payment
-
 # routers admin
 from api_db.cruds.controllers.controllerPartners import router as router_partners
 from api_db.cruds.controllers.controllerRawMaterials import router as router_raw_materials
@@ -56,10 +49,8 @@ from api_db.database import get_db
 
 
 app = FastAPI()
-app.mount("/static", StaticFiles(directory="static"), name="static")
 app.mount("/api_db", StaticFiles(directory="api_db"), name="api_db")
 app.mount("/admin/content", StaticFiles(directory="admin/content"), name="admin")
-app.mount("/red_neuronal", StaticFiles(directory="red_neuronal"), name="red_neuronal")
 # app.mount("/admin/sales_details", StaticFiles(directory="admin/content"), name="admin")
 
 
@@ -70,15 +61,9 @@ def App():
     })
 
     return simple.router(
-        route("/", Index(context)),
-        route("/login", Login(context)),
-        route("/product", Product(context)),
-        route("/cart", Cart(context)),
-        route("/payment", Payment(context)),
-
 
         # Admin
-        route("/admin/login", AdminLogin(context)),
+        route("/", AdminLogin(context)),
         route("/admin/index", AdminIndex(context)),
         route("/admin/partners", AdminPartners(context)),
         route("/admin/raw_materials", RawMaterials(context)),
