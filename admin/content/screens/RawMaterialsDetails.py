@@ -35,8 +35,8 @@ def RawMaterialsDetails(context):
 
     use_effect(fillData)
 
-    def create_table_row(data_partner):
-        partner = data_partner["partner"]
+    def create_table_row(raw_material_partner):
+        partner = raw_material_partner["partner"]
         return html.tr(
             html.td(partner['name']),
             html.td(partner['direction']),
@@ -104,7 +104,7 @@ def RawMaterialsDetails(context):
          },
         html.div(
             {"class": "card-header py-3"},
-            html.h6({"class": "m-0 font-weight-bold text-primary"}, "Products in the Sale"),
+            html.h6({"class": "m-0 font-weight-bold text-primary"}, "Article distributors"),
         ),
         html.div(
             {"class": "card-body"},

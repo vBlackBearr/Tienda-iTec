@@ -10,11 +10,13 @@ from admin.content.screens._base import Base
 def Management(context):
     context_value = use_context(context)
 
+    partners, set_partners = use_state([])
 
     def UpdateForm():
         # Estados para almacenar los valores de los inputs
         input1_value, set_input1_value = use_state("")
         input2_value, set_input2_value = use_state("")
+
 
         # Función para manejar el evento de cambio en el primer input
         def handle_input1_change(e):
@@ -122,9 +124,68 @@ def Management(context):
             }, "Update"),
         )
 
+    def create_table_row(partner):
+        return html.tr(
+            html.td(partner['name']),
+            html.td(partner['direction']),
+            html.td(partner['api_endpoint']),
+            html.td(
+                html.a({
+                    "href": f"/admin/partners_details/{partner['id']}",
+                },
+                    html.button({
+                        "class_name": "btn btn-info"
+                    }, "details"),
+                ),
+            )
+        )
+
+    list_items = html.div(
+        {"class": "card shadow mb-4",
+         "style": {
+             "height": "400px"
+         }
+         },
+        html.div(
+            {"class": "card-header py-3 d-flex flex-row"},
+            html.h6({"class": "m-0 font-weight-bold text-primary"}, "Partners List"),
+            html.a({
+                "class": "ml-3",
+                "href": "/admin/add_partner",
+            },
+                html.button({"class": "btn btn-primary"}, "Agregar partner")
+            )
+        ),
+        html.div(
+            {"class": "card-body"},
+            html.div(
+                {"class": "table-responsive h-100",
+                 "style": {
+                     # "height": "100px"
+                 }},
+                html.table(
+                    {"class": "table table-bordered", "id": "dataTable", "width": "100%", "cellspacing": "0",
+                     },
+                    html.thead(
+                        html.tr(
+                            html.th("NAME"),
+                            html.th("DIRECTION"),
+                            html.th("API"),
+                            html.th(""),
+                        ),
+                    ),
+                    html.tbody(
+                        [create_table_row(row) for row in partners]
+                    ),
+                ),
+            ),
+        ),
+    )
+
     return Base((
 
         UpdateForm(),
         RP(),
+        list_items,
 
     ), context_value)

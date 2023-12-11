@@ -8,6 +8,7 @@ from reactpy import component, html
 from reactpy.core.hooks import create_context
 from reactpy_router import route, simple, use_params
 
+from admin.content.screens.AddPartner import AddPartner
 # Screens Admin
 from admin.content.screens.index import Index as AdminIndex
 from admin.content.screens.Partners import Partners as AdminPartners
@@ -87,6 +88,7 @@ def App():
         route("/admin/purchases_logistica", PurchasesLogistica(context)),
         route("/admin/sales_logistica", SalesLogistica(context)),
         route("/admin/management", Management(context)),
+        route("/admin/add_partner", AddPartner(context)),
 
         route("*", html.h1("Missing Link 🔗‍💥")),
     )
