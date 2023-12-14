@@ -175,13 +175,27 @@ async def getProduct(product_id):
 
 
 async def postProduct(new_product):
-    response = await request("POST", (home + "/backend/products"), json=new_product)
+    url = f"{home}/backend/products"
 
-    if response.status == 200:
-        result = await response.json()
-        return result
-    else:
-        return None
+    async with aiohttp.ClientSession() as session:
+        async with session.post(url, json=new_product) as response:
+            if response.status == 200:
+                result = await response.json()
+                return {"status_code": 200, "data": result}
+            else:
+                return None
+
+
+async def postBOM(new_product):
+    url = f"{home}/backend/bom"
+
+    async with aiohttp.ClientSession() as session:
+        async with session.post(url, json=new_product) as response:
+            if response.status == 200:
+                result = await response.json()
+                return {"status_code": 200, "data": result}
+            else:
+                return None
 
 
 async def updateProduct(product_id, updated_product):

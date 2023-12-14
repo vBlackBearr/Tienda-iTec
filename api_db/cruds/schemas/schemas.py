@@ -148,7 +148,6 @@ class BOMBase(BaseModel):
     product_id: int
     raw_material_id: int
     quantity: int
-    props: dict
     enabled: bool
 
 
