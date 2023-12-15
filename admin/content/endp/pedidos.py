@@ -3,8 +3,9 @@ import time
 import httpx
 from fastapi import APIRouter, Depends, HTTPException
 
-from admin.content.api import getStock, updateProduct, getProduct
+from admin.content.api import getStock, updateProduct, getProduct, solicitarALogistica
 from admin.content.fabrica.fabrica import ensamblarProducto
+from admin.content.fabrica.fabrica2 import restar_stock_producto
 from api_db.cruds.controllers.controllerProducts import get_product
 from api_db.cruds.controllers.controllerProductsSales import create_product_sale
 from api_db.cruds.controllers.controllerSales import create_sale
@@ -23,9 +24,13 @@ router = APIRouter()
 async def post_pedido(order_data: dict, db: Session = Depends(get_db)):
     user_id = order_data["user_id"]
     products = order_data["products"]
+    pedido_id = order_data["pedido_id"]
+    api_comprador = order_data["api_comprador"]
+
+    d = order_data["products"]
     print("Pedido de user ", user_id, " recibido: ", products)
 
-    return await order(user_id, products, db)
+    return await order(user_id, products, db, pedido_id, api_comprador)
 
 
 @router.post("/api/clientes/order")
@@ -45,7 +50,7 @@ async def post_pedido(data: dict, db: Session = Depends(get_db)):
     return await order(user_id, products, db)
 
 
-async def order(user_id, products, db):
+async def order(user_id, products, db, pedido_id: str = "", api_comprador: str = ""):
     total = 0
     for product_data in products:
         product = await get_product(product_data["id"], db)
@@ -61,18 +66,12 @@ async def order(user_id, products, db):
     }
     sale = await postSale(sale_data)
 
+    cont = 0
     for product_data in products:
         product = await get_product(product_data["id"], db)
         quantity = product_data["quantity"]
         subtotal = product.price * quantity
 
-        # Verificar si hay suficiente stock del producto
-        if product.stock < quantity:
-            # Si no hay suficiente stock, fabricar la cantidad faltante
-            await ensamblarProducto(product.id, quantity - product.stock, db)
-
-
-        # Crear el registro en ProductSale
         product_sale_data = {
             "product_id": product.id,
             "sale_id": sale["id"],
@@ -80,21 +79,32 @@ async def order(user_id, products, db):
             "subtotal": subtotal,
             "enabled": 1,
         }
-
-        await restar_stock_producto(product.id, quantity, db)
-
         await create_product_sale(ProductSaleCreate(**product_sale_data), db)
 
-    return {"Message": "Pedido exitoso!, contamos con su pedido en stock, en seguida se le entregará"}
+        # Verificar si hay suficiente stock del producto
+        if product.stock < quantity:
+            # Si no hay suficiente stock, fabricar la cantidad faltante
+            await ensamblarProducto(product.id, quantity - product.stock, db, sale["id"], products)
+            cont = cont + 1
 
+    if cont == 0:
+        # Mandar a logistica para que lo lleve a su destino
+        envio = {
+            "destino": api_comprador,
+            "carga": products
+        }
+        await solicitarALogistica(envio)
 
-async def restar_stock_producto(product_id: int, quantity: int, db: Session):
-    product = await get_product(product_id, db)
-    if product.stock < quantity:
-        raise HTTPException(status_code=400, detail="No hay suficiente stock para restar")
+        for product_data in products:
+            product = await get_product(product_data["id"], db)
+            quantity = product_data["quantity"]
+            await restar_stock_producto(product.id, quantity, db)
 
-    product.stock -= quantity
-    db.commit()
+        return {"Message": "Pedido exitoso!, contamos con su pedido en stock, en seguida se le entregará"}
+    else:
+        return {
+            "Message": "Pedido exitoso!, no contamos con stock suficienite, pero en cuanto lo tengamos se le enviará"}
+
 
 
 # @router.post("/api/order")

@@ -1,3 +1,5 @@
+import uuid
+
 from sqlalchemy import Column, Integer, String, JSON, Boolean, ForeignKey, Date, DECIMAL, UniqueConstraint
 from sqlalchemy.orm import relationship
 from api_db.database import Base
@@ -164,3 +166,12 @@ class Purchase(Base):
 
     # Relaciones
     raw_materials_partners = relationship("RawMaterialPartner", back_populates="purchases")
+
+
+class PedidoPendiente(Base):
+    __tablename__ = "pedidos_pendientes"
+
+    id = Column(Integer, primary_key=True, index=True)
+    venta_id = Column(Integer)
+    pedido_id = Column(String)
+    props = Column(JSON)

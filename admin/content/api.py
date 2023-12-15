@@ -19,7 +19,6 @@ async def request(method, url, **kwargs):
 
 
 async def getPartners():
-
     url = home + "/backend/partners"
 
     async with aiohttp.ClientSession() as session:
@@ -146,6 +145,7 @@ async def deleteRawMaterial(raw_material_id):
         return True
     else:
         return False
+
 
 async def getRawMaterials():
     url = home + "/backend/raw_materials"
@@ -361,6 +361,7 @@ async def getStock(product_id):
                 print(f"Error: {response.status}")
                 return {"error": f"Unexpected error: {response.status}", "status_code": response.status}
 
+
 async def postTier1():
     url = "https://tier1pp.azurewebsites.net/clientrequest/"
 
@@ -374,7 +375,7 @@ async def postTier1():
     }
 
     async with aiohttp.ClientSession() as session:
-        async with session.post(url, json= update_data) as response:
+        async with session.post(url, json=update_data) as response:
             # print(response.status)
             if response.status == 200:
                 result = await response.json()
@@ -397,21 +398,76 @@ async def Login(credentials):
         return {"status": response.status_code}
 
 
-
-
-
 async def orderToPartner():
     print("")
     # return {"error": f"Unexpected error: {response.status}", "status_code": response.status}
 
 
 async def solicitarALogistica(products):
-    url = f"{home}/backend/bom"
+    print("pidiendo a logistica")
+    embarque = {
+        "carga": products,
+        ""
+    }
+    url = "http://10.228.3.29:8000/solicitar-embarque"
 
     async with aiohttp.ClientSession() as session:
-        async with session.post(url, json=products) as response:
+        async with session.post(url, json=embarque) as response:
             if response.status == 200:
                 result = await response.json()
+                print("pedido a logistica exitoso", result)
                 return {"status_code": 200, "data": result}
             else:
                 return None
+
+
+async def create_pedido_pendiente(data):
+    url = home + "/backend/pedidos_pendientes"
+    async with aiohttp.ClientSession() as session:
+        async with session.post(url, json=data) as response:
+            if response.status == 200:
+                result = await response.json()
+                return result
+            else:
+                print(f"Error: {response.status}")
+
+
+async def get_pedido_pendiente(pedido_id):
+    url = home + f"/backend/pedidos_pendientes/{pedido_id}"
+    async with aiohttp.ClientSession() as session:
+        async with session.get(url) as response:
+            if response.status == 200:
+                result = await response.json()
+                return result
+            else:
+                print(f"Error: {response.status}")
+
+async def get_pedidos_pendientes():
+    url = home + "/backend/pedidos_pendientes"
+    async with aiohttp.ClientSession() as session:
+        async with session.get(url) as response:
+            if response.status == 200:
+                result = await response.json()
+                return result
+            else:
+                print(f"Error: {response.status}")
+
+async def update_pedido_pendiente(pedido_id, data):
+    url = home + f"/backend/pedidos_pendientes/{pedido_id}"
+    async with aiohttp.ClientSession() as session:
+        async with session.put(url, json=data) as response:
+            if response.status == 200:
+                result = await response.json()
+                return result
+            else:
+                print(f"Error: {response.status}")
+
+async def delete_pedido_pendiente(pedido_id):
+    url = home + f"/backend/pedidos_pendientes/{pedido_id}"
+    async with aiohttp.ClientSession() as session:
+        async with session.delete(url) as response:
+            if response.status == 200:
+                result = await response.json()
+                return result
+            else:
+                print(f"Error: {response.status}")
