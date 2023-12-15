@@ -11,7 +11,7 @@ router = APIRouter()
 
 
 @router.post("/backend/sales")
-def create_sale(sale: schemas.SaleCreate, db: Session = Depends(get_db)):
+async def create_sale(sale: schemas.SaleCreate, db: Session = Depends(get_db)):
     db_sale = models.Sale(**sale.dict())
     db.add(db_sale)
     db.commit()

@@ -14,7 +14,7 @@ def get_products_sales(skip: int = 0, limit: int = 10, db: Session = Depends(get
 
 
 @router.post("/backend/products_sales")
-def create_product_sale(product_sale: ProductSaleCreate, db: Session = Depends(get_db)):
+async def create_product_sale(product_sale: ProductSaleCreate, db: Session = Depends(get_db)):
     db_product_sale = ProductSale(**product_sale.dict())
     db.add(db_product_sale)
     db.commit()

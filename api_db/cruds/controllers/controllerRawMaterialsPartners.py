@@ -1,21 +1,20 @@
 from fastapi import APIRouter, Depends, HTTPException
-from sqlalchemy.orm import Session
-from admin.content.database import get_db
-from admin.content.cruds.schemas.schemas import ProductCreate, ProductUpdate
-from admin.content.cruds.models.models import Product
+from api_db.database import get_db, SessionLocal
+# from admin.content.cruds.schemas.schemas import ProductCreate, ProductUpdate
+from api_db.cruds.models.models import RawMaterialPartner
 
 router = APIRouter()
 
 
 @router.get("/raw_materials_partners")
-def get_raw_materials_partners(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
+def get_raw_materials_partners(skip: int = 0, limit: int = 10, db: SessionLocal = Depends(get_db)):
     products = db.query(Product).offset(skip).limit(limit).all()
     return products
 
 
 @router.post("/raw_materials_partners")
-def create_raw_materials_partners(product: ProductCreate, db: Session = Depends(get_db)):
-    db_product = Product(**product.dict())
+def create_raw_materials_partners(product: dict, db: SessionLocal = Depends(get_db)):
+    db_product = RawMaterial(**product.dict())
     db.add(db_product)
     db.commit()
     db.refresh(db_product)
@@ -23,7 +22,7 @@ def create_raw_materials_partners(product: ProductCreate, db: Session = Depends(
 
 
 @router.get("/raw_materials_partners/{product_id}")
-def get_product(product_id: int, db: Session = Depends(get_db)):
+def get_product(product_id: int, db: SessionLocal = Depends(get_db)):
     product = db.query(Product).filter(Product.id == product_id).first()
     if not product:
         raise HTTPException(status_code=404, detail="Product not found")
@@ -31,7 +30,7 @@ def get_product(product_id: int, db: Session = Depends(get_db)):
 
 
 @router.put("/raw_materials_partners/{product_id}")
-def update_product(product_id: int, product_data: ProductUpdate, db: Session = Depends(get_db)):
+def update_product(product_id: int, product_data: ProductUpdate, db: SessionLocal = Depends(get_db)):
     product = db.query(Product).filter(Product.id == product_id).first()
     if not product:
         raise HTTPException(status_code=404, detail="Product not found")
@@ -45,7 +44,7 @@ def update_product(product_id: int, product_data: ProductUpdate, db: Session = D
 
 
 @router.delete("/raw_materials_partners/{product_id}")
-def delete_product(product_id: int, db: Session = Depends(get_db)):
+def delete_product(product_id: int, db: SessionLocal = Depends(get_db)):
     product = db.query(Product).filter(Product.id == product_id).first()
     if not product:
         raise HTTPException(status_code=404, detail="Product not found")

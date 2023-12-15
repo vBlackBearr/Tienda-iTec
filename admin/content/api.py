@@ -353,3 +353,18 @@ async def Login(credentials):
         return result
     else:
         return {"status": response.status_code}
+
+
+async def sendToBuild(list):
+    for product in list:
+        data = await getProduct(product["id"])
+        if data["status_code"] == 200:
+            materials = data["data"]["bom"]
+
+            for material in materials:
+                endpoint = material["raw_material"]["raw_materials_partners"][0]["partner"]["api_endpoint"]
+                print("Endpoint: " + endpoint)
+
+
+async def orderToPartner():
+    print("")

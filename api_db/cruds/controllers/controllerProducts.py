@@ -27,7 +27,7 @@ def create_product(product: ProductCreate, db: Session = Depends(get_db)):
 
 
 @router.get("/backend/products/{product_id}")
-def get_product(product_id: int, db: Session = Depends(get_db)):
+async def get_product(product_id: int, db: Session = Depends(get_db)):
     product = (
         db.query(Product)
         .options(joinedload(models.Product.bom).options(joinedload(models.BOM.raw_material).options(joinedload(models.RawMaterial.raw_materials_partners).options(joinedload(models.RawMaterialPartner.partner)))))
