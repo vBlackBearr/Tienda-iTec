@@ -106,8 +106,14 @@ def RawMaterialsCrud():
          }
          },
         html.div(
-            {"class": "card-header py-3"},
+            {"class": "card-header py-3 d-flex flex-row"},
             html.h6({"class": "m-0 font-weight-bold text-primary"}, "Raw Materials List"),
+            html.a({
+                "class": "ml-3",
+                "href": "/admin/add_raw_material",
+            },
+                html.button({"class": "btn btn-primary"}, "Agregar raw material")
+            )
         ),
         html.div(
             {"class": "card-body"},

@@ -11,6 +11,7 @@ class Partner(Base):
     details = Column(String)
     direction = Column(String)
     api_endpoint = Column(String)
+    user_id = Column(Integer)
     props = Column(JSON)
     enabled = Column(Boolean)
 

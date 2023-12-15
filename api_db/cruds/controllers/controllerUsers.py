@@ -175,7 +175,7 @@ def update_cart_sum(Authorization: Annotated[str | None, Header()] = None, data:
 
 
 @router.get("/backend/users/cart")
-def get_cart(Authorization: Annotated[str | None, Header()] = None, db: Session = Depends(get_db)):
+async def get_cart(Authorization: Annotated[str | None, Header()] = None, db: Session = Depends(get_db)):
     user = getUserWithToken(Authorization, db)
     if user is None:
         raise HTTPException(status_code=404, detail="User not found")
@@ -186,7 +186,7 @@ def get_cart(Authorization: Annotated[str | None, Header()] = None, db: Session 
 
     for cart_item in cart:
         # print(cart_item.product_id)
-        product = get_product(cart_item.product_id, db)
+        product = await get_product(cart_item.product_id, db)
         final_cart.append(
             {"id": product.id, "name": product.name, "price": product.price, "quantity": cart_item.quantity})
 
@@ -277,7 +277,7 @@ def get_users(skip: int = 0, limit: int = 10, db: Session = Depends(get_db)):
 
 
 @router.post("/backend/users")
-def create_user(user: UserCreate, db: Session = Depends(get_db)):
+async def create_user(user: UserCreate, db: Session = Depends(get_db)):
     db_user = User(**user.dict())
     db.add(db_user)
     db.commit()

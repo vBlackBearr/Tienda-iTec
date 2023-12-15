@@ -1,6 +1,10 @@
+import asyncio
+
 import aiohttp
 
 import os
+
+import httpx
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -48,13 +52,27 @@ async def getPartner(partner_id):
 
 
 async def postPartner(new_partner):
-    response = await request("POST", (home + "/backend/partners"), json=new_partner)
+    url = f"{home}/backend/partners"
 
-    if response.status == 200:
-        result = await response.json()
-        return result
-    else:
-        return None
+    async with aiohttp.ClientSession() as session:
+        async with session.post(url, json=new_partner) as response:
+            if response.status == 200:
+                result = await response.json()
+                return {"status_code": 200, "data": result}
+            else:
+                return None
+
+
+async def postUser(new_user):
+    url = f"{home}/backend/users"
+
+    async with aiohttp.ClientSession() as session:
+        async with session.post(url, json=new_user) as response:
+            if response.status == 200:
+                result = await response.json()
+                return {"status_code": 200, "data": result}
+            else:
+                return None
 
 
 async def updatePartner(partner_id, partner_data):
@@ -140,6 +158,30 @@ async def getRawMaterials():
             else:
                 # Manejar otros códigos de estado si es necesario
                 print(f"Error: {response.status}")
+
+
+async def getRawMaterialsFromPartners():
+    # print("dsdajkdl")
+    partners_data = await getPartners()
+    partners = partners_data["data"]
+    raw_materials_from_partners = []
+
+    for partner in partners:
+        api_endpoint = partner["api_endpoint"]
+        async with aiohttp.ClientSession() as session:
+            async with session.get(f"{api_endpoint}/backend/products") as response:
+                if response.status == 200:
+                    products = await response.json()
+                    for product in products:
+                        raw_materials_from_partners.append({"partner_name": partner["name"], "product": product})
+                else:
+                    print(f"Error fetching products from {api_endpoint}")
+
+    # Realizar solicitudes en paralelo para cada partner
+    # tasks = [fetch_raw_materials(partner) for partner in partners]
+    # await asyncio.gather(*tasks)
+    # print(raw_materials_from_partners)
+    return raw_materials_from_partners
 
 
 async def getProducts():
@@ -355,18 +397,20 @@ async def Login(credentials):
         return {"status": response.status_code}
 
 
-async def sendToBuild(list):
-    for product in list:
-        data = await getProduct(product["id"])
-        if data["status_code"] == 200:
-            materials = data["data"]["bom"]
 
-            for material in materials:
-                endpoint = material["raw_material"]["raw_materials_partners"][0]["partner"]["api_endpoint"]
-                print("Endpoint: " + endpoint)
 
 
 async def orderToPartner():
     print("")
     # return {"error": f"Unexpected error: {response.status}", "status_code": response.status}
 
+async def solicitarALogistica(products):
+    url = f"{home}/backend/bom"
+
+    async with aiohttp.ClientSession() as session:
+        async with session.post(url, json=products) as response:
+            if response.status == 200:
+                result = await response.json()
+                return {"status_code": 200, "data": result}
+            else:
+                return None

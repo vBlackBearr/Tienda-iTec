@@ -8,11 +8,12 @@ from reactpy import component, html
 from reactpy.core.hooks import create_context
 from reactpy_router import route, simple, use_params
 
-from admin.content.screens.AddProduct import AddProduct
 # Screens Admin
+from admin.content.screens.AddProduct import AddProduct
 from admin.content.screens.index import Index as AdminIndex
 from admin.content.screens.Partners import Partners as AdminPartners
 from admin.content.screens.RawMaterials import RawMaterials
+from admin.content.screens.AddRawMaterial import AddRawMaterial
 from admin.content.screens.RawMaterialsDetails import RawMaterialsDetails
 from admin.content.screens.Products import Products as AdminProducts
 from admin.content.screens.Sales import Sales
@@ -94,6 +95,7 @@ def App():
         route("/admin/add_partner", AddPartner(context)),
         route("/admin/partners_details/{id:int}", PartnersDetails(context)),
         route("/admin/add_product", AddProduct(context)),
+        route("/admin/add_raw_material", AddRawMaterial(context)),
 
         route("*", html.h1("Missing Link 🔗‍💥")),
     )

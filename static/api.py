@@ -11,7 +11,7 @@ print(home)
 async def order(data):
     timeout = httpx.Timeout(30.0)
     async with httpx.AsyncClient(timeout=timeout) as client:
-        response = await client.post(home + "/api/order", json=data)
+        response = await client.post(home + "/api/clientes/order", json=data)
 
     if response.status_code == 200:
         result = response.json()
