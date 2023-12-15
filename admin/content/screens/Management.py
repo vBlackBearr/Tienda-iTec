@@ -184,7 +184,7 @@ def Management(context):
 
     return Base((
 
-        # UpdateForm(),
+        UpdateForm(),
         RP(),
         list_items,
         html.button({"on_click": handlePedido},

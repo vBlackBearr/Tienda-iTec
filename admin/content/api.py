@@ -1,5 +1,4 @@
 import aiohttp
-import httpx
 
 import os
 from dotenv import load_dotenv
@@ -342,6 +341,7 @@ async def postTier1():
             else:
                 # Otro tipo de error
                 print(f"Error: {response.status}")
+
                 return {"error": f"Unexpected error: {response.status}", "status_code": response.status}
 
 
@@ -368,3 +368,5 @@ async def sendToBuild(list):
 
 async def orderToPartner():
     print("")
+    # return {"error": f"Unexpected error: {response.status}", "status_code": response.status}
+
