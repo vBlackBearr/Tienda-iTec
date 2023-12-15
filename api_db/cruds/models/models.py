@@ -37,6 +37,7 @@ class RawMaterialPartner(Base):
     id = Column(Integer, primary_key=True, index=True)
     raw_material_id = Column(Integer, ForeignKey('raw_materials.id'))
     partner_id = Column(Integer, ForeignKey('partners.id'))
+    min_order = Column(Integer)
     props = Column(JSON)
     enabled = Column(Boolean)
     purchases = relationship("Purchase", back_populates="raw_materials_partners")

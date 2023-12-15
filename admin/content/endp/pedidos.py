@@ -23,7 +23,7 @@ router = APIRouter()
 async def post_pedido(order_data: dict, db: Session = Depends(get_db)):
     user_id = order_data["user_id"]
     products = order_data["products"]
-    print("Pedido de user ", user_id, " recibido")
+    print("Pedido de user ", user_id, " recibido: ", products)
 
     return await order(user_id, products, db)
 
@@ -40,7 +40,7 @@ async def post_pedido(data: dict, db: Session = Depends(get_db)):
         user_id = user_response["data"]["id"]
         products = cart_response["data"]
 
-    print("Pedido de user ", user_id, " recibido")
+    print("Pedido de user ", user_id, " recibido: ", products)
 
     return await order(user_id, products, db)
 
@@ -59,7 +59,7 @@ async def order(user_id, products, db):
         "state_id": 1,
         "enabled": 1,
     }
-    sale = await create_sale(SaleCreate(**sale_data), db)
+    sale = await postSale(sale_data)
 
     for product_data in products:
         product = await get_product(product_data["id"], db)
@@ -71,10 +71,11 @@ async def order(user_id, products, db):
             # Si no hay suficiente stock, fabricar la cantidad faltante
             await ensamblarProducto(product.id, quantity - product.stock, db)
 
+
         # Crear el registro en ProductSale
         product_sale_data = {
             "product_id": product.id,
-            "sale_id": sale.id,
+            "sale_id": sale["id"],
             "quantity": quantity,
             "subtotal": subtotal,
             "enabled": 1,

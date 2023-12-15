@@ -261,7 +261,7 @@ async def deleteProduct(product_id):
 
 
 async def getSales():
-    url = "http://localhost:8000/backend/sales"
+    url = home + "/backend/sales"
 
     async with aiohttp.ClientSession() as session:
         async with session.get(url) as response:
@@ -403,6 +403,7 @@ async def Login(credentials):
 async def orderToPartner():
     print("")
     # return {"error": f"Unexpected error: {response.status}", "status_code": response.status}
+
 
 async def solicitarALogistica(products):
     url = f"{home}/backend/bom"
